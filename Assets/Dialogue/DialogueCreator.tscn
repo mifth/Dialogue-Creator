@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://b0umk4iq77nwp"]
+[gd_scene load_steps=5 format=3 uid="uid://b0umk4iq77nwp"]
 
-[ext_resource type="PackedScene" uid="uid://dqew00eqnakod" path="res://addons/dialoguecreator/Assets/Dialogue/DCTextNode.tscn" id="1_coe53"]
+[ext_resource type="PackedScene" uid="uid://dqew00eqnakod" path="res://addons/dialoguecreator/Assets/Nodes/DCTextNode.tscn" id="1_coe53"]
+[ext_resource type="PackedScene" uid="uid://d2lq0kftu4x0j" path="res://addons/dialoguecreator/Assets/Nodes/DCStartNode.tscn" id="2_2qopm"]
+[ext_resource type="PackedScene" uid="uid://cbwso84hxx088" path="res://addons/dialoguecreator/Assets/Nodes/DCRerouteNode.tscn" id="3_rladd"]
+[ext_resource type="PackedScene" uid="uid://dkupkikm75tpq" path="res://addons/dialoguecreator/Assets/Nodes/DCOnOffTextNode.tscn" id="4_2fc6v"]
 
 [node name="DialogueCreator" type="Control"]
 layout_mode = 3
@@ -22,25 +25,72 @@ grow_vertical = 2
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="MenuButton" type="MenuButton" parent="VBoxContainer/MenuBar"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MenuBar"]
 layout_mode = 0
-offset_right = 98.0
-offset_bottom = 45.0
-text = "Nodes"
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="FileButton" type="MenuButton" parent="VBoxContainer/MenuBar/HBoxContainer"]
+layout_mode = 2
+text = "File"
 item_count = 2
-popup/item_0/text = "StartNode"
+popup/item_0/text = "Open"
 popup/item_0/id = 0
-popup/item_1/text = "TextNode"
+popup/item_1/text = "Save"
 popup/item_1/id = 1
+
+[node name="NodesButton" type="MenuButton" parent="VBoxContainer/MenuBar/HBoxContainer"]
+layout_mode = 2
+text = "Nodes"
+item_count = 4
+popup/item_0/text = "Start"
+popup/item_0/id = 0
+popup/item_1/text = "Text"
+popup/item_1/id = 1
+popup/item_2/text = "Reroute"
+popup/item_2/id = 2
+popup/item_3/text = "Enable/Disable Text"
+popup/item_3/id = 3
 
 [node name="GraphEdit" type="GraphEdit" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+show_grid = false
+snapping_distance = 10
+zoom_min = 0.05
+zoom_max = 5.0
 
 [node name="TextNode" parent="VBoxContainer/GraphEdit" instance=ExtResource("1_coe53")]
 layout_mode = 0
-offset_left = 146.0
-offset_top = 108.0
-offset_right = 616.0
-offset_bottom = 475.0
-position_offset = Vector2(146, 108)
+offset_left = 480.0
+offset_top = 148.0
+offset_right = 950.0
+offset_bottom = 515.0
+position_offset = Vector2(480, 148)
+
+[node name="DcStartNode" parent="VBoxContainer/GraphEdit" instance=ExtResource("2_2qopm")]
+layout_mode = 0
+offset_left = 170.0
+offset_top = 396.0
+offset_right = 360.0
+offset_bottom = 482.0
+mouse_filter = 1
+position_offset = Vector2(170, 396)
+
+[node name="DcRerouteNode" parent="VBoxContainer/GraphEdit" instance=ExtResource("3_rladd")]
+layout_mode = 0
+offset_left = 180.0
+offset_top = 278.0
+offset_right = 216.0
+offset_bottom = 333.0
+mouse_filter = 1
+position_offset = Vector2(180, 278)
+
+[node name="DcOnOffNode" parent="VBoxContainer/GraphEdit" instance=ExtResource("4_2fc6v")]
+layout_mode = 0
+offset_left = 192.0
+offset_top = 110.0
+offset_right = 323.0
+offset_bottom = 238.0
+mouse_filter = 1
+position_offset = Vector2(192, 110)

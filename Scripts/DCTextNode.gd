@@ -8,4 +8,4 @@ func _exit_tree():
 
 func _on_add_text_button_pressed():
 	add_child(text_node_text_resource.instantiate())
-	set_slot( get_children().size() - 1, false, 0, Color.WHITE, true, 0, Color.WHITE)
+	set_slot( get_children().size() - 1, true, 0, Color.WHITE, true, 0, Color.WHITE)
