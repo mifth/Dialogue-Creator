@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cbwso84hxx088"]
 
-[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/DCBaseNode.gd" id="1_gye64"]
+[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCBaseNode.gd" id="1_gye64"]
 
 [node name="DcRerouteNode" type="GraphNode"]
 offset_right = 36.0

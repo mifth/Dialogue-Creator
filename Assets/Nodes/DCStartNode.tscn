@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://d2lq0kftu4x0j"]
 
-[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/DCBaseNode.gd" id="1_datyo"]
+[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCBaseNode.gd" id="1_datyo"]
 
 [node name="DcStartNode" type="GraphNode"]
 offset_right = 76.0

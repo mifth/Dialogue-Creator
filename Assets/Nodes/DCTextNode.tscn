@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dqew00eqnakod"]
 
-[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/DCTextNode.gd" id="1_1ypaw"]
+[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCTextNode.gd" id="1_1ypaw"]
 [ext_resource type="PackedScene" uid="uid://bklhda5e8dmxn" path="res://addons/dialoguecreator/Assets/Nodes/DCTextNodeText.tscn" id="2_xsdtl"]
 
 [node name="TextNode" type="GraphNode"]
