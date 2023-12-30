@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCBaseNode.gd" id="1_ex34n"]
 
-[node name="DcOnOffNode" type="GraphNode"]
+[node name="DcEnableDisableTextNode" type="GraphNode"]
 offset_right = 76.0
 offset_bottom = 55.0
 title = "On/Off Text"
