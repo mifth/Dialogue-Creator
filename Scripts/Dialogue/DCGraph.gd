@@ -9,8 +9,13 @@ extends Control
 # Preload Nodes
 @onready var _start_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCStartNode.tscn")
 @onready var _dialogue_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCDialogueNode.tscn")
-@onready var _en_dis_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCEnDisTextNode.tscn")
+@onready var _enable_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCEnableTextNode.tscn")
+@onready var _hide_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCHideTextNode.tscn")
 @onready var _reroute_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCRerouteNode.tscn")
+@onready var _action_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCActionNode.tscn")
+@onready var _note_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCNoteNode.tscn")
+@onready var _settext_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCSetTextNode.tscn")
+@onready var _text_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCTextNode.tscn")
 
 
 func _ready():
@@ -27,7 +32,17 @@ func _add_node(node_name: String):
 	elif node_name == "Dialogue":
 		node_res = _dialogue_node_res
 	elif node_name == "Enable/Disable Text":
-		node_res = _en_dis_node_res
+		node_res = _enable_node_res
+	elif node_name == "Hide/Unhide Text":
+		node_res = _hide_node_res
+	elif node_name == "Action":
+		node_res = _action_node_res
+	elif node_name == "Note":
+		node_res = _note_node_res
+	elif node_name == "Set Text":
+		node_res = _settext_node_res
+	elif node_name == "Text":
+		node_res = _text_node_res
 
 	var new_node: GraphNode = node_res.instantiate()
 	_graph.add_child(new_node)

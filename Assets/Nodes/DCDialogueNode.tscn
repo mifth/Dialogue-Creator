@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dqew00eqnakod"]
 
 [ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCDialogueNode.gd" id="1_df1nm"]
-[ext_resource type="PackedScene" uid="uid://bklhda5e8dmxn" path="res://addons/dialoguecreator/Assets/Nodes/DCTextNodeText.tscn" id="2_4xwg5"]
+[ext_resource type="PackedScene" uid="uid://bklhda5e8dmxn" path="res://addons/dialoguecreator/Assets/Nodes/DCDialogueNodeText.tscn" id="2_ffuyl"]
 
 [node name="DialogueNode" type="GraphNode"]
 offset_right = 470.0
@@ -9,7 +9,7 @@ offset_bottom = 367.0
 size_flags_vertical = 3
 mouse_filter = 1
 resizable = true
-title = "DialogueNode"
+title = "Dialogue"
 slot/0/left_enabled = true
 slot/0/left_type = 0
 slot/0/left_color = Color(1, 1, 1, 1)
@@ -19,29 +19,46 @@ slot/0/right_type = 0
 slot/0/right_color = Color(1, 1, 1, 1)
 slot/0/right_icon = null
 slot/0/draw_stylebox = true
+slot/1/left_enabled = true
+slot/1/left_type = 1
+slot/1/left_color = Color(0.894118, 0.784314, 0.509804, 1)
+slot/1/left_icon = null
+slot/1/right_enabled = false
+slot/1/right_type = 0
+slot/1/right_color = Color(1, 1, 1, 1)
+slot/1/right_icon = null
+slot/1/draw_stylebox = true
 script = ExtResource("1_df1nm")
-text_node_text_resource = ExtResource("2_4xwg5")
+text_node_text_resource = ExtResource("2_ffuyl")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Character ID: "
 
-[node name="CharacterID" type="SpinBox" parent="HBoxContainer"]
+[node name="CharacterID" type="SpinBox" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 max_value = 1e+06
 rounded = true
 
-[node name="Label2" type="Label" parent="HBoxContainer"]
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "   "
 
-[node name="AddTextButton" type="Button" parent="HBoxContainer"]
+[node name="AddTextButton" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 text = " + "
 
-[connection signal="pressed" from="HBoxContainer/AddTextButton" to="." method="_on_add_text_button_pressed"]
+[node name="MainTextEdit" type="TextEdit" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+text = "{\"Eng\": \"Hodor\",}"
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/AddTextButton" to="." method="_on_add_text_button_pressed"]

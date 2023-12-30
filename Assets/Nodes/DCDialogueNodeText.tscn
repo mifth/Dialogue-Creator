@@ -1,12 +1,12 @@
 [gd_scene load_steps=2 format=3 uid="uid://bklhda5e8dmxn"]
 
-[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCTextNodeText.gd" id="1_xlrfm"]
+[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCDialogueNodeText.gd" id="1_0887f"]
 
 [node name="TextNodeText" type="TextEdit"]
 size_flags_vertical = 3
 text = "{\"Eng\": \"Winter is coming\",}"
 wrap_mode = 1
-script = ExtResource("1_xlrfm")
+script = ExtResource("1_0887f")
 
 [node name="DeleteTextButton" type="Button" parent="."]
 layout_mode = 1
