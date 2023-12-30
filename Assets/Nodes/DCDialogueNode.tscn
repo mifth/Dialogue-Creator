@@ -1,15 +1,15 @@
 [gd_scene load_steps=3 format=3 uid="uid://dqew00eqnakod"]
 
-[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCTextNode.gd" id="1_1ypaw"]
-[ext_resource type="PackedScene" uid="uid://bklhda5e8dmxn" path="res://addons/dialoguecreator/Assets/Nodes/DCTextNodeText.tscn" id="2_xsdtl"]
+[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCDialogueNode.gd" id="1_df1nm"]
+[ext_resource type="PackedScene" uid="uid://bklhda5e8dmxn" path="res://addons/dialoguecreator/Assets/Nodes/DCTextNodeText.tscn" id="2_4xwg5"]
 
-[node name="TextNode" type="GraphNode"]
+[node name="DialogueNode" type="GraphNode"]
 offset_right = 470.0
 offset_bottom = 367.0
 size_flags_vertical = 3
 mouse_filter = 1
 resizable = true
-title = "TextNode"
+title = "DialogueNode"
 slot/0/left_enabled = true
 slot/0/left_type = 0
 slot/0/left_color = Color(1, 1, 1, 1)
@@ -19,8 +19,8 @@ slot/0/right_type = 0
 slot/0/right_color = Color(1, 1, 1, 1)
 slot/0/right_icon = null
 slot/0/draw_stylebox = true
-script = ExtResource("1_1ypaw")
-text_node_text_resource = ExtResource("2_xsdtl")
+script = ExtResource("1_df1nm")
+text_node_text_resource = ExtResource("2_4xwg5")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2

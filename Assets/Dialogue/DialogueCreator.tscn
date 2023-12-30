@@ -44,7 +44,7 @@ text = "Nodes"
 item_count = 5
 popup/item_0/text = "Start"
 popup/item_0/id = 0
-popup/item_1/text = "Text"
+popup/item_1/text = "Dialogue"
 popup/item_1/id = 1
 popup/item_2/text = "Reroute"
 popup/item_2/id = 2
@@ -59,6 +59,7 @@ layout_mode = 2
 size_flags_vertical = 3
 show_grid = false
 snapping_distance = 10
+connection_lines_curvature = 0.2
 zoom_min = 0.05
 zoom_max = 5.0
 

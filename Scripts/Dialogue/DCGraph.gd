@@ -8,7 +8,7 @@ extends Control
 
 # Preload Nodes
 @onready var _start_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCStartNode.tscn")
-@onready var _text_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCTextNode.tscn")
+@onready var _dialogue_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCDialogueNode.tscn")
 @onready var _en_dis_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCEnDisTextNode.tscn")
 @onready var _reroute_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCRerouteNode.tscn")
 
@@ -24,8 +24,8 @@ func _add_node(node_name: String):
 		node_res = _start_node_res
 	elif node_name == "Reroute":
 		node_res = _reroute_node_res
-	elif node_name == "Text":
-		node_res = _text_node_res
+	elif node_name == "Dialogue":
+		node_res = _dialogue_node_res
 	elif node_name == "Enable/Disable Text":
 		node_res = _en_dis_node_res
 
