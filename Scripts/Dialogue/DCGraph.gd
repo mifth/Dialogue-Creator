@@ -58,8 +58,23 @@ func _input(event):
 				node2.queue_free()
 
 
-func _on_connection_request(from_node, from_port, to_node, to_port):
+#func DeleteNode():
+	#pass
+
+
+func _on_connection_request(from_node: StringName, from_port, to_node: StringName, to_port):
 	if not _graph.is_node_connected(from_node, from_port, to_node, to_port):
+		
+		var from_graph_nd: GraphNode = _graph.get_node(NodePath(from_node)) as GraphNode
+		var connections = _graph.get_connection_list()
+		
+		# 
+		if from_graph_nd.get_input_port_type(from_port) == 0:
+			for conn in connections:
+				if conn["from_node"] == from_node and from_port == conn["from_port"]:
+					_graph.disconnect_node(conn["from_node"], conn["from_port"], conn["to_node"], conn["to_port"])
+					break
+		
 		_graph.connect_node(from_node, from_port, to_node, to_port)
 	else:
 		_graph.disconnect_node(from_node, from_port, to_node, to_port)

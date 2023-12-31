@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCActionNode.gd" id="1_63wvx"]
 
-[node name="DCActionNode" type="GraphNode"]
+[node name="ActionNode" type="GraphNode"]
 offset_right = 259.0
 offset_bottom = 78.0
 resizable = true

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dokdk2g52xit2"]
 
-[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCBaseNode.gd" id="1_ofckq"]
+[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCBaseGraphNode.gd" id="1_26qq4"]
 
 [node name="TextNode" type="GraphNode"]
 offset_right = 403.0
@@ -16,7 +16,7 @@ slot/0/right_type = 1
 slot/0/right_color = Color(0.882353, 0.74902, 0.431373, 1)
 slot/0/right_icon = null
 slot/0/draw_stylebox = true
-script = ExtResource("1_ofckq")
+script = ExtResource("1_26qq4")
 
 [node name="TextEdit" type="TextEdit" parent="."]
 layout_mode = 2

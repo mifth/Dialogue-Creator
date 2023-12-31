@@ -2,22 +2,44 @@
 
 [ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCDialogueNodeText.gd" id="1_0887f"]
 
-[node name="TextNodeText" type="TextEdit"]
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 179.0
+offset_bottom = 82.0
+size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "{\"Eng\": \"Winter is coming\",}"
-wrap_mode = 1
 script = ExtResource("1_0887f")
 
-[node name="DeleteTextButton" type="Button" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
+anchors_preset = 15
 anchor_right = 1.0
-offset_left = -15.0
-offset_top = -1.0
-offset_right = 5.51501
-offset_bottom = 30.0
-grow_horizontal = 0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextNodeText" type="TextEdit" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "{\"Eng\": \"Winter is coming\",}"
+wrap_mode = 1
+
+[node name="ControlsVBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="DeleteTextButton" type="Button" parent="HBoxContainer/ControlsVBoxContainer"]
+layout_mode = 2
 text = "x"
 
-[connection signal="pressed" from="DeleteTextButton" to="." method="_on_delete_text_button_pressed"]
+[node name="UpTextButton" type="Button" parent="HBoxContainer/ControlsVBoxContainer"]
+layout_mode = 2
+text = "^"
+
+[node name="DownTextButton" type="Button" parent="HBoxContainer/ControlsVBoxContainer"]
+layout_mode = 2
+text = "v"
+
+[connection signal="pressed" from="HBoxContainer/ControlsVBoxContainer/DeleteTextButton" to="." method="_on_delete_text_button_pressed"]

@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://cbwso84hxx088"]
 
-[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCBaseNode.gd" id="1_gye64"]
+[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCBaseGraphNode.gd" id="1_t42uv"]
 
-[node name="DcRerouteNode" type="GraphNode"]
+[node name="RerouteNode" type="GraphNode"]
 offset_right = 36.0
 offset_bottom = 55.0
 slot/0/left_enabled = true
@@ -14,7 +14,7 @@ slot/0/right_type = 0
 slot/0/right_color = Color(1, 1, 1, 1)
 slot/0/right_icon = null
 slot/0/draw_stylebox = true
-script = ExtResource("1_gye64")
+script = ExtResource("1_t42uv")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
