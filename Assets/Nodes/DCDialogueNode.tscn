@@ -60,5 +60,6 @@ text = " + "
 layout_mode = 2
 size_flags_vertical = 3
 text = "{\"Eng\": \"Hodor\",}"
+wrap_mode = 1
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/AddTextButton" to="." method="_on_add_text_button_pressed"]

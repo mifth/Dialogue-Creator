@@ -26,7 +26,6 @@ text = "{\"Eng\": \"Winter is coming\",}"
 wrap_mode = 1
 
 [node name="ControlsVBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 8
 

@@ -22,3 +22,4 @@ script = ExtResource("1_26qq4")
 layout_mode = 2
 size_flags_vertical = 3
 text = "{\"Eng\": \"Winter is coming\",}"
+wrap_mode = 1
