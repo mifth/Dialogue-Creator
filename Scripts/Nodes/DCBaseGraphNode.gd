@@ -80,14 +80,8 @@ func UpPort(the_node: Node):
 		up_input_port = input_port - 1
 	if output_port > -1:
 		up_output_port = output_port - 1
-	#var up_slot_name
 	
 	var new_connections = []
-
-	#if input_port >= 0:
-		#up_slot_name = get_child(get_input_port_slot(input_port + 1)).name
-	#elif output_port >= 0:
-		#up_slot_name = get_child(get_input_port_slot(output_port + 1)).name
 
 	for i in range(connections.size() - 1, -1, -1):
 		var conn = connections[i]
@@ -104,6 +98,47 @@ func UpPort(the_node: Node):
 			graph.disconnect_node(conn["from_node"], conn["from_port"], conn["to_node"], conn["to_port"])
 		elif conn["to_node"] == name and conn["to_port"] == up_input_port and up_input_port > -1:
 			new_connections.append([conn["from_node"], conn["from_port"], conn["to_node"], conn["to_port"] + 1])
+			graph.disconnect_node(conn["from_node"], conn["from_port"], conn["to_node"], conn["to_port"])
+			
+	for conn in new_connections:
+		graph.connect_node(conn[0], conn[1], conn[2], conn[3])
+
+
+func DownPort(the_node: Node):
+	if get_children().find(the_node) == get_children().size() - 1:
+		return
+
+	var graph = get_parent() as GraphEdit
+	var connections = graph.get_connection_list()
+
+	var input_port := GetInputPortID(the_node)
+	var output_port := GetOutputPortID(the_node)
+	
+	var down_input_port := -1
+	var down_output_port := -1
+	
+	if input_port > -1:
+		down_input_port = input_port + 1
+	if output_port > -1:
+		down_output_port = output_port + 1
+	
+	var new_connections = []
+
+	for i in range(connections.size() - 1, -1, -1):
+		var conn = connections[i]
+		
+		if conn["from_node"] == name and conn["from_port"] == output_port and output_port > -1:
+			new_connections.append([conn["from_node"], conn["from_port"] + 1, conn["to_node"], conn["to_port"]])
+			graph.disconnect_node(conn["from_node"], conn["from_port"], conn["to_node"], conn["to_port"])
+		elif conn["to_node"] == name and conn["to_port"] == input_port and input_port > -1:
+			new_connections.append([conn["from_node"], conn["from_port"], conn["to_node"], conn["to_port"] + 1])
+			graph.disconnect_node(conn["from_node"], conn["from_port"], conn["to_node"], conn["to_port"])
+
+		elif conn["from_node"] == name and conn["from_port"] == down_output_port and down_output_port > -1:
+			new_connections.append([conn["from_node"], conn["from_port"] - 1, conn["to_node"], conn["to_port"]])
+			graph.disconnect_node(conn["from_node"], conn["from_port"], conn["to_node"], conn["to_port"])
+		elif conn["to_node"] == name and conn["to_port"] == down_input_port and down_input_port > -1:
+			new_connections.append([conn["from_node"], conn["from_port"], conn["to_node"], conn["to_port"] - 1])
 			graph.disconnect_node(conn["from_node"], conn["from_port"], conn["to_node"], conn["to_port"])
 			
 	for conn in new_connections:
