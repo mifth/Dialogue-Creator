@@ -1,0 +1,77 @@
+[gd_scene load_steps=3 format=3 uid="uid://b0umk4iq77nwp"]
+
+[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Dialogue/DCGraph.gd" id="1_dotdc"]
+[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Menu/DCNodesMenu.gd" id="2_grrel"]
+
+[node name="DialogueCreator" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dotdc")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuBar" type="MenuBar" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MenuBar"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="FileButton" type="MenuButton" parent="VBoxContainer/MenuBar/HBoxContainer"]
+layout_mode = 2
+text = "File"
+item_count = 2
+popup/item_0/text = "Open"
+popup/item_0/id = 0
+popup/item_1/text = "Save"
+popup/item_1/id = 1
+
+[node name="NodesButton" type="MenuButton" parent="VBoxContainer/MenuBar/HBoxContainer"]
+layout_mode = 2
+text = "Nodes"
+item_count = 10
+popup/item_0/text = "Start"
+popup/item_0/id = 0
+popup/item_1/text = "Dialogue"
+popup/item_1/id = 1
+popup/item_2/text = "Reroute"
+popup/item_2/id = 2
+popup/item_3/text = "Reroute Text"
+popup/item_3/id = 3
+popup/item_4/text = "Enable/Disable Text"
+popup/item_4/id = 4
+popup/item_5/text = "Hide/Unhide Text"
+popup/item_5/id = 5
+popup/item_6/text = "Action"
+popup/item_6/id = 6
+popup/item_7/text = "Set Text"
+popup/item_7/id = 7
+popup/item_8/text = "Text"
+popup/item_8/id = 8
+popup/item_9/text = "Note"
+popup/item_9/id = 9
+script = ExtResource("2_grrel")
+
+[node name="DCGraphEdit" type="GraphEdit" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+show_grid = false
+snapping_distance = 10
+connection_lines_curvature = 0.2
+zoom_min = 0.05
+zoom_max = 5.0
+
+[connection signal="connection_request" from="VBoxContainer/DCGraphEdit" to="." method="_on_connection_request"]
+[connection signal="disconnection_request" from="VBoxContainer/DCGraphEdit" to="." method="_on_dc_graph_edit_disconnection_request"]

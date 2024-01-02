@@ -1,4 +1,4 @@
-extends DCBaseNode
+extends DCBaseGraphNode
 
 @export var text_node_text_resource: Resource
 

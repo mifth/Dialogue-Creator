@@ -1,3 +1,3 @@
-extends DCBaseNode
+extends DCBaseGraphNode
 
 
