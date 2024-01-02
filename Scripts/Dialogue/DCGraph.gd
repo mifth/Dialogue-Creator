@@ -1,3 +1,4 @@
+class_name DCGraph
 extends Control
 
 @onready var _graph: GraphEdit = $VBoxContainer/DCGraphEdit
@@ -69,12 +70,12 @@ func DeleteSelectedGraphNodes():
 	for i in nodes_rng:
 		var node2: GraphNode = nodes[i] as GraphNode
 		if node2.selected:
-			del_names.append(StringName(node2.get_path()).get_file())
+			del_names.append(node2.name)
 			node2.queue_free()
 
 	# Remove Connections of Deleted Nodes
 	for conn in connections:
-		if String(conn["from_node"]) in del_names or String(conn["to_node"]) in del_names:
+		if conn["from_node"] in del_names or conn["to_node"] in del_names:
 			_graph.disconnect_node(conn["from_node"], conn["from_port"], conn["to_node"], conn["to_port"])
 
 

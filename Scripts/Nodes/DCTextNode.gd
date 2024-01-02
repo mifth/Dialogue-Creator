@@ -1,6 +1,6 @@
 extends DCBaseNode
 
-@onready @export var text_node_text_resource: Resource
+@export var text_node_text_resource: Resource
 
 
 func _on_add_text_button_pressed():
@@ -9,4 +9,4 @@ func _on_add_text_button_pressed():
 	text_node.DeleteDialogueText.connect(self.ClearPorts)
 
 	add_child(text_node)
-	set_slot( get_children().size() - 1, true, 1, Color.BURLYWOOD, true, 0, Color.WHITE)
+	set_slot( get_children().size() - 1, false, 1, Color.BURLYWOOD, true, 1, Color.BURLYWOOD)
