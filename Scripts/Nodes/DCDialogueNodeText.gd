@@ -23,3 +23,8 @@ func _on_up_text_button_pressed():
 
 func _on_down_text_button_pressed():
 	emit_signal("DownDialogueText", self)
+
+
+func GetTextNode() -> TextEdit:
+	return $HBoxContainer/TextNodeText
+

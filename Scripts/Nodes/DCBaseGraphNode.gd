@@ -67,6 +67,8 @@ func UpPort(the_node: Node):
 	if get_children().find(the_node) == first_id:
 		return
 
+	var second_node: Node
+
 	var graph = get_parent() as GraphEdit
 	var connections = graph.get_connection_list()
 
@@ -78,8 +80,10 @@ func UpPort(the_node: Node):
 	
 	if input_port > -1:
 		up_input_port = input_port - 1
+		second_node = get_child(get_input_port_slot(up_input_port))
 	if output_port > -1:
 		up_output_port = output_port - 1
+		second_node = get_child(get_output_port_slot(up_output_port))
 	
 	var new_connections = []
 
@@ -103,10 +107,14 @@ func UpPort(the_node: Node):
 	for conn in new_connections:
 		graph.connect_node(conn[0], conn[1], conn[2], conn[3])
 
+	return [the_node, second_node]
+
 
 func DownPort(the_node: Node):
 	if get_children().find(the_node) == get_children().size() - 1:
 		return
+
+	var second_node: Node
 
 	var graph = get_parent() as GraphEdit
 	var connections = graph.get_connection_list()
@@ -119,8 +127,10 @@ func DownPort(the_node: Node):
 	
 	if input_port > -1:
 		down_input_port = input_port + 1
+		second_node = get_child(get_input_port_slot(down_input_port))
 	if output_port > -1:
 		down_output_port = output_port + 1
+		second_node = get_child(get_output_port_slot(down_output_port))
 	
 	var new_connections = []
 
@@ -143,3 +153,31 @@ func DownPort(the_node: Node):
 			
 	for conn in new_connections:
 		graph.connect_node(conn[0], conn[1], conn[2], conn[3])
+	
+	return [the_node, second_node]
+
+
+func ReverseTexts(nodes):
+	if nodes and nodes[0] and nodes[1]:
+		var text_1: DCDialogueNodeText = nodes[0] as DCDialogueNodeText
+		var text_2: DCDialogueNodeText = nodes[1] as DCDialogueNodeText
+
+		var tmp_txt_1 = text_1.GetTextNode().text
+		var tmp_txt_2 = text_2.GetTextNode().text
+		
+		text_1.GetTextNode().text = tmp_txt_2
+		text_2.GetTextNode().text = tmp_txt_1
+
+
+func ReverseTextsUp(the_node: Node):
+	var nodes = UpPort(the_node)
+	
+	if nodes:
+		ReverseTexts(nodes)
+
+
+func ReverseTextsDown(the_node: Node):
+	var nodes = DownPort(the_node)
+	
+	if nodes:
+		ReverseTexts(nodes)
