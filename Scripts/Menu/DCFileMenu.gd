@@ -1,9 +1,10 @@
-class_name DCNodesMenu
+class_name DCFileMenu
 extends MenuButton
 
 var popup: PopupMenu
 
-signal AddNode
+signal SaveFile
+signal LoadFile
 
 
 func _ready():
@@ -14,5 +15,7 @@ func _ready():
 func _on_item_pressed(ID):
 	var button_name = popup.get_item_text(ID)
 	
-	emit_signal("AddNode", button_name)
-	
+	if button_name == "Save":
+		emit_signal("SaveFile")
+	elif  button_name == "Open":
+		emit_signal("LoadFile")

@@ -3,7 +3,7 @@ extends Control
 
 @onready var _graph: GraphEdit = $VBoxContainer/DCGraphEdit
 
-@onready var file_button: MenuButton = $VBoxContainer/MenuBar/HBoxContainer/FileButton
+@onready var file_button: DCFileMenu = $VBoxContainer/MenuBar/HBoxContainer/FileButton
 @onready var nodes_button: DCNodesMenu = $VBoxContainer/MenuBar/HBoxContainer/NodesButton
 
 
@@ -21,7 +21,17 @@ extends Control
 
 
 func _ready():
-	nodes_button.add_node.connect(self._add_node)
+	file_button.SaveFile.connect(self._save_file)
+	file_button.LoadFile.connect(self._load_file)
+	nodes_button.AddNode.connect(self._add_node)
+
+
+func _save_file():
+	DCParse.SaveJS(_graph)
+
+
+func _load_file():
+	pass
 
 
 func _add_node(node_name: String):
@@ -86,7 +96,7 @@ func _on_connection_request(from_node: StringName, from_port, to_node: StringNam
 		var connections = _graph.get_connection_list()
 		
 		# Remove Old Conncetion
-		if from_graph_nd.get_input_port_type(from_port) == 0:
+		if from_graph_nd.get_output_port_type(from_port) == 0:
 			for conn in connections:
 				if conn["from_node"] == from_node and from_port == conn["from_port"]:
 					_graph.disconnect_node(conn["from_node"], conn["from_port"], conn["to_node"], conn["to_port"])
