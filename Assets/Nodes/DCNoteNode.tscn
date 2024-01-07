@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dxsej4c63qxkb"]
 
-[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCActionNode.gd" id="1_a7j02"]
+[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCNoteNode.gd" id="1_agerf"]
 
 [node name="NoteNode" type="GraphNode"]
 offset_right = 403.0
@@ -16,7 +16,7 @@ slot/0/right_type = 0
 slot/0/right_color = Color(1, 1, 1, 1)
 slot/0/right_icon = null
 slot/0/draw_stylebox = true
-script = ExtResource("1_a7j02")
+script = ExtResource("1_agerf")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2

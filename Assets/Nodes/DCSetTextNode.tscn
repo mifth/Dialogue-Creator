@@ -19,6 +19,15 @@ slot/0/right_type = 0
 slot/0/right_color = Color(1, 1, 1, 1)
 slot/0/right_icon = null
 slot/0/draw_stylebox = true
+slot/1/left_enabled = false
+slot/1/left_type = 0
+slot/1/left_color = Color(1, 1, 1, 1)
+slot/1/left_icon = null
+slot/1/right_enabled = true
+slot/1/right_type = 1
+slot/1/right_color = Color(0.905882, 0.415686, 1, 1)
+slot/1/right_icon = null
+slot/1/draw_stylebox = true
 script = ExtResource("1_7a52l")
 text_node_text_resource = ExtResource("2_kvhh1")
 
@@ -33,5 +42,10 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 text = " + "
+
+[node name="Random" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Random"
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/AddTextButton" to="." method="_on_add_text_button_pressed"]

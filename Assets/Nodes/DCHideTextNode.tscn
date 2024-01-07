@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dfw0qov5uxbk7"]
 
-[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCBaseGraphNode.gd" id="1_8ytg7"]
+[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCHideTextNode.gd" id="1_hdwdu"]
 
 [node name="HideTextNode" type="GraphNode"]
 offset_right = 171.0
@@ -33,7 +33,7 @@ slot/2/right_type = 1
 slot/2/right_color = Color(0.819608, 0.67451, 0.0313726, 1)
 slot/2/right_icon = null
 slot/2/draw_stylebox = true
-script = ExtResource("1_8ytg7")
+script = ExtResource("1_hdwdu")
 
 [node name="Tmp" type="Label" parent="."]
 layout_mode = 2

@@ -181,3 +181,56 @@ func ReverseTextsDown(the_node: Node):
 	
 	if nodes:
 		ReverseTexts(nodes)
+
+
+func GetInputsJS():
+	var inputs = []
+
+	for i in range(get_input_port_count()):
+		var input = {}
+		input["Type"] = get_input_port_type(i)
+		input["Slot"] = get_input_port_slot(i)
+		
+		inputs.append(input)
+
+	return inputs
+
+
+func GetOutputsJS():
+	var outputs = []
+	
+	# Outputs
+	for i in range(get_output_port_count()):
+		var output = {}
+		output["Type"] = get_output_port_type(i)
+		output["Slot"] = get_output_port_slot(i)
+		
+		outputs.append(output)
+	
+	return outputs
+	
+	
+func GetNodeBaseParamsJS() -> Dictionary:
+	var inputs = {}
+
+	inputs["Inputs"] = GetInputsJS()
+	inputs["Outputs"] = GetOutputsJS()
+
+	return inputs
+	
+	
+func GetTextNodesJS():
+	var text_nodes_js = []
+	var children = get_children()
+	for i in range(children.size()):
+		var child_node = children[i]
+		
+		if is_instance_of(child_node, DCDialogueNodeText):
+			var text_node = child_node as DCDialogueNodeText
+
+			text_nodes_js.append(text_node.GetTextNode().text)
+	
+	return text_nodes_js
+	
+	
+	
