@@ -20,6 +20,6 @@ func GetNodeParamsJS():
 	
 	params["TextNodes"] = GetTextNodesJS()
 	
-	params["Type"] = "DCSetTextNode"
+	#params["Type"] = DCUtils.SetTextNode
 	
-	return params
+	return [params, DCUtils.SetTextNode]

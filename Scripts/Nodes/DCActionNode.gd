@@ -12,6 +12,6 @@ func GetNodeParamsJS():
 	
 	params["ActionName"] = _action_name_node.text
 
-	params["Type"] = "DCActionNode"
+	#params["Type"] = DCUtils.ActionNode
 	
-	return params
+	return [params, DCUtils.ActionNode]

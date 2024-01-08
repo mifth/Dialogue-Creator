@@ -75,5 +75,15 @@ connection_lines_curvature = 0.2
 zoom_min = 0.05
 zoom_max = 5.0
 
+[node name="SaveFileDialog" type="FileDialog" parent="."]
+initial_position = 2
+size = Vector2i(589, 344)
+dialog_hide_on_ok = true
+dialog_autowrap = true
+access = 2
+filters = PackedStringArray("*.json")
+use_native_dialog = true
+
 [connection signal="connection_request" from="VBoxContainer/DCGraphEdit" to="." method="_on_connection_request"]
 [connection signal="disconnection_request" from="VBoxContainer/DCGraphEdit" to="." method="_on_dc_graph_edit_disconnection_request"]
+[connection signal="file_selected" from="SaveFileDialog" to="." method="_on_save_file_dialog_file_selected"]

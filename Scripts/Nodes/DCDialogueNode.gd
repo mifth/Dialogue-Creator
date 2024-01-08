@@ -22,9 +22,12 @@ func GetNodeParamsJS():
 	var main_text = $MainTextEdit as TextEdit
 	params["MainText"] = main_text.text
 	
+	var char_id = $VBoxContainer/HBoxContainer/CharacterID as SpinBox
+	params["CharacterID"] = char_id.value as int
+	
 	# Get Texts
 	params["TextNodes"] = GetTextNodesJS()
 	
-	params["Type"] = "DCDialogueNode"
+	#params["Type"] = DCUtils.DialogueNode
 	
-	return params
+	return [params, DCUtils.DialogueNode]

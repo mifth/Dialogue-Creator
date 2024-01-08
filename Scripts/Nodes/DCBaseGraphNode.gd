@@ -208,17 +208,26 @@ func GetOutputsJS():
 		outputs.append(output)
 	
 	return outputs
-	
-	
+
+
 func GetNodeBaseParamsJS() -> Dictionary:
-	var inputs = {}
+	var base_params = {}
 
-	inputs["Inputs"] = GetInputsJS()
-	inputs["Outputs"] = GetOutputsJS()
+	base_params["Inputs"] = GetInputsJS()
+	base_params["Outputs"] = GetOutputsJS()
+	
+	base_params["Name"] = name
+	
+	base_params["Position"] = [position_offset.x, position_offset.y]
 
-	return inputs
-	
-	
+	if resizable:
+		base_params["Size"] = [size.x, size.y]
+	else:
+		base_params["Size"] = []
+
+	return base_params
+
+
 func GetTextNodesJS():
 	var text_nodes_js = []
 	var children = get_children()
@@ -231,6 +240,4 @@ func GetTextNodesJS():
 			text_nodes_js.append(text_node.GetTextNode().text)
 	
 	return text_nodes_js
-	
-	
-	
+

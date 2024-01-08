@@ -21,20 +21,26 @@ extends Control
 
 
 func _ready():
-	file_button.SaveFile.connect(self._save_file)
-	file_button.LoadFile.connect(self._load_file)
-	nodes_button.AddNode.connect(self._add_node)
+	file_button.SaveFile.connect(self.SaveFileJS)
+	file_button.LoadFile.connect(self.LoadFileJS)
+	nodes_button.AddNode.connect(self.AddNode)
 
 
-func _save_file():
-	DCParse.SaveJS(_graph)
+func SaveFileJS():
+	var file_d = $SaveFileDialog
+	file_d.show()
+	
 
 
-func _load_file():
+func _on_save_file_dialog_file_selected(path):
+	DCParse.SaveFileJS(_graph, path)
+
+
+func LoadFileJS():
 	pass
 
 
-func _add_node(node_name: String):
+func AddNode(node_name: String):
 	var node_res: Resource
 	
 	if node_name == "Start":
@@ -59,8 +65,9 @@ func _add_node(node_name: String):
 		node_res = _text_node_res
 
 	var new_node: GraphNode = node_res.instantiate()
-	_graph.add_child(new_node)
 	new_node.position_offset = _graph.scroll_offset + (Vector2(get_viewport().size) / 2.5)
+
+	_graph.add_child(new_node)
 
 
 func _input(event):
@@ -109,5 +116,4 @@ func _on_connection_request(from_node: StringName, from_port, to_node: StringNam
 
 func _on_dc_graph_edit_disconnection_request(from_node, from_port, to_node, to_port):
 	_graph.disconnect_node(from_node, from_port, to_node, to_port)
-
 

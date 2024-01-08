@@ -24,8 +24,10 @@ layout_mode = 2
 layout_mode = 2
 text = "Start ID: "
 
-[node name="StartSpinBox" type="SpinBox" parent="HBoxContainer"]
+[node name="StartIDSpinBox" type="SpinBox" parent="HBoxContainer"]
 layout_mode = 2
-max_value = 100000.0
+max_value = 2e+07
 rounded = true
 allow_greater = true
+
+[connection signal="value_changed" from="HBoxContainer/StartIDSpinBox" to="." method="_on_start_spin_box_value_changed"]

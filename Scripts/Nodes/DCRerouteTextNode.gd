@@ -5,8 +5,8 @@ extends DCBaseGraphNode
 func GetNodeParamsJS():
 	var params = GetNodeBaseParamsJS()
 	
-	params["Type"] = "DCRerouteTextNode"
+	#params["Type"] = DCUtils.RerouteTextNode
 	
-	return params
+	return [params, DCUtils.RerouteTextNode]
 
 

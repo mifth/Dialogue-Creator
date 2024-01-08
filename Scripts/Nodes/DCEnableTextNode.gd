@@ -5,6 +5,6 @@ extends DCBaseGraphNode
 func GetNodeParamsJS():
 	var params = GetNodeBaseParamsJS()
 	
-	params["Type"] = "DCEnableTextNode"
+	#params["Type"] = DCUtils.EnableTextNode
 	
-	return params
+	return [params, DCUtils.EnableTextNode]
