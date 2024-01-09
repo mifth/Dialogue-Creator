@@ -64,6 +64,7 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 	var data_js = JSON.parse_string(text_js)
 
 	var nodes_js = data_js["Nodes"]
+	var conns_js = data_js["Connections"]
 
 	for node_js in nodes_js[DCUtils.ActionNode]:
 		var new_node = DCGraph.action_node_res.instantiate() as GraphNode
@@ -73,6 +74,10 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 	for node_js in nodes_js[DCUtils.DialogueNode]:
 		var new_node = DCGraph.dialogue_node_res.instantiate() as GraphNode
 		SetNodeParamsJS(new_node, node_js)
+		
+		if node_js["TextSlots"]:
+			AddTextTextSlotsJS(new_node, node_js["TextSlots"])
+		
 		graph.add_child(new_node)
 
 	for node_js in nodes_js[DCUtils.EnableTextNode]:
@@ -103,6 +108,10 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 	for node_js in nodes_js[DCUtils.SetTextNode]:
 		var new_node = DCGraph.settext_node_res.instantiate() as GraphNode
 		SetNodeParamsJS(new_node, node_js)
+		
+		if node_js["TextSlots"]:
+			AddTextTextSlotsJS(new_node, node_js["TextSlots"])
+		
 		graph.add_child(new_node)
 
 	for node_js in nodes_js[DCUtils.StartNode]:
@@ -113,8 +122,22 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 	for node_js in nodes_js[DCUtils.TextNode]:
 		var new_node = DCGraph.text_node_res.instantiate() as GraphNode
 		SetNodeParamsJS(new_node, node_js)
+		
+		if node_js["TextSlots"]:
+			AddTextTextSlotsJS(new_node, node_js["TextSlots"])
+		
 		graph.add_child(new_node)
 
+		# Add Connections
+		for conn_js in conns_js:
+			graph.connect_node(conn_js["FromNode"], conn_js["FromPort"], conn_js["ToNode"], conn_js["ToPort"])
+
+
+static func AddTextTextSlotsJS(base_graph_node: DCBaseGraphNode, texts: Array):
+	for text in texts:
+		var text_node = base_graph_node.AddTextTextNode() as DCDialogueNodeText
+		text_node.GetTextNode().text = text
+		
 
 static func SetNodeParamsJS(node: GraphNode, node_js):
 	node.position_offset = Vector2(node_js["Position"][0], node_js["Position"][1])

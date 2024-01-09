@@ -241,3 +241,16 @@ func GetTextNodesJS():
 	
 	return text_nodes_js
 
+
+func AddTextNode(is_port_l:bool, port_l_type: int, port_l_color: Color,
+				is_port_r:bool, port_r_type: int, port_r_color: Color) -> DCDialogueNodeText:
+	var text_node = DCGraph.text_node_text_res.instantiate() as DCDialogueNodeText
+	
+	text_node.DeleteDialogueText.connect(self.ClearPorts)
+	text_node.UpDialogueText.connect(self.ReverseTextsUp)
+	text_node.DownDialogueText.connect(self.ReverseTextsDown)
+
+	add_child(text_node)
+	set_slot( get_children().size() - 1, is_port_l, port_l_type, port_l_color, is_port_r, port_r_type, port_r_color)
+	
+	return text_node

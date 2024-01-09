@@ -21,6 +21,8 @@ static var note_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/D
 static var settext_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCSetTextNode.tscn")
 static var text_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCTextNode.tscn")
 
+static var text_node_text_res: Resource = preload("res://addons/dialoguecreator/Assets/Nodes/DCDialogueNodeText.tscn")
+
 
 func _ready():
 	file_button.NewFile.connect(self.NewScene)
