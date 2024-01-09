@@ -6,63 +6,83 @@ extends Control
 @onready var file_button: DCFileMenu = $VBoxContainer/MenuBar/HBoxContainer/FileButton
 @onready var nodes_button: DCNodesMenu = $VBoxContainer/MenuBar/HBoxContainer/NodesButton
 
+@onready var _file_dialogue = $SaveFileDialog
+
 
 # Preload Nodes
-@onready var _start_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCStartNode.tscn")
-@onready var _dialogue_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCDialogueNode.tscn")
-@onready var _enable_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCEnableTextNode.tscn")
-@onready var _hide_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCHideTextNode.tscn")
-@onready var _reroute_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCRerouteNode.tscn")
-@onready var _reroute_text_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCRerouteTextNode.tscn")
-@onready var _action_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCActionNode.tscn")
-@onready var _note_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCNoteNode.tscn")
-@onready var _settext_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCSetTextNode.tscn")
-@onready var _text_node_res = preload("res://addons/dialoguecreator/Assets/Nodes/DCTextNode.tscn")
+static var start_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCStartNode.tscn")
+static var dialogue_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCDialogueNode.tscn")
+static var enable_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCEnableTextNode.tscn")
+static var hide_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCHideTextNode.tscn")
+static var reroute_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCRerouteNode.tscn")
+static var reroute_text_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCRerouteTextNode.tscn")
+static var action_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCActionNode.tscn")
+static var note_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCNoteNode.tscn")
+static var settext_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCSetTextNode.tscn")
+static var text_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCTextNode.tscn")
 
 
 func _ready():
-	file_button.SaveFile.connect(self.SaveFileJS)
-	file_button.LoadFile.connect(self.LoadFileJS)
+	file_button.NewFile.connect(self.NewScene)
+	file_button.SaveFile.connect(self.SaveFileDialogue)
+	file_button.LoadFile.connect(self.LoadFileDialogue)
 	nodes_button.AddNode.connect(self.AddNode)
 
 
-func SaveFileJS():
-	var file_d = $SaveFileDialog
-	file_d.show()
-	
+func ClearGraph():
+	for node in _graph.get_children():
+		node.queue_free()
+
+	_graph.clear_connections()
+
+
+func NewScene():
+	ClearGraph()
+
+
+func SaveFileDialogue():
+	_file_dialogue.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+	_file_dialogue.title = "Save To JSON"
+	_file_dialogue.show()
 
 
 func _on_save_file_dialog_file_selected(path):
-	DCParse.SaveFileJS(_graph, path)
+	if _file_dialogue.file_mode == FileDialog.FILE_MODE_SAVE_FILE:
+		DCParse.SaveFileJS(_graph, path)
+	else:
+		ClearGraph()
+		DCParse.LoadFileJS(_graph, path)
 
 
-func LoadFileJS():
-	pass
+func LoadFileDialogue():
+	_file_dialogue.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	_file_dialogue.title = "Load JSON"
+	_file_dialogue.show()
 
 
 func AddNode(node_name: String):
 	var node_res: Resource
 	
 	if node_name == "Start":
-		node_res = _start_node_res
+		node_res = start_node_res
 	elif node_name == "Reroute":
-		node_res = _reroute_node_res
+		node_res = reroute_node_res
 	elif node_name == "Reroute Text":
-		node_res = _reroute_text_node_res
+		node_res = reroute_text_node_res
 	elif node_name == "Dialogue":
-		node_res = _dialogue_node_res
+		node_res = dialogue_node_res
 	elif node_name == "Enable/Disable Text":
-		node_res = _enable_node_res
+		node_res = enable_node_res
 	elif node_name == "Hide/Unhide Text":
-		node_res = _hide_node_res
+		node_res = hide_node_res
 	elif node_name == "Action":
-		node_res = _action_node_res
+		node_res = action_node_res
 	elif node_name == "Note":
-		node_res = _note_node_res
+		node_res = note_node_res
 	elif node_name == "Set Text":
-		node_res = _settext_node_res
+		node_res = settext_node_res
 	elif node_name == "Text":
-		node_res = _text_node_res
+		node_res = text_node_res
 
 	var new_node: GraphNode = node_res.instantiate()
 	new_node.position_offset = _graph.scroll_offset + (Vector2(get_viewport().size) / 2.5)

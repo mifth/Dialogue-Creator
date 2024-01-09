@@ -59,4 +59,65 @@ static func SaveFileJS(graph: GraphEdit, path: String):
 	file.store_string(data_js_str)
 	
 	
+static func LoadFileJS(graph: GraphEdit, path: String):
+	var text_js = FileAccess.get_file_as_string(path)
+	var data_js = JSON.parse_string(text_js)
 
+	var nodes_js = data_js["Nodes"]
+
+	for node_js in nodes_js[DCUtils.ActionNode]:
+		var new_node = DCGraph.action_node_res.instantiate() as GraphNode
+		SetNodeParamsJS(new_node, node_js)
+		graph.add_child(new_node)
+
+	for node_js in nodes_js[DCUtils.DialogueNode]:
+		var new_node = DCGraph.dialogue_node_res.instantiate() as GraphNode
+		SetNodeParamsJS(new_node, node_js)
+		graph.add_child(new_node)
+
+	for node_js in nodes_js[DCUtils.EnableTextNode]:
+		var new_node = DCGraph.enable_node_res.instantiate() as GraphNode
+		SetNodeParamsJS(new_node, node_js)
+		graph.add_child(new_node)
+
+	for node_js in nodes_js[DCUtils.HideTextNode]:
+		var new_node = DCGraph.hide_node_res.instantiate() as GraphNode
+		SetNodeParamsJS(new_node, node_js)
+		graph.add_child(new_node)
+
+	for node_js in nodes_js[DCUtils.NoteNode]:
+		var new_node = DCGraph.note_node_res.instantiate() as GraphNode
+		SetNodeParamsJS(new_node, node_js)
+		graph.add_child(new_node)
+
+	for node_js in nodes_js[DCUtils.RerouteNode]:
+		var new_node = DCGraph.reroute_node_res.instantiate() as GraphNode
+		SetNodeParamsJS(new_node, node_js)
+		graph.add_child(new_node)
+
+	for node_js in nodes_js[DCUtils.RerouteTextNode]:
+		var new_node = DCGraph.reroute_text_node_res.instantiate() as GraphNode
+		SetNodeParamsJS(new_node, node_js)
+		graph.add_child(new_node)
+
+	for node_js in nodes_js[DCUtils.SetTextNode]:
+		var new_node = DCGraph.settext_node_res.instantiate() as GraphNode
+		SetNodeParamsJS(new_node, node_js)
+		graph.add_child(new_node)
+
+	for node_js in nodes_js[DCUtils.StartNode]:
+		var new_node = DCGraph.start_node_res.instantiate() as GraphNode
+		SetNodeParamsJS(new_node, node_js)
+		graph.add_child(new_node)
+
+	for node_js in nodes_js[DCUtils.TextNode]:
+		var new_node = DCGraph.text_node_res.instantiate() as GraphNode
+		SetNodeParamsJS(new_node, node_js)
+		graph.add_child(new_node)
+
+
+static func SetNodeParamsJS(node: GraphNode, node_js):
+	node.position_offset = Vector2(node_js["Position"][0], node_js["Position"][1])
+	
+	if node_js["Size"]:
+		node.size = Vector2(node_js["Size"][0], node_js["Size"][1])

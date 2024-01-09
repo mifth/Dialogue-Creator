@@ -33,11 +33,13 @@ offset_bottom = 40.0
 [node name="FileButton" type="MenuButton" parent="VBoxContainer/MenuBar/HBoxContainer"]
 layout_mode = 2
 text = "File"
-item_count = 2
-popup/item_0/text = "Open"
+item_count = 3
+popup/item_0/text = "New"
 popup/item_0/id = 0
-popup/item_1/text = "Save"
+popup/item_1/text = "Open"
 popup/item_1/id = 1
+popup/item_2/text = "Save"
+popup/item_2/id = 2
 script = ExtResource("2_4wsl1")
 
 [node name="NodesButton" type="MenuButton" parent="VBoxContainer/MenuBar/HBoxContainer"]
