@@ -236,8 +236,11 @@ func GetTextNodesJS():
 		
 		if is_instance_of(child_node, DCDialogueNodeText):
 			var text_node = child_node as DCDialogueNodeText
+			
+			var text_slot_dict = {}
+			text_slot_dict["Text"] = text_node.GetTextNode().text
 
-			text_nodes_js.append(text_node.GetTextNode().text)
+			text_nodes_js.append(text_slot_dict)
 	
 	return text_nodes_js
 

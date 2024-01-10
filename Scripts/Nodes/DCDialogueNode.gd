@@ -10,19 +10,23 @@ func AddTextTextNode() -> DCDialogueNodeText:
 	return AddTextNode(true, 1, Color.BURLYWOOD, true, 0, Color.WHITE)
 
 
+func GetMainText() -> TextEdit:
+	return $MainTextEdit as TextEdit
+
+
 func GetNodeParamsJS():
 	var params = GetNodeBaseParamsJS()
 
 	# Get Main Text
-	var main_text = $MainTextEdit as TextEdit
-	params["MainText"] = main_text.text
+	var main_text = GetMainText()
+	var main_text_dict = {}
+	main_text_dict["Text"] = main_text.text
+	params["MainText"] = main_text_dict
 	
 	var char_id = $VBoxContainer/HBoxContainer/CharacterID as SpinBox
 	params["CharacterID"] = char_id.value as int
 	
 	# Get Texts
 	params["TextSlots"] = GetTextNodesJS()
-	
-	#params["Type"] = DCUtils.DialogueNode
 	
 	return [params, DCUtils.DialogueNode]

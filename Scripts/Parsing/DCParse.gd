@@ -81,6 +81,10 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 		SetNodeParamsJS(new_node, node_js)
 		nodes_by_name[node_js["Name"]] = new_node.name
 		
+		# Set Main Text
+		var main_text = new_node.GetMainText()
+		main_text.text = node_js["MainText"]["Text"]
+		
 		if node_js["TextSlots"]:
 			AddTextTextSlotsJS(new_node, node_js["TextSlots"])
 		
@@ -149,7 +153,7 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 static func AddTextTextSlotsJS(base_graph_node: DCBaseGraphNode, texts: Array):
 	for text in texts:
 		var text_node = base_graph_node.AddTextTextNode() as DCDialogueNodeText
-		text_node.GetTextNode().text = text
+		text_node.GetTextNode().text = text["Text"]
 		
 
 static func SetNodeParamsJS(node: GraphNode, node_js):

@@ -15,6 +15,4 @@ func GetNodeParamsJS():
 	
 	params["TextSlots"] = GetTextNodesJS()
 	
-	#params["Type"] = DCUtils.TextNode
-	
 	return [params, DCUtils.TextNode]
