@@ -65,72 +65,85 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 
 	var nodes_js = data_js["Nodes"]
 	var conns_js = data_js["Connections"]
+	
+	var nodes_by_name = {}  # Nodes By Original Name
 
 	for node_js in nodes_js[DCUtils.ActionNode]:
 		var new_node = DCGraph.action_node_res.instantiate() as GraphNode
-		SetNodeParamsJS(new_node, node_js)
 		graph.add_child(new_node)
+		SetNodeParamsJS(new_node, node_js)
+		nodes_by_name[node_js["Name"]] = new_node.name
+		
 
 	for node_js in nodes_js[DCUtils.DialogueNode]:
 		var new_node = DCGraph.dialogue_node_res.instantiate() as GraphNode
+		graph.add_child(new_node)
 		SetNodeParamsJS(new_node, node_js)
+		nodes_by_name[node_js["Name"]] = new_node.name
 		
 		if node_js["TextSlots"]:
 			AddTextTextSlotsJS(new_node, node_js["TextSlots"])
 		
-		graph.add_child(new_node)
 
 	for node_js in nodes_js[DCUtils.EnableTextNode]:
 		var new_node = DCGraph.enable_node_res.instantiate() as GraphNode
-		SetNodeParamsJS(new_node, node_js)
 		graph.add_child(new_node)
+		SetNodeParamsJS(new_node, node_js)
+		nodes_by_name[node_js["Name"]] = new_node.name
 
 	for node_js in nodes_js[DCUtils.HideTextNode]:
 		var new_node = DCGraph.hide_node_res.instantiate() as GraphNode
-		SetNodeParamsJS(new_node, node_js)
 		graph.add_child(new_node)
+		SetNodeParamsJS(new_node, node_js)
+		nodes_by_name[node_js["Name"]] = new_node.name
 
 	for node_js in nodes_js[DCUtils.NoteNode]:
 		var new_node = DCGraph.note_node_res.instantiate() as GraphNode
-		SetNodeParamsJS(new_node, node_js)
 		graph.add_child(new_node)
+		SetNodeParamsJS(new_node, node_js)
+		nodes_by_name[node_js["Name"]] = new_node.name
 
 	for node_js in nodes_js[DCUtils.RerouteNode]:
 		var new_node = DCGraph.reroute_node_res.instantiate() as GraphNode
-		SetNodeParamsJS(new_node, node_js)
 		graph.add_child(new_node)
+		SetNodeParamsJS(new_node, node_js)
+		nodes_by_name[node_js["Name"]] = new_node.name
 
 	for node_js in nodes_js[DCUtils.RerouteTextNode]:
 		var new_node = DCGraph.reroute_text_node_res.instantiate() as GraphNode
-		SetNodeParamsJS(new_node, node_js)
 		graph.add_child(new_node)
+		SetNodeParamsJS(new_node, node_js)
+		nodes_by_name[node_js["Name"]] = new_node.name
 
 	for node_js in nodes_js[DCUtils.SetTextNode]:
 		var new_node = DCGraph.settext_node_res.instantiate() as GraphNode
+		graph.add_child(new_node)
 		SetNodeParamsJS(new_node, node_js)
 		
 		if node_js["TextSlots"]:
 			AddTextTextSlotsJS(new_node, node_js["TextSlots"])
 		
-		graph.add_child(new_node)
+		nodes_by_name[node_js["Name"]] = new_node.name
 
 	for node_js in nodes_js[DCUtils.StartNode]:
 		var new_node = DCGraph.start_node_res.instantiate() as GraphNode
-		SetNodeParamsJS(new_node, node_js)
 		graph.add_child(new_node)
+		SetNodeParamsJS(new_node, node_js)
+		nodes_by_name[node_js["Name"]] = new_node.name
 
 	for node_js in nodes_js[DCUtils.TextNode]:
 		var new_node = DCGraph.text_node_res.instantiate() as GraphNode
+		graph.add_child(new_node)
 		SetNodeParamsJS(new_node, node_js)
 		
 		if node_js["TextSlots"]:
 			AddTextTextSlotsJS(new_node, node_js["TextSlots"])
 		
-		graph.add_child(new_node)
+		nodes_by_name[node_js["Name"]] = new_node.name
 
-		# Add Connections
-		for conn_js in conns_js:
-			graph.connect_node(conn_js["FromNode"], conn_js["FromPort"], conn_js["ToNode"], conn_js["ToPort"])
+	# Add Connections
+	for conn_js in conns_js:
+		graph.connect_node(nodes_by_name[conn_js["FromNode"]], conn_js["FromPort"], nodes_by_name[conn_js["ToNode"]], conn_js["ToPort"])
 
 
 static func AddTextTextSlotsJS(base_graph_node: DCBaseGraphNode, texts: Array):

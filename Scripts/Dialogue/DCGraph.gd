@@ -32,10 +32,10 @@ func _ready():
 
 
 func ClearGraph():
+	_graph.clear_connections()
+
 	for node in _graph.get_children():
 		node.queue_free()
-
-	_graph.clear_connections()
 
 
 func NewScene():

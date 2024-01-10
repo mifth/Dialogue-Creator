@@ -1,8 +1,6 @@
 class_name DCSetTextNode
 extends DCBaseGraphNode
 
-@export var text_node_text_resource: Resource
-
 
 func _on_add_text_button_pressed():
 	AddTextTextNode()

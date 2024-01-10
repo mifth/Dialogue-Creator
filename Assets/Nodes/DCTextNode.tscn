@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://b8rv0d4hl2g7w"]
+[gd_scene load_steps=2 format=3 uid="uid://b8rv0d4hl2g7w"]
 
 [ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCTextNode.gd" id="1_88fwy"]
-[ext_resource type="PackedScene" uid="uid://bklhda5e8dmxn" path="res://addons/dialoguecreator/Assets/Nodes/DCDialogueNodeText.tscn" id="2_npc7u"]
 
 [node name="TextNode" type="GraphNode"]
 offset_right = 470.0
@@ -29,7 +28,6 @@ slot/1/right_color = Color(0.907006, 0.415941, 1, 1)
 slot/1/right_icon = null
 slot/1/draw_stylebox = true
 script = ExtResource("1_88fwy")
-text_node_text_resource = ExtResource("2_npc7u")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
