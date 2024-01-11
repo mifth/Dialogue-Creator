@@ -12,6 +12,9 @@ const RerouteTextNode = "DCRerouteTextNode"
 const SetTextNode = "DCSetTextNode"
 const StartNode = "DCStartNode"
 const TextNode = "DCTextNode"
+const CharacterNode = "DCCharacterNode"
+
+const version = [0, 1]
 
 
 static func GenerateID(ids, start_value: int) -> int:

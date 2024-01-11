@@ -14,6 +14,10 @@ func GetMainText() -> TextEdit:
 	return $MainTextEdit as TextEdit
 
 
+func GetCharacterIDSpinBox() -> SpinBox:
+	return $VBoxContainer/HBoxContainer/CharacterID
+
+
 func GetNodeParamsJS():
 	var params = GetNodeBaseParamsJS()
 
@@ -23,8 +27,7 @@ func GetNodeParamsJS():
 	main_text_dict["Text"] = main_text.text
 	params["MainText"] = main_text_dict
 	
-	var char_id = $VBoxContainer/HBoxContainer/CharacterID as SpinBox
-	params["CharacterID"] = char_id.value as int
+	params["CharacterID"] = GetCharacterIDSpinBox().value as int
 	
 	# Get Texts
 	params["TextSlots"] = GetTextNodesJS()

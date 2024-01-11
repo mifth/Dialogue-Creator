@@ -15,6 +15,7 @@ static func CreateNodesArraysJS():
 	nodes_js[DCUtils.SetTextNode] = []
 	nodes_js[DCUtils.StartNode] = []
 	nodes_js[DCUtils.TextNode] = []
+	nodes_js[DCUtils.CharacterNode] = []
 
 	return nodes_js
 
@@ -41,6 +42,7 @@ static func GetDataJS(graph: GraphEdit):
 
 	data_js["Nodes"] = nodes_js
 	data_js["Connections"] = conns_js
+	data_js["Version"] = DCUtils.version
 
 	return data_js
 
@@ -76,7 +78,7 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 		
 
 	for node_js in nodes_js[DCUtils.DialogueNode]:
-		var new_node = DCGraph.dialogue_node_res.instantiate() as GraphNode
+		var new_node = DCGraph.dialogue_node_res.instantiate() as DCDialogueNode
 		graph.add_child(new_node)
 		SetNodeParamsJS(new_node, node_js)
 		nodes_by_name[node_js["Name"]] = new_node.name
@@ -84,6 +86,9 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 		# Set Main Text
 		var main_text = new_node.GetMainText()
 		main_text.text = node_js["MainText"]["Text"]
+		
+		var char_id = new_node.GetCharacterIDSpinBox()
+		char_id.value = node_js["CharacterID"] as int
 		
 		if node_js["TextSlots"]:
 			AddTextTextSlotsJS(new_node, node_js["TextSlots"])
@@ -142,6 +147,18 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 		
 		if node_js["TextSlots"]:
 			AddTextTextSlotsJS(new_node, node_js["TextSlots"])
+		
+		nodes_by_name[node_js["Name"]] = new_node.name
+
+	for node_js in nodes_js[DCUtils.CharacterNode]:
+		var new_node = DCGraph.character_node_res.instantiate() as DCCharacterNode
+		graph.add_child(new_node)
+		SetNodeParamsJS(new_node, node_js)
+		
+		var char_id = new_node.GetCharacterIDSpinBox()
+		char_id.value = node_js["CharacterID"] as int
+		
+		new_node.GetCharacterNameLineEdit().text = node_js["CharacterName"]
 		
 		nodes_by_name[node_js["Name"]] = new_node.name
 

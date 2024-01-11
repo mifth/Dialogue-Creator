@@ -20,6 +20,7 @@ static var action_node_res := preload("res://addons/dialoguecreator/Assets/Nodes
 static var note_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCNoteNode.tscn")
 static var settext_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCSetTextNode.tscn")
 static var text_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCTextNode.tscn")
+static var character_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCCharacterNode.tscn")
 
 static var text_node_text_res: Resource = preload("res://addons/dialoguecreator/Assets/Nodes/DCDialogueNodeText.tscn")
 
@@ -29,7 +30,6 @@ func _ready():
 	file_button.SaveFile.connect(self.SaveFileDialogue)
 	file_button.LoadFile.connect(self.LoadFileDialogue)
 	nodes_button.AddNode.connect(self.AddNode)
-
 
 func ClearGraph():
 	_graph.clear_connections()
@@ -85,6 +85,8 @@ func AddNode(node_name: String):
 		node_res = settext_node_res
 	elif node_name == "Text":
 		node_res = text_node_res
+	elif node_name == "Character":
+		node_res = character_node_res
 
 	var new_node: GraphNode = node_res.instantiate()
 	new_node.position_offset = _graph.scroll_offset + (Vector2(get_viewport().size) / 2.5)
