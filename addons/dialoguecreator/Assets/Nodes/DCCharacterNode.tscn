@@ -1,11 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://blt40x8rvdb4w"]
+[gd_scene load_steps=2 format=3 uid="uid://blt40x8rvdb4w"]
 
 [ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCCharacterNode.gd" id="1_ujftc"]
-[ext_resource type="Texture2D" uid="uid://b283vrein1k2y" path="res://icon.svg" id="2_jbp1f"]
 
 [node name="ActionNode" type="GraphNode"]
 offset_right = 338.0
-offset_bottom = 377.0
+offset_bottom = 397.0
 resizable = true
 title = "Character"
 slot/0/left_enabled = false
@@ -50,6 +49,6 @@ size_flags_horizontal = 3
 [node name="CharactersItemList" type="ItemList" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-item_count = 1
-item_0/text = ""
-item_0/icon = ExtResource("2_jbp1f")
+max_columns = 80
+same_column_width = true
+fixed_icon_size = Vector2i(128, 128)

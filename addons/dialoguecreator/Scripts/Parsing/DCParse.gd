@@ -160,6 +160,8 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 		
 		new_node.GetCharacterNameLineEdit().text = node_js["CharacterName"]
 		
+		new_node.GetItemsIcons().select(node_js["CharacterTexture"])
+		
 		nodes_by_name[node_js["Name"]] = new_node.name
 
 	# Add Connections
