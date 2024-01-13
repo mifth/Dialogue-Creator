@@ -26,9 +26,12 @@ custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MenuBar"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="FileButton" type="MenuButton" parent="VBoxContainer/MenuBar/HBoxContainer"]
 layout_mode = 2
@@ -70,6 +73,17 @@ popup/item_10/text = "Note"
 popup/item_10/id = 10
 script = ExtResource("2_grrel")
 
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MenuBar/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+
+[node name="PlaySceneButton" type="Button" parent="VBoxContainer/MenuBar/HBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "►"
+
 [node name="DCGraphEdit" type="GraphEdit" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -88,6 +102,7 @@ access = 2
 filters = PackedStringArray("*.json")
 use_native_dialog = true
 
+[connection signal="pressed" from="VBoxContainer/MenuBar/HBoxContainer/HBoxContainer/PlaySceneButton" to="." method="_on_play_scene_button_pressed"]
 [connection signal="connection_request" from="VBoxContainer/DCGraphEdit" to="." method="_on_connection_request"]
 [connection signal="disconnection_request" from="VBoxContainer/DCGraphEdit" to="." method="_on_dc_graph_edit_disconnection_request"]
 [connection signal="file_selected" from="SaveFileDialog" to="." method="_on_save_file_dialog_file_selected"]

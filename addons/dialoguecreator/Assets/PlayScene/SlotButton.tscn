@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://dn8do3pic03s7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b66nx"]
+bg_color = Color(0.0509804, 0.0509804, 0.0509804, 0.556863)
+
+[node name="SlotButton" type="Button"]
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_b66nx")
+text = "Next"

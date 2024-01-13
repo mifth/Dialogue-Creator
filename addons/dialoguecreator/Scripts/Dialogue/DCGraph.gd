@@ -22,7 +22,9 @@ static var settext_node_res := preload("res://addons/dialoguecreator/Assets/Node
 static var text_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCTextNode.tscn")
 static var character_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCCharacterNode.tscn")
 
-static var text_node_text_res: Resource = preload("res://addons/dialoguecreator/Assets/Nodes/DCDialogueNodeText.tscn")
+static var text_node_text_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCDialogueNodeText.tscn")
+
+static var play_scene_res := preload("res://addons/dialoguecreator/Assets/PlayScene/PlayScene.tscn")
 
 
 func _ready():
@@ -34,7 +36,10 @@ func _ready():
 func ClearGraph():
 	_graph.clear_connections()
 
-	for node in _graph.get_children():
+	var nodes_range = range(_graph.get_children().size() -1, -1, -1)
+	for i in nodes_range:
+		var node = _graph.get_children()[i]
+		_graph.remove_child(node)
 		node.queue_free()
 
 
@@ -141,3 +146,6 @@ func _on_connection_request(from_node: StringName, from_port, to_node: StringNam
 func _on_dc_graph_edit_disconnection_request(from_node, from_port, to_node, to_port):
 	_graph.disconnect_node(from_node, from_port, to_node, to_port)
 
+
+func _on_play_scene_button_pressed():
+	add_child(play_scene_res.instantiate())

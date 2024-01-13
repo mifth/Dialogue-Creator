@@ -135,9 +135,13 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 		nodes_by_name[node_js["Name"]] = new_node.name
 
 	for node_js in nodes_js[DCUtils.StartNode]:
-		var new_node = DCGraph.start_node_res.instantiate() as GraphNode
+		var new_node = DCGraph.start_node_res.instantiate() as DCStartNode
 		graph.add_child(new_node)
 		SetNodeParamsJS(new_node, node_js)
+		
+		new_node.GetStartName().text = node_js["StartName"]
+		new_node.GetStartIDSpinBox().value = node_js["StartID"] as int
+		
 		nodes_by_name[node_js["Name"]] = new_node.name
 
 	for node_js in nodes_js[DCUtils.TextNode]:
@@ -160,7 +164,12 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 		
 		new_node.GetCharacterNameLineEdit().text = node_js["CharacterName"]
 		
-		new_node.GetItemsIcons().select(node_js["CharacterTexture"])
+		# Set Character Icon
+		var char_icons = new_node.GetItemsIcons()
+		if node_js["CharacterTexture"] < char_icons.item_count:
+			char_icons.select(node_js["CharacterTexture"])
+		else:
+			char_icons.select(char_icons.item_count - 1)
 		
 		nodes_by_name[node_js["Name"]] = new_node.name
 

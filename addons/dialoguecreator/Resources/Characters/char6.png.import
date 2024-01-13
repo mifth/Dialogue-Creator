@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cm27nl11w7uor"
-path.s3tc="res://.godot/imported/man9.png-efe1982e45c6d8e5f8998a2400add1bc.s3tc.ctex"
+uid="uid://b47duukb3efib"
+path.s3tc="res://.godot/imported/char6.png-503cd5322a740256b54c7a31981fa910.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://addons/dialoguecreator/Resources/Characters/man9.png"
-dest_files=["res://.godot/imported/man9.png-efe1982e45c6d8e5f8998a2400add1bc.s3tc.ctex"]
+source_file="res://addons/dialoguecreator/Resources/Characters/char6.png"
+dest_files=["res://.godot/imported/char6.png-503cd5322a740256b54c7a31981fa910.s3tc.ctex"]
 
 [params]
 
@@ -31,5 +31,5 @@ process/premult_alpha=true
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=512
+process/size_limit=0
 detect_3d/compress_to=1

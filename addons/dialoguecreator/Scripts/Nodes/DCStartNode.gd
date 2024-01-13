@@ -9,19 +9,21 @@ func _enter_tree():
 func GetNodeParamsJS():
 	var params = GetNodeBaseParamsJS()
 	
-	var id_node = GetStartIDSpinBox()
-	params["StartID"] = id_node.value as int
-	
-	#params["Type"] = DCUtils.StartNode
+	params["StartID"] = GetStartIDSpinBox().value as int
+	params["StartName"] = GetStartName().text
 	
 	return [params, DCUtils.StartNode]
 
 
-func GetStartIDSpinBox():
-	return $HBoxContainer/StartIDSpinBox as SpinBox
+func GetStartIDSpinBox() -> SpinBox:
+	return $VBoxContainer/HBoxContainer/StartIDSpinBox
 
 
-func GetStartID():
+func GetStartName() -> LineEdit:
+	return $VBoxContainer/HBoxContainer2/StartNameLineEdit
+
+
+func GetStartID() -> int:
 	return GetStartIDSpinBox().value as int
 
 

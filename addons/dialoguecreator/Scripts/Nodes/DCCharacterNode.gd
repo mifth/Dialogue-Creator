@@ -5,11 +5,11 @@ extends DCBaseGraphNode
 func _ready():
 	var lst = GetItemsIcons()
 	#ResourceLoader.exists("res://sprite.tscn")
-	var girl_str = "res://addons/dialoguecreator/Resources/Characters/girl"
-	var man_str = "res://addons/dialoguecreator/Resources/Characters/man"
+	var char_str = "res://addons/dialoguecreator/Resources/Characters/char"
+	var other_str = "res://addons/dialoguecreator/Resources/Characters/other"
 	
 
-	for res_item_str in [girl_str, man_str]:
+	for res_item_str in [char_str, other_str]:
 		var i_val = 0
 		# Man
 		while true:
@@ -21,7 +21,6 @@ func _ready():
 				i_val += 1
 			else:
 				break
-
 
 
 func GetItemsIcons() -> ItemList:

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bfkyxg18o80hk"
-path.s3tc="res://.godot/imported/girl10.png-e170b72df03f35aaaf82ed5b83c134f8.s3tc.ctex"
+uid="uid://q7t34e315y4h"
+path.s3tc="res://.godot/imported/char14.png-e70ecc7f88b0cbe9309bc7b618a4c03e.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://addons/dialoguecreator/Resources/Characters/girl10.png"
-dest_files=["res://.godot/imported/girl10.png-e170b72df03f35aaaf82ed5b83c134f8.s3tc.ctex"]
+source_file="res://addons/dialoguecreator/Resources/Characters/char14.png"
+dest_files=["res://.godot/imported/char14.png-e70ecc7f88b0cbe9309bc7b618a4c03e.s3tc.ctex"]
 
 [params]
 
@@ -31,5 +31,5 @@ process/premult_alpha=true
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
-process/size_limit=512
+process/size_limit=0
 detect_3d/compress_to=1
