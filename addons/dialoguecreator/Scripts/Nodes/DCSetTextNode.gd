@@ -15,4 +15,4 @@ func GetNodeParamsJS():
 	
 	params["TextSlots"] = GetTextNodesJS()
 	
-	return [params, DCUtils.SetTextNode]
+	return [params, DCGUtils.SetTextNode]

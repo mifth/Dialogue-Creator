@@ -45,4 +45,4 @@ func GetNodeParamsJS():
 	var lst = GetItemsIcons()
 	params["CharacterTexture"] = lst.get_selected_items()[0]
 	
-	return [params, DCUtils.CharacterNode]
+	return [params, DCGUtils.CharacterNode]

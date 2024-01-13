@@ -4,18 +4,18 @@ extends Object
 
 static func CreateNodesArraysJS():
 	var nodes_js = {}
-	
-	nodes_js[DCUtils.ActionNode] = []
-	nodes_js[DCUtils.DialogueNode] = []
-	nodes_js[DCUtils.EnableTextNode] = []
-	nodes_js[DCUtils.HideTextNode] = []
-	nodes_js[DCUtils.NoteNode] = []
-	nodes_js[DCUtils.RerouteNode] = []
-	nodes_js[DCUtils.RerouteTextNode] = []
-	nodes_js[DCUtils.SetTextNode] = []
-	nodes_js[DCUtils.StartNode] = []
-	nodes_js[DCUtils.TextNode] = []
-	nodes_js[DCUtils.CharacterNode] = []
+
+	nodes_js[DCGUtils.ActionNode] = []
+	nodes_js[DCGUtils.DialogueNode] = []
+	nodes_js[DCGUtils.EnableTextNode] = []
+	nodes_js[DCGUtils.HideTextNode] = []
+	nodes_js[DCGUtils.NoteNode] = []
+	nodes_js[DCGUtils.RerouteNode] = []
+	nodes_js[DCGUtils.RerouteTextNode] = []
+	nodes_js[DCGUtils.SetTextNode] = []
+	nodes_js[DCGUtils.StartNode] = []
+	nodes_js[DCGUtils.TextNode] = []
+	nodes_js[DCGUtils.CharacterNode] = []
 
 	return nodes_js
 
@@ -70,14 +70,14 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 	
 	var nodes_by_name = {}  # Nodes By Original Name
 
-	for node_js in nodes_js[DCUtils.ActionNode]:
+	for node_js in nodes_js[DCGUtils.ActionNode]:
 		var new_node = DCGraph.action_node_res.instantiate() as GraphNode
 		graph.add_child(new_node)
 		SetNodeParamsJS(new_node, node_js)
 		nodes_by_name[node_js["Name"]] = new_node.name
 		
 
-	for node_js in nodes_js[DCUtils.DialogueNode]:
+	for node_js in nodes_js[DCGUtils.DialogueNode]:
 		var new_node = DCGraph.dialogue_node_res.instantiate() as DCDialogueNode
 		graph.add_child(new_node)
 		SetNodeParamsJS(new_node, node_js)
@@ -94,37 +94,37 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 			AddTextTextSlotsJS(new_node, node_js["TextSlots"])
 		
 
-	for node_js in nodes_js[DCUtils.EnableTextNode]:
+	for node_js in nodes_js[DCGUtils.EnableTextNode]:
 		var new_node = DCGraph.enable_node_res.instantiate() as GraphNode
 		graph.add_child(new_node)
 		SetNodeParamsJS(new_node, node_js)
 		nodes_by_name[node_js["Name"]] = new_node.name
 
-	for node_js in nodes_js[DCUtils.HideTextNode]:
+	for node_js in nodes_js[DCGUtils.HideTextNode]:
 		var new_node = DCGraph.hide_node_res.instantiate() as GraphNode
 		graph.add_child(new_node)
 		SetNodeParamsJS(new_node, node_js)
 		nodes_by_name[node_js["Name"]] = new_node.name
 
-	for node_js in nodes_js[DCUtils.NoteNode]:
+	for node_js in nodes_js[DCGUtils.NoteNode]:
 		var new_node = DCGraph.note_node_res.instantiate() as GraphNode
 		graph.add_child(new_node)
 		SetNodeParamsJS(new_node, node_js)
 		nodes_by_name[node_js["Name"]] = new_node.name
 
-	for node_js in nodes_js[DCUtils.RerouteNode]:
+	for node_js in nodes_js[DCGUtils.RerouteNode]:
 		var new_node = DCGraph.reroute_node_res.instantiate() as GraphNode
 		graph.add_child(new_node)
 		SetNodeParamsJS(new_node, node_js)
 		nodes_by_name[node_js["Name"]] = new_node.name
 
-	for node_js in nodes_js[DCUtils.RerouteTextNode]:
+	for node_js in nodes_js[DCGUtils.RerouteTextNode]:
 		var new_node = DCGraph.reroute_text_node_res.instantiate() as GraphNode
 		graph.add_child(new_node)
 		SetNodeParamsJS(new_node, node_js)
 		nodes_by_name[node_js["Name"]] = new_node.name
 
-	for node_js in nodes_js[DCUtils.SetTextNode]:
+	for node_js in nodes_js[DCGUtils.SetTextNode]:
 		var new_node = DCGraph.settext_node_res.instantiate() as GraphNode
 		graph.add_child(new_node)
 		SetNodeParamsJS(new_node, node_js)
@@ -134,7 +134,7 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 		
 		nodes_by_name[node_js["Name"]] = new_node.name
 
-	for node_js in nodes_js[DCUtils.StartNode]:
+	for node_js in nodes_js[DCGUtils.StartNode]:
 		var new_node = DCGraph.start_node_res.instantiate() as DCStartNode
 		graph.add_child(new_node)
 		SetNodeParamsJS(new_node, node_js)
@@ -144,7 +144,7 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 		
 		nodes_by_name[node_js["Name"]] = new_node.name
 
-	for node_js in nodes_js[DCUtils.TextNode]:
+	for node_js in nodes_js[DCGUtils.TextNode]:
 		var new_node = DCGraph.text_node_res.instantiate() as GraphNode
 		graph.add_child(new_node)
 		SetNodeParamsJS(new_node, node_js)
@@ -154,7 +154,7 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 		
 		nodes_by_name[node_js["Name"]] = new_node.name
 
-	for node_js in nodes_js[DCUtils.CharacterNode]:
+	for node_js in nodes_js[DCGUtils.CharacterNode]:
 		var new_node = DCGraph.character_node_res.instantiate() as DCCharacterNode
 		graph.add_child(new_node)
 		SetNodeParamsJS(new_node, node_js)

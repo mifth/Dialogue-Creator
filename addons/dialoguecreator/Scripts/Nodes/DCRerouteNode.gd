@@ -5,4 +5,4 @@ extends DCBaseGraphNode
 func GetNodeParamsJS():
 	var params = GetNodeBaseParamsJS()
 	
-	return [params, DCUtils.RerouteNode]
+	return [params, DCGUtils.RerouteNode]

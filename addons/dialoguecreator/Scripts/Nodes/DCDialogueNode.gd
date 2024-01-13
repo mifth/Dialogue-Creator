@@ -32,4 +32,4 @@ func GetNodeParamsJS():
 	# Get Texts
 	params["TextSlots"] = GetTextNodesJS()
 	
-	return [params, DCUtils.DialogueNode]
+	return [params, DCGUtils.DialogueNode]

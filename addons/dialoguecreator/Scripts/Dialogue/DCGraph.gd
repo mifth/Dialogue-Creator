@@ -53,18 +53,18 @@ func SaveFileDialogue():
 	_file_dialogue.show()
 
 
+func LoadFileDialogue():
+	_file_dialogue.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	_file_dialogue.title = "Load JSON"
+	_file_dialogue.show()
+
+
 func _on_save_file_dialog_file_selected(path):
 	if _file_dialogue.file_mode == FileDialog.FILE_MODE_SAVE_FILE:
 		DCParse.SaveFileJS(_graph, path)
 	else:
 		ClearGraph()
 		DCParse.LoadFileJS(_graph, path)
-
-
-func LoadFileDialogue():
-	_file_dialogue.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-	_file_dialogue.title = "Load JSON"
-	_file_dialogue.show()
 
 
 func AddNode(node_name: String):

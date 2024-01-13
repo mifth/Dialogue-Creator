@@ -8,4 +8,4 @@ func GetNodeParamsJS():
 	params["NoteName"] = $VBoxContainer/HBoxContainer/NoteNameLineEdit.text
 	params["NoteText"] = $VBoxContainer/NoteTextEdit.text
 	
-	return [params, DCUtils.NoteNode]
+	return [params, DCGUtils.NoteNode]

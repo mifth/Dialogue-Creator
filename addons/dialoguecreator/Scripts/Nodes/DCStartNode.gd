@@ -12,7 +12,7 @@ func GetNodeParamsJS():
 	params["StartID"] = GetStartIDSpinBox().value as int
 	params["StartName"] = GetStartName().text
 	
-	return [params, DCUtils.StartNode]
+	return [params, DCGUtils.StartNode]
 
 
 func GetStartIDSpinBox() -> SpinBox:
@@ -43,7 +43,7 @@ func GetIDs(nodes):
 
 func SetUniqueStartID(start_value: int):
 	var nodes = get_parent().get_children()
-	SetStartID(DCUtils.GenerateID(GetIDs(nodes), start_value))
+	SetStartID(DCGUtils.GenerateID(GetIDs(nodes), start_value))
 
 
 func _on_start_spin_box_value_changed(value):
