@@ -3,7 +3,7 @@ extends DCBaseGraphNode
 
 
 func _enter_tree():
-	SetUniqueStartID(0)
+	SetUniqueID(0)
 
 
 func GetNodeParamsJS():
@@ -27,10 +27,6 @@ func GetStartID() -> int:
 	return GetStartIDSpinBox().value as int
 
 
-func SetStartID(new_value: int):
-	GetStartIDSpinBox().value = new_value
-
-
 func GetIDs(nodes):
 	var ids = []
 
@@ -41,10 +37,10 @@ func GetIDs(nodes):
 	return ids
 
 
-func SetUniqueStartID(start_value: int):
+func SetUniqueID(start_value: int):
 	var nodes = get_parent().get_children()
-	SetStartID(DCGUtils.GenerateID(GetIDs(nodes), start_value))
+	GetStartIDSpinBox().value = DCGUtils.GenerateID(GetIDs(nodes), start_value)
 
 
 func _on_start_spin_box_value_changed(value):
-	SetUniqueStartID(value)
+	SetUniqueID(value)

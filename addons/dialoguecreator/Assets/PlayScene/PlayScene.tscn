@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://lyy3otb7wxtn"]
 
-[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/PlayScene/PlayScene.gd" id="1_r3g0h"]
+[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/PlayScene/DCPlayScene.gd" id="1_yuohd"]
 [ext_resource type="Texture2D" uid="uid://dj1ocs366pbcv" path="res://addons/dialoguecreator/Resources/Characters/char1.png" id="2_mf80e"]
-[ext_resource type="PackedScene" uid="uid://dn8do3pic03s7" path="res://addons/dialoguecreator/Assets/PlayScene/SlotButton.tscn" id="3_1lgcp"]
+[ext_resource type="PackedScene" uid="uid://dn8do3pic03s7" path="res://addons/dialoguecreator/Assets/PlayScene/TextSlotButton.tscn" id="3_ebybh"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jywe1"]
 bg_color = Color(0.105882, 0.105882, 0.105882, 1)
@@ -17,7 +17,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_r3g0h")
+script = ExtResource("1_yuohd")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -100,11 +100,11 @@ size_flags_vertical = 3
 theme_override_font_sizes/normal_font_size = 22
 text = "Hi traveler! What are you doing here? This place isn't safe for outsiders. But probably I have a job for you."
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="TextsVBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SlotButton" parent="PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/VBoxContainer" instance=ExtResource("3_1lgcp")]
+[node name="TextSlotButton" parent="PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/TextsVBoxContainer" instance=ExtResource("3_ebybh")]
 layout_mode = 2
 
 [node name="Container2" type="Container" parent="PanelContainer/VBoxContainer/HBoxContainer"]

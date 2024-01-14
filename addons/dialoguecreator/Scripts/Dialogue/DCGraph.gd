@@ -10,21 +10,21 @@ extends Control
 
 
 # Preload Nodes
-static var start_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCStartNode.tscn")
-static var dialogue_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCDialogueNode.tscn")
-static var enable_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCEnableTextNode.tscn")
-static var hide_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCHideTextNode.tscn")
-static var reroute_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCRerouteNode.tscn")
-static var reroute_text_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCRerouteTextNode.tscn")
-static var action_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCActionNode.tscn")
-static var note_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCNoteNode.tscn")
-static var settext_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCSetTextNode.tscn")
-static var text_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCTextNode.tscn")
-static var character_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCCharacterNode.tscn")
+const start_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCStartNode.tscn")
+const dialogue_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCDialogueNode.tscn")
+const enable_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCEnableTextNode.tscn")
+const hide_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCHideTextNode.tscn")
+const reroute_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCRerouteNode.tscn")
+const reroute_text_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCRerouteTextNode.tscn")
+const action_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCActionNode.tscn")
+const note_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCNoteNode.tscn")
+const settext_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCSetTextNode.tscn")
+const text_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCTextNode.tscn")
+const character_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCCharacterNode.tscn")
 
-static var text_node_text_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCDialogueNodeText.tscn")
+const text_node_text_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCDialogueNodeText.tscn")
 
-static var play_scene_res := preload("res://addons/dialoguecreator/Assets/PlayScene/PlayScene.tscn")
+const play_scene_res := preload("res://addons/dialoguecreator/Assets/PlayScene/PlayScene.tscn")
 
 
 func _ready():
@@ -35,12 +35,7 @@ func _ready():
 
 func ClearGraph():
 	_graph.clear_connections()
-
-	var nodes_range = range(_graph.get_children().size() -1, -1, -1)
-	for i in nodes_range:
-		var node = _graph.get_children()[i]
-		_graph.remove_child(node)
-		node.queue_free()
+	DCGUtils.remove_children(_graph)
 
 
 func NewScene():
@@ -147,6 +142,9 @@ func _on_connection_request(from_node: StringName, from_port, to_node: StringNam
 				or is_instance_of(from_graph_nd, DCHideTextNode) )
 				and not is_instance_of(to_graph_nd, DCDialogueNode) ):
 				return
+			elif is_instance_of(to_graph_nd, DCDialogueNode):
+				if to_port < 2:
+					return
 		
 		_graph.connect_node(from_node, from_port, to_node, to_port)
 	else:

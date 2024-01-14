@@ -3,6 +3,6 @@ extends Object
 
 
 var main_text: String
-var texts: Array
+var texts: Array[DCGTextSlot]
 
-var id_value
+var character_id  # Null if no character is assigned. Integer value.

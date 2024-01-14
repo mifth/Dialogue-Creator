@@ -33,10 +33,10 @@ static func GetDataJS(graph: GraphEdit):
 
 	for conn in graph.get_connection_list():
 		var conn_js = {}
-		conn_js["FromNode"] = conn["from_node"]
-		conn_js["FromPort"] = conn["from_port"]
-		conn_js["ToNode"] = conn["to_node"]
-		conn_js["ToPort"] = conn["to_port"]
+		conn_js["from_node"] = conn["from_node"]
+		conn_js["from_port"] = conn["from_port"]
+		conn_js["to_node"] = conn["to_node"]
+		conn_js["to_port"] = conn["to_port"]
 		
 		conns_js.append(conn_js)
 
@@ -50,13 +50,17 @@ static func GetDataJS(graph: GraphEdit):
 static func SaveFileJS(graph: GraphEdit, path: String):
 	var data_js = GetDataJS(graph)
 	var data_js_str = JSON.stringify(data_js, "   ")
+	
+	var final_path = path
+	if not final_path.ends_with(".json"):
+		final_path += ".json"
 
-	if FileAccess.file_exists(path):
+	if FileAccess.file_exists(final_path):
 		# Set Writable
-		if FileAccess.get_read_only_attribute(path):
-			FileAccess.set_read_only_attribute(path, false)
+		if FileAccess.get_read_only_attribute(final_path):
+			FileAccess.set_read_only_attribute(final_path, false)
 
-	var file = FileAccess.open(path, FileAccess.WRITE)
+	var file = FileAccess.open(final_path, FileAccess.WRITE)
 	file.store_string(data_js_str)
 	
 	
@@ -179,7 +183,7 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 
 	# Add Connections
 	for conn_js in conns_js:
-		graph.connect_node(nodes_by_name[conn_js["FromNode"]], conn_js["FromPort"], nodes_by_name[conn_js["ToNode"]], conn_js["ToPort"])
+		graph.connect_node(nodes_by_name[conn_js["from_node"]], conn_js["from_port"], nodes_by_name[conn_js["to_node"]], conn_js["to_port"])
 
 
 static func AddTextTextSlotsJS(base_graph_node: DCBaseGraphNode, texts: Array):

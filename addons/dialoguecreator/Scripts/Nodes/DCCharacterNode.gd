@@ -2,6 +2,10 @@ class_name DCCharacterNode
 extends DCBaseGraphNode 
 
 
+func _enter_tree():
+	SetUniqueID(0)
+
+
 func _ready():
 	var lst = GetItemsIcons()
 	#ResourceLoader.exists("res://sprite.tscn")
@@ -43,6 +47,30 @@ func GetNodeParamsJS():
 	params["CharacterID"] = GetCharacterIDSpinBox().value as int
 	
 	var lst = GetItemsIcons()
-	params["CharacterTexture"] = lst.get_selected_items()[0]
+	
+	var texture_items = lst.get_selected_items()
+	if texture_items:
+		params["CharacterTexture"] = lst.get_selected_items()[0]
+	else:
+		params["CharacterTexture"] = 0
 	
 	return [params, DCGUtils.CharacterNode]
+
+
+func GetIDs(nodes):
+	var ids = []
+
+	for node in nodes:
+		if is_instance_of(node, DCCharacterNode) and node != self:
+			ids.append(node.GetCharacterIDSpinBox().value as int)
+
+	return ids
+
+
+func SetUniqueID(start_value: int):
+	var nodes = get_parent().get_children()
+	GetCharacterIDSpinBox().value = DCGUtils.GenerateID(GetIDs(nodes), start_value)
+
+
+func _on_character_id_value_changed(value):
+	SetUniqueID(value)

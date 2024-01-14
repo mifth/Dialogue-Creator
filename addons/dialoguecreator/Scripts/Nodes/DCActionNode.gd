@@ -17,3 +17,5 @@ func GetNodeParamsJS():
 	params["ActionText"] = get_action_text_node().text
 	
 	return [params, DCGUtils.ActionNode]
+
+

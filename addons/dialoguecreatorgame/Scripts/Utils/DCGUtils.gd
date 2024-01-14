@@ -27,3 +27,9 @@ static func GenerateID(ids, start_value: int) -> int:
 	return -1
 
 
+static func remove_children(parent: Node):
+	var nodes_range = range(parent.get_children().size() -1, -1, -1)
+	for i in nodes_range:
+		var node = parent.get_children()[i]
+		parent.remove_child(node)
+		node.queue_free()

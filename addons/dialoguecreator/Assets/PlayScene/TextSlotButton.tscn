@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://dn8do3pic03s7"]
+
+[ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/PlayScene/DCTextSlotButton.gd" id="1_n3ewr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b66nx"]
+bg_color = Color(0.0509804, 0.0509804, 0.0509804, 0.556863)
+
+[node name="TextSlotButton" type="Button"]
+offset_right = 472.0
+offset_bottom = 31.0
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_b66nx")
+text = "Next"
+script = ExtResource("1_n3ewr")
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]
