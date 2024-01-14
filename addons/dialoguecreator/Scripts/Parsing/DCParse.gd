@@ -74,6 +74,7 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 		graph.add_child(new_node)
 		SetNodeParamsJS(new_node, node_js)
 		
+		new_node.get_action_name_node().text = node_js["ActionName"]
 		new_node.get_action_text_node().text = node_js["ActionText"]
 		
 		nodes_by_name[node_js["Name"]] = new_node.name

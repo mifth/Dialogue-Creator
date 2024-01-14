@@ -52,7 +52,19 @@ text = "False"
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ActionNameLineEdit" type="TextEdit" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Name: "
+
+[node name="TypeLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ActionTextLineEdit" type="TextEdit" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "{\"Type\": \"MyAction\"}"
+text = "{}"
