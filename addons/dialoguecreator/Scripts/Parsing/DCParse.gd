@@ -49,7 +49,6 @@ static func GetDataJS(graph: GraphEdit):
 
 static func SaveFileJS(graph: GraphEdit, path: String):
 	var data_js = GetDataJS(graph)
-	
 	var data_js_str = JSON.stringify(data_js, "   ")
 
 	if FileAccess.file_exists(path):
@@ -87,8 +86,9 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 		var main_text = new_node.GetMainText()
 		main_text.text = node_js["MainText"]["Text"]
 		
-		var char_id = new_node.GetCharacterIDSpinBox()
-		char_id.value = node_js["CharacterID"] as int
+		if "Character" in node_js.keys():
+			var char_id = new_node.GetCharacterIDSpinBox()
+			char_id.value = node_js["Character"]["Id"] as int
 		
 		if node_js["TextSlots"]:
 			AddTextTextSlotsJS(new_node, node_js["TextSlots"])

@@ -41,7 +41,9 @@ text = "Character ID: "
 
 [node name="CharacterID" type="SpinBox" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
+min_value = -1.0
 max_value = 1e+06
+value = -1.0
 rounded = true
 
 [node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer"]

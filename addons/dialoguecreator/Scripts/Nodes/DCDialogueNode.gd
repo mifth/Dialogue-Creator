@@ -27,7 +27,9 @@ func GetNodeParamsJS():
 	main_text_dict["Text"] = main_text.text
 	params["MainText"] = main_text_dict
 	
-	params["CharacterID"] = GetCharacterIDSpinBox().value as int
+	var id_box = GetCharacterIDSpinBox()
+	if id_box.value >= 0:
+		params["Character"] = {"Id": id_box.value as int}
 	
 	# Get Texts
 	params["TextSlots"] = GetTextNodesJS()

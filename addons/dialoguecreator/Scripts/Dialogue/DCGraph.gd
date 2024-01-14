@@ -129,14 +129,24 @@ func _on_connection_request(from_node: StringName, from_port, to_node: StringNam
 	if not _graph.is_node_connected(from_node, from_port, to_node, to_port):
 		
 		var from_graph_nd: GraphNode = _graph.get_node(NodePath(from_node)) as GraphNode
+		var to_graph_nd: GraphNode = _graph.get_node(NodePath(to_node)) as GraphNode
 		var connections = _graph.get_connection_list()
 		
-		# Remove Old Conncetion
+		# 0 Type.
 		if from_graph_nd.get_output_port_type(from_port) == 0:
+			# Remove Old Conncetion
 			for conn in connections:
 				if conn["from_node"] == from_node and from_port == conn["from_port"]:
 					_graph.disconnect_node(conn["from_node"], conn["from_port"], conn["to_node"], conn["to_port"])
 					break
+		
+		# 1 Type
+		elif from_graph_nd.get_output_port_type(from_port) == 1:
+			# If FROM is Enable/Hide and TO is not Dialogue
+			if ( ( is_instance_of(from_graph_nd, DCEnableTextNode)
+				or is_instance_of(from_graph_nd, DCHideTextNode) )
+				and not is_instance_of(to_graph_nd, DCDialogueNode) ):
+				return
 		
 		_graph.connect_node(from_node, from_port, to_node, to_port)
 	else:
