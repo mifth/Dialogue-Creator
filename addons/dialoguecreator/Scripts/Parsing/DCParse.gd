@@ -70,9 +70,12 @@ static func LoadFileJS(graph: GraphEdit, path: String):
 	var nodes_by_name = {}  # Nodes By Original Name
 
 	for node_js in nodes_js[DCGUtils.ActionNode]:
-		var new_node = DCGraph.action_node_res.instantiate() as GraphNode
+		var new_node = DCGraph.action_node_res.instantiate() as DCActionNode
 		graph.add_child(new_node)
 		SetNodeParamsJS(new_node, node_js)
+		
+		new_node.get_action_text_node().text = node_js["ActionText"]
+		
 		nodes_by_name[node_js["Name"]] = new_node.name
 		
 
