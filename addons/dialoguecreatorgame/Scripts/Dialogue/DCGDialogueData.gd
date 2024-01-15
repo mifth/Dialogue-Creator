@@ -3,7 +3,6 @@ extends Object
 
 
 var data_js: Dictionary
-var connections: Array = []
 var nodes_by_name: Dictionary = {}
 
 
@@ -25,11 +24,10 @@ class NodeData:
 func parse_js(date_js_str: String):
 	self.data_js = JSON.parse_string(date_js_str)
 	
-	self.conns_js = self.data_js["Connections"]
-	
 	if self.data_js:
-		var nodes_js: Dictionary = self.data_js["Nodes"]
+		var nodes_js: Dictionary = get_nodes_js()
 		
+		# Get Nodes By Name
 		for nodes_key in nodes_js.keys():
 			var the_nodes_js : Array = nodes_js[nodes_key]
 			
@@ -42,14 +40,30 @@ func parse_js(date_js_str: String):
 				
 				self.nodes_by_name[node_js["Name"]] = dc_node_data
 
+		# Get Connections per Node
+		var conns_js = get_connections_js()
+		for i in range(conns_js.size()):
+			var conn = conns_js[i]
+			
+			self.nodes_by_name[conn["from_node"]].from_node_conns.append(i)
+			self.nodes_by_name[conn["to_node"]].to_node_conns.append(i)
+
+
+func get_nodes_js():
+	return self.data_js["Nodes"]
+
+
+func get_connections_js() -> Array:
+	return self.data_js["Connections"]
+
 
 # Returns Next Node and Input Port
-func get_next_node_by_main_port(from_node_name: String, from_port_id: int):
+func get_next_node_by_port(from_node_name: String, from_port_id: int):
 	var node_data = self.nodes_by_name[from_node_name] as NodeData
 	var port_type = get_output_port_type(node_data.get_node_js(), from_port_id)
 
 	if port_type == 0:
-		for conn in self.conns_js:
+		for conn in get_connections_js():
 			if conn["from_node"] == from_node_name and conn["from_port"] == from_port_id:
 				return [conn["to_node"], conn["to_port"]]
 	else:

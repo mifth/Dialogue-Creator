@@ -1,14 +1,14 @@
 class_name  DCTextSlotButton
 extends Button
 
-signal next_node_signal(port_id: int)
 
+signal next_node_button(out_port_id: int)
 
-var port_id: int
+var out_port_id: int
 
 
 func _on_pressed():
-	next_node_signal.emit(self.port_id)
+	next_node_button.emit(self.out_port_id)
 
 
 func _exit_tree():

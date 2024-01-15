@@ -56,7 +56,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="TextureRect" type="TextureRect" parent="PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+[node name="CharacterTextureRect" type="TextureRect" parent="PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
 size_flags_vertical = 3
 texture = ExtResource("2_mf80e")

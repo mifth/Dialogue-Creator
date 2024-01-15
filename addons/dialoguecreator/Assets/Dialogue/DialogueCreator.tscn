@@ -84,6 +84,19 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "►"
 
+[node name="Label" type="Label" parent="VBoxContainer/MenuBar/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "    "
+
+[node name="PlayLineEdit" type="LineEdit" parent="VBoxContainer/MenuBar/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Eng"
+
+[node name="PlaySpinBox" type="SpinBox" parent="VBoxContainer/MenuBar/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+max_value = 100000.0
+rounded = true
+
 [node name="DCGraphEdit" type="GraphEdit" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3

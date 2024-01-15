@@ -1,7 +1,7 @@
 class_name DCGraph
 extends Control
 
-@onready var _graph: GraphEdit = $VBoxContainer/DCGraphEdit
+@onready var graph: GraphEdit = $VBoxContainer/DCGraphEdit
 
 @onready var file_button: DCFileMenu = $VBoxContainer/MenuBar/HBoxContainer/FileButton
 @onready var nodes_button: DCNodesMenu = $VBoxContainer/MenuBar/HBoxContainer/NodesButton
@@ -34,8 +34,8 @@ func _ready():
 	nodes_button.AddNode.connect(self.AddNode)
 
 func ClearGraph():
-	_graph.clear_connections()
-	DCGUtils.remove_children(_graph)
+	graph.clear_connections()
+	DCGUtils.remove_children(graph)
 
 
 func NewScene():
@@ -56,10 +56,10 @@ func LoadFileDialogue():
 
 func _on_save_file_dialog_file_selected(path):
 	if _file_dialogue.file_mode == FileDialog.FILE_MODE_SAVE_FILE:
-		DCParse.SaveFileJS(_graph, path)
+		DCParse.SaveFileJS(graph, path)
 	else:
 		ClearGraph()
-		DCParse.LoadFileJS(_graph, path)
+		DCParse.LoadFileJS(graph, path)
 
 
 func AddNode(node_name: String):
@@ -89,9 +89,9 @@ func AddNode(node_name: String):
 		node_res = character_node_res
 
 	var new_node: GraphNode = node_res.instantiate()
-	new_node.position_offset = _graph.scroll_offset + (Vector2(get_viewport().size) / 2.5)
+	new_node.position_offset = graph.scroll_offset + (Vector2(get_viewport().size) / 2.5)
 
-	_graph.add_child(new_node)
+	graph.add_child(new_node)
 
 
 func _input(event):
@@ -100,12 +100,12 @@ func _input(event):
 
 
 func DeleteSelectedGraphNodes():
-	var nodes = _graph.get_children()
+	var nodes = graph.get_children()
 	var nodes_rng = range(nodes.size())
 	nodes_rng.reverse()
 
 	var del_names: Array[String] = []
-	var connections = _graph.get_connection_list()
+	var connections = graph.get_connection_list()
 
 	# Delete Selected Nodes
 	for i in nodes_rng:
@@ -117,22 +117,22 @@ func DeleteSelectedGraphNodes():
 	# Remove Connections of Deleted Nodes
 	for conn in connections:
 		if conn["from_node"] in del_names or conn["to_node"] in del_names:
-			_graph.disconnect_node(conn["from_node"], conn["from_port"], conn["to_node"], conn["to_port"])
+			graph.disconnect_node(conn["from_node"], conn["from_port"], conn["to_node"], conn["to_port"])
 
 
 func _on_connection_request(from_node: StringName, from_port, to_node: StringName, to_port):
-	if not _graph.is_node_connected(from_node, from_port, to_node, to_port):
+	if not graph.is_node_connected(from_node, from_port, to_node, to_port):
 		
-		var from_graph_nd: GraphNode = _graph.get_node(NodePath(from_node)) as GraphNode
-		var to_graph_nd: GraphNode = _graph.get_node(NodePath(to_node)) as GraphNode
-		var connections = _graph.get_connection_list()
+		var from_graph_nd: GraphNode = graph.get_node(NodePath(from_node)) as GraphNode
+		var to_graph_nd: GraphNode = graph.get_node(NodePath(to_node)) as GraphNode
+		var connections = graph.get_connection_list()
 		
 		# 0 Type.
 		if from_graph_nd.get_output_port_type(from_port) == 0:
 			# Remove Old Conncetion
 			for conn in connections:
 				if conn["from_node"] == from_node and from_port == conn["from_port"]:
-					_graph.disconnect_node(conn["from_node"], conn["from_port"], conn["to_node"], conn["to_port"])
+					graph.disconnect_node(conn["from_node"], conn["from_port"], conn["to_node"], conn["to_port"])
 					break
 		
 		# 1 Type
@@ -146,13 +146,13 @@ func _on_connection_request(from_node: StringName, from_port, to_node: StringNam
 				if to_port < 2:
 					return
 		
-		_graph.connect_node(from_node, from_port, to_node, to_port)
+		graph.connect_node(from_node, from_port, to_node, to_port)
 	else:
-		_graph.disconnect_node(from_node, from_port, to_node, to_port)
+		graph.disconnect_node(from_node, from_port, to_node, to_port)
 
 
 func _on_dc_graph_edit_disconnection_request(from_node, from_port, to_node, to_port):
-	_graph.disconnect_node(from_node, from_port, to_node, to_port)
+	graph.disconnect_node(from_node, from_port, to_node, to_port)
 
 
 func _on_play_scene_button_pressed():
