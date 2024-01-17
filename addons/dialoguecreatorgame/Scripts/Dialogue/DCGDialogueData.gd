@@ -10,15 +10,16 @@ class NodeData:
 	var node_class_key: String  # Node Class Nmae
 	var array_index: int  # Index in data_js["Nodes"][node_class_key] Array
 	
-	var from_node_conns: Array[int] = []
-	var to_node_conns: Array[int] = []
+	var from_node_conns := {}
+	var to_node_conns := {}
 	
 	func fill_data(node_key: String, array_index: int):
 		self.node_class_key = node_key
 		self.array_index = array_index
 
-	func get_node_js():
-		self.data_js[self.node_class_key][self.array_index]
+
+func get_node_js(node_data: NodeData):
+	return get_nodes_js()[node_data.node_class_key][node_data.array_index]
 
 
 func parse_js(date_js_str: String):
@@ -45,8 +46,59 @@ func parse_js(date_js_str: String):
 		for i in range(conns_js.size()):
 			var conn = conns_js[i]
 			
-			self.nodes_by_name[conn["from_node"]].from_node_conns.append(i)
-			self.nodes_by_name[conn["to_node"]].to_node_conns.append(i)
+			var from_node_c = self.nodes_by_name[conn["from_node"]].from_node_conns
+			var from_port = conn["from_port"] as int
+			var to_port = conn["to_port"] as int
+			
+			if from_port not in from_node_c.keys():
+				from_node_c[from_port] = []
+			from_node_c[from_port].append(i)
+			
+			var to_node_c = self.nodes_by_name[conn["to_node"]].to_node_conns
+			if to_port not in to_node_c.keys():
+				to_node_c[to_port] = []
+			to_node_c[to_port].append(i)
+
+
+func get_next_interactive(the_node: NodeData) -> NodeData:
+	var next_node = the_node
+	#var interactive_node
+
+	for i in range(200):  # 200 iterations are just not to get infinite recursion
+		var node_js = get_nodes_js()[the_node.node_class_key][the_node.array_index]
+		var node_outputs = node_js["Outputs"]
+		
+		var output_id
+		
+		if node_outputs and node_outputs[0]["Type"] == 0:
+			output_id = 0
+
+		if output_id != null:
+			if output_id in the_node.from_node_conns.keys():
+				var node_data_port_id = the_node.from_node_conns[output_id]
+
+				if node_data_port_id:
+					var conn = get_connections_js()[node_data_port_id[output_id]]
+					next_node = nodes_by_name[conn["to_node"]] as NodeData
+					
+					# Next Interactive Node Is Found!
+					if next_node.node_class_key in DCGUtils.InteractiveNodes:
+						return next_node
+		else:
+			break
+
+	return null
+
+
+func get_text_by_lang(text: String, lang: String):
+	var lang_text = JSON.parse_string(text)
+	
+	if lang_text and typeof(lang_text) == TYPE_DICTIONARY and lang in lang_text.keys():
+		return lang_text[lang]
+
+
+func get_characters():
+	return self.data_js["Characters"]
 
 
 func get_nodes_js():
@@ -57,20 +109,7 @@ func get_connections_js() -> Array:
 	return self.data_js["Connections"]
 
 
-# Returns Next Node and Input Port
-func get_next_node_by_port(from_node_name: String, from_port_id: int):
-	var node_data = self.nodes_by_name[from_node_name] as NodeData
-	var port_type = get_output_port_type(node_data.get_node_js(), from_port_id)
-
-	if port_type == 0:
-		for conn in get_connections_js():
-			if conn["from_node"] == from_node_name and conn["from_port"] == from_port_id:
-				return [conn["to_node"], conn["to_port"]]
-	else:
-		print("Port Type is not 0 in " +  from_node_name)
-
-
-func get_input_port_type(node_js, to_port_id: int):
+func get_input_port_type(node_js, to_port_id: int) -> int:
 	return node_js["Inputs"][to_port_id]["Type"]
 
 
@@ -78,8 +117,10 @@ func get_output_port_type(node_js, from_port_id: int):
 	return node_js["Outputs"][from_port_id]["Type"]
 
 
-func get_startnode_by_id(start_node_id: int):
+func get_startnode_by_id(start_node_id: int) -> NodeData:
 	for node_js in self.data_js["Nodes"][DCGUtils.StartNode]:
 		if node_js["StartID"] == start_node_id:
-			return node_js
+			return nodes_by_name[node_js["Name"]] as NodeData
+	
+	return null
 

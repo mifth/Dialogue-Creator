@@ -6,8 +6,10 @@ extends Control
 @onready var file_button: DCFileMenu = $VBoxContainer/MenuBar/HBoxContainer/FileButton
 @onready var nodes_button: DCNodesMenu = $VBoxContainer/MenuBar/HBoxContainer/NodesButton
 
-@onready var _file_dialogue = $SaveFileDialog
+@onready var file_dialogue = $SaveFileDialog
 
+@onready var play_start_id_spin: SpinBox = $VBoxContainer/MenuBar/HBoxContainer/HBoxContainer/PlaySpinBox
+@onready var play_lang_edit: LineEdit = $VBoxContainer/MenuBar/HBoxContainer/HBoxContainer/PlayLineEdit
 
 # Preload Nodes
 const start_node_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCStartNode.tscn")
@@ -43,19 +45,19 @@ func NewScene():
 
 
 func SaveFileDialogue():
-	_file_dialogue.file_mode = FileDialog.FILE_MODE_SAVE_FILE
-	_file_dialogue.title = "Save To JSON"
-	_file_dialogue.show()
+	file_dialogue.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+	file_dialogue.title = "Save To JSON"
+	file_dialogue.show()
 
 
 func LoadFileDialogue():
-	_file_dialogue.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-	_file_dialogue.title = "Load JSON"
-	_file_dialogue.show()
+	file_dialogue.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	file_dialogue.title = "Load JSON"
+	file_dialogue.show()
 
 
 func _on_save_file_dialog_file_selected(path):
-	if _file_dialogue.file_mode == FileDialog.FILE_MODE_SAVE_FILE:
+	if file_dialogue.file_mode == FileDialog.FILE_MODE_SAVE_FILE:
 		DCParse.SaveFileJS(graph, path)
 	else:
 		ClearGraph()
@@ -129,6 +131,10 @@ func _on_connection_request(from_node: StringName, from_port, to_node: StringNam
 		
 		# 0 Type.
 		if from_graph_nd.get_output_port_type(from_port) == 0:
+			# Only Dialogue Node is allowed to have infinite recursion
+			if from_node == to_node and not is_instance_of(graph.get_node(NodePath(from_node)), DCDialogueNode):
+				return
+			
 			# Remove Old Conncetion
 			for conn in connections:
 				if conn["from_node"] == from_node and from_port == conn["from_port"]:
@@ -137,6 +143,11 @@ func _on_connection_request(from_node: StringName, from_port, to_node: StringNam
 		
 		# 1 Type
 		elif from_graph_nd.get_output_port_type(from_port) == 1:
+			
+			# Type 1 is not allowed to have infinite recursion
+			if from_node == to_node:
+				return
+
 			# If FROM is Enable/Hide and TO is not Dialogue
 			if ( ( is_instance_of(from_graph_nd, DCEnableTextNode)
 				or is_instance_of(from_graph_nd, DCHideTextNode) )
