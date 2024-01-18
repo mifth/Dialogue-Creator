@@ -74,3 +74,4 @@ func SetUniqueID(start_value: int):
 
 func _on_character_id_value_changed(value):
 	SetUniqueID(value)
+
