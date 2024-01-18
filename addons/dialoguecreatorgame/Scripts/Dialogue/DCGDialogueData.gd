@@ -98,7 +98,17 @@ func get_text_by_lang(text: String, lang: String):
 
 
 func get_characters():
-	return self.data_js["Characters"]
+	return get_nodes_js()[DCGUtils.CharacterNode]
+
+
+func get_character_node_js_by_id(id: int):
+	var chars = get_characters()
+	if chars:
+		for char_node in chars:
+			if char_node["CharacterID"] == id:
+				return char_node
+
+	return null
 
 
 func get_nodes_js():

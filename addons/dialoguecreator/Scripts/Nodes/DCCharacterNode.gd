@@ -50,7 +50,7 @@ func GetNodeParamsJS():
 	
 	var texture_items = lst.get_selected_items()
 	if texture_items:
-		params["CharacterTexture"] = lst.get_selected_items()[0]
+		params["CharacterTexture"] = lst.get_selected_items()[0] as int
 	else:
 		params["CharacterTexture"] = 0
 	

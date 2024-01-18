@@ -34,9 +34,9 @@ static func GetDataJS(graph: GraphEdit):
 	for conn in graph.get_connection_list():
 		var conn_js = {}
 		conn_js["from_node"] = conn["from_node"]
-		conn_js["from_port"] = conn["from_port"]
+		conn_js["from_port"] = conn["from_port"] as int
 		conn_js["to_node"] = conn["to_node"]
-		conn_js["to_port"] = conn["to_port"]
+		conn_js["to_port"] = conn["to_port"] as int
 		
 		conns_js.append(conn_js)
 

@@ -7,7 +7,7 @@ var play_lang: String
 
 
 func _enter_tree():
-	var scene = get_tree().current_scene as DCGraph
+	var scene = get_graph()
 	var data_js = DCParse.GetDataJS(scene.graph)
 	var data_js_str = JSON.stringify(data_js)
 	
@@ -30,14 +30,31 @@ func _enter_tree():
 		if next_interactive_node:
 			# Set up Dialogue Node
 			if next_interactive_node.node_class_key == DCGUtils.DialogueNode:
-				set_dialogue_node(next_interactive_node)
+				set_up_dialogue_node(next_interactive_node)
 
 
-func set_dialogue_node(d_node: DCGDialogueData.NodeData):
-	var main_text_str = self.dc_data.get_node_js(d_node)["MainText"]["Text"]
+func get_graph() -> DCGraph:
+	return get_tree().current_scene
+
+
+func set_up_dialogue_node(d_node: DCGDialogueData.NodeData):
+	var node_js = self.dc_data.get_node_js(d_node)
+
+	var main_text_str = node_js["MainText"]["Text"]
 	var main_text = self.dc_data.get_text_by_lang(main_text_str, self.play_lang)
+
 	if main_text:
 		get_main_text_edit().text = main_text
+
+	if "Character" in node_js.keys():
+		var char_id = node_js["Character"]["Id"]
+		
+		var char_node = self.dc_data.get_character_node_js_by_id(char_id)
+		if char_node:
+			get_char_name_edit().text = char_node["CharacterName"]
+			#get_char_texture_edit().texture = null
+			#print(char_node["CharacterTexture"])
+			print(char_node["Name"], get_node(get_graph().get_path() as String + "/" + char_node["Name"]))
 
 
 func clear_play_scene():
