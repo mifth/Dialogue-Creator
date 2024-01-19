@@ -60,30 +60,36 @@ func parse_js(date_js_str: String):
 			to_node_c[to_port].append(i)
 
 
-func get_next_interactive(the_node: NodeData) -> NodeData:
+func get_next_interactive_node(the_node: NodeData, port_id: int) -> NodeData:
 	var next_node = the_node
 	#var interactive_node
 
 	for i in range(200):  # 200 iterations are just not to get infinite recursion
-		var node_js = get_nodes_js()[the_node.node_class_key][the_node.array_index]
+		var node_js = get_nodes_js()[next_node.node_class_key][next_node.array_index]
 		var node_outputs = node_js["Outputs"]
 		
 		var output_id
 		
-		if node_outputs and node_outputs[0]["Type"] == 0:
+		if i == 0:
+			output_id = port_id
+		elif node_outputs and node_outputs[0]["Type"] == 0:
 			output_id = 0
 
 		if output_id != null:
-			if output_id in the_node.from_node_conns.keys():
-				var node_data_port_id = the_node.from_node_conns[output_id]
+			if output_id in next_node.from_node_conns.keys():
+				var node_data_port_id = next_node.from_node_conns[output_id]
 
 				if node_data_port_id:
-					var conn = get_connections_js()[node_data_port_id[output_id]]
-					next_node = nodes_by_name[conn["to_node"]] as NodeData
+					var conn = get_connections_js()[node_data_port_id[0]]
+					next_node = nodes_by_name[conn["to_node"]] as DCGDialogueData.NodeData
 					
 					# Next Interactive Node Is Found!
 					if next_node.node_class_key in DCGUtils.InteractiveNodes:
 						return next_node
+				else:
+					break
+			else:
+				break
 		else:
 			break
 

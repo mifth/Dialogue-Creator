@@ -58,10 +58,10 @@ func LoadFileDialogue():
 
 func _on_save_file_dialog_file_selected(path):
 	if file_dialogue.file_mode == FileDialog.FILE_MODE_SAVE_FILE:
-		DCParse.SaveFileJS(graph, path)
+		DCParse.SaveFileJS(self, path)
 	else:
 		ClearGraph()
-		DCParse.LoadFileJS(graph, path)
+		DCParse.LoadFileJS(self, path)
 
 
 func AddNode(node_name: String):
