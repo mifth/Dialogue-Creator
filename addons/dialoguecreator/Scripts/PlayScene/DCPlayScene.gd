@@ -2,10 +2,13 @@ extends Node
 
 
 var dc_data: DCGDialogueData
+var live_nodes_js: Dictionary
+
 var play_start_id: int
 var play_lang: String
 
-var text_button := preload("res://addons/dialoguecreator/Assets/PlayScene/TextSlotButton.tscn")
+const text_button := preload("res://addons/dialoguecreator/Assets/PlayScene/TextSlotButton.tscn")
+const action_texture = preload("res://addons/dialoguecreator/Resources/Action/Action.png")
 
 var current_dialogue: DCGDialogueData.NodeData
 
@@ -51,7 +54,9 @@ func run_next_dialogue(port_id: int):
 		# Set up Dialogue Node
 		if next_interactive_node.node_class_key == DCGUtils.DialogueNode:
 			set_up_dialogue_node(next_interactive_node)
-
+		elif next_interactive_node.node_class_key == DCGUtils.ActionNode:
+			set_up_action_node(next_interactive_node)
+			
 	else:
 		queue_free()
 
@@ -63,6 +68,25 @@ func add_text_button(text: String, port_id: int):
 	
 	text_b.text = text
 	get_texts_container().add_child(text_b)
+
+
+func set_up_action_node(d_node: DCGDialogueData.NodeData):
+	var node_js = self.dc_data.get_node_js(d_node)
+
+	var action_text = ""
+	var name_js = node_js["ActionName"]
+	var text_js = node_js["ActionText"]
+	
+	if name_js:
+		action_text = name_js
+	if text_js:
+		action_text += "\n" + text_js
+	
+	get_main_text_edit().text = action_text
+	get_char_texture_edit().texture = self.action_texture
+	
+	add_text_button("True", 0)
+	add_text_button("False", 1)
 
 
 func set_up_dialogue_node(d_node: DCGDialogueData.NodeData):

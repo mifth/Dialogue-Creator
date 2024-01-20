@@ -134,9 +134,10 @@ func get_output_port_type(node_js, from_port_id: int):
 
 
 func get_startnode_by_id(start_node_id: int) -> NodeData:
-	for node_js in self.data_js["Nodes"][DCGUtils.StartNode]:
-		if node_js["StartID"] == start_node_id:
-			return nodes_by_name[node_js["Name"]] as NodeData
+	if DCGUtils.StartNode in self.data_js["Nodes"]:
+		for node_js in self.data_js["Nodes"][DCGUtils.StartNode]:
+			if node_js["StartID"] == start_node_id:
+				return nodes_by_name[node_js["Name"]]
 	
 	return null
 

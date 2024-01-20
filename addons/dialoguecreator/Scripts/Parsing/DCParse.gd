@@ -186,7 +186,7 @@ static func LoadFileJS(main_graph: DCGraph, path: String):
 			# Set Character Icon
 			var char_icons = new_node.GetItemsIcons()
 			if node_js["CharacterTexture"] < char_icons.item_count:
-				char_icons.select(node_js["CharacterTexture"])
+				char_icons.select((node_js["CharacterTexture"] as int % char_icons.item_count as int) as int)
 			else:
 				char_icons.select(char_icons.item_count - 1)
 			
