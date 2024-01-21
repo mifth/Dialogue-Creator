@@ -5,10 +5,10 @@
 [ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Menu/DCNodesMenu.gd" id="2_grrel"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jihrp"]
-bg_color = Color(0.0235294, 0.0235294, 0.0235294, 1)
+bg_color = Color(0.12549, 0.12549, 0.12549, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1saej"]
-bg_color = Color(0.0588235, 0.0588235, 0.0588235, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jxu4k"]
+bg_color = Color(0.152941, 0.152941, 0.152941, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6x65q"]
 bg_color = Color(0.0235294, 0.0235294, 0.0235294, 0.290196)
@@ -77,15 +77,15 @@ popup/item_3/text = "Set Text"
 popup/item_3/id = 3
 popup/item_4/text = "Character"
 popup/item_4/id = 4
-popup/item_5/text = "Reroute"
+popup/item_5/text = "Action"
 popup/item_5/id = 5
-popup/item_6/text = "Reroute Text"
+popup/item_6/text = "Reroute"
 popup/item_6/id = 6
-popup/item_7/text = "Enable/Disable Text"
+popup/item_7/text = "Reroute Text"
 popup/item_7/id = 7
-popup/item_8/text = "Hide/Unhide Text"
+popup/item_8/text = "Enable/Disable Text"
 popup/item_8/id = 8
-popup/item_9/text = "Action"
+popup/item_9/text = "Hide/Unhide Text"
 popup/item_9/id = 9
 popup/item_10/text = "Note"
 popup/item_10/id = 10
@@ -102,13 +102,17 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "►"
 
-[node name="Label" type="Label" parent="VBoxContainer/MenuBar/HBoxContainer/HBoxContainer"]
+[node name="Label2" type="Label" parent="VBoxContainer/MenuBar/HBoxContainer/HBoxContainer"]
 layout_mode = 2
-text = "    "
+text = "      Language"
 
 [node name="PlayLineEdit" type="LineEdit" parent="VBoxContainer/MenuBar/HBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Eng"
+
+[node name="Label3" type="Label" parent="VBoxContainer/MenuBar/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "  Start ID"
 
 [node name="PlaySpinBox" type="SpinBox" parent="VBoxContainer/MenuBar/HBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -118,7 +122,7 @@ rounded = true
 [node name="DCGraphEdit" type="GraphEdit" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_1saej")
+theme_override_styles/panel = SubResource("StyleBoxFlat_jxu4k")
 theme_override_styles/menu_panel = SubResource("StyleBoxFlat_6x65q")
 show_grid = false
 snapping_distance = 10

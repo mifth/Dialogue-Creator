@@ -60,9 +60,24 @@ func parse_js(date_js_str: String):
 			to_node_c[to_port].append(i)
 
 
-func get_next_interactive_node(the_node: NodeData, port_id: int) -> NodeData:
+func get_live_node_js(the_node: NodeData, live_nodes_js: Dictionary):
+	if the_node.node_class_key in DCGUtils.live_nodes_types:
+		var node_js = get_nodes_js()[the_node.node_class_key][the_node.array_index]
+		var live_node_js
+		
+		if nodes_by_name.find_key(the_node) not in live_nodes_js:
+		
+			live_node_js = node_js.duplicate(true)
+			live_nodes_js[node_js["Name"]] = live_node_js
+		else:
+			live_node_js = live_nodes_js[node_js["Name"]]
+			
+		return live_node_js
+
+
+# live_nodes_js are json nodes which can be modified during a dialogue
+func get_next_dialogue_node(the_node: NodeData, port_id: int, live_nodes_js: Dictionary) -> NodeData:
 	var next_node = the_node
-	#var interactive_node
 
 	for i in range(200):  # 200 iterations are just not to get infinite recursion
 		var node_js = get_nodes_js()[next_node.node_class_key][next_node.array_index]
@@ -81,11 +96,17 @@ func get_next_interactive_node(the_node: NodeData, port_id: int) -> NodeData:
 
 				if node_data_port_id:
 					var conn = get_connections_js()[node_data_port_id[0]]
-					next_node = nodes_by_name[conn["to_node"]] as DCGDialogueData.NodeData
-					
+					var parse_node = nodes_by_name[conn["to_node"]] as DCGDialogueData.NodeData
+
 					# Next Interactive Node Is Found!
-					if next_node.node_class_key in DCGUtils.InteractiveNodes:
-						return next_node
+					if parse_node.node_class_key in DCGUtils.dialogue_nodes_types:
+						return parse_node
+					else:
+						if parse_node.node_class_key == DCGUtils.SetTextNode:
+							set_live_texts(parse_node, live_nodes_js)
+						
+						next_node = parse_node
+						
 				else:
 					break
 			else:
@@ -96,6 +117,20 @@ func get_next_interactive_node(the_node: NodeData, port_id: int) -> NodeData:
 	return null
 
 
+func set_live_texts(text_node: NodeData, live_nodes_js: Dictionary):
+	var live_node_js = get_live_node_js(text_node, live_nodes_js)
+	var node_outputs = live_node_js["Outputs"]
+	
+	for conns in text_node.from_node_conns:
+		var key_int = text_node.from_node_conns.find_key(conns)
+		if key_int == 0:
+			continue
+		elif key_int == 1:
+			pass  # CHANGE RANDOM TEXTS
+		else:
+			pass # CHANGE TEXTS
+
+
 func get_text_by_lang(text: String, lang: String):
 	var lang_text = JSON.parse_string(text)
 	
@@ -104,7 +139,9 @@ func get_text_by_lang(text: String, lang: String):
 
 
 func get_characters():
-	return get_nodes_js()[DCGUtils.CharacterNode]
+	var nodes_js = get_nodes_js()
+	if nodes_js and DCGUtils.CharacterNode in nodes_js:
+		return get_nodes_js()[DCGUtils.CharacterNode]
 
 
 func get_character_node_js_by_id(id: int):

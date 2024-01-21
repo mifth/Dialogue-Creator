@@ -154,8 +154,10 @@ func _on_connection_request(from_node: StringName, from_port, to_node: StringNam
 				and not is_instance_of(to_graph_nd, DCDialogueNode) ):
 				return
 			elif is_instance_of(to_graph_nd, DCDialogueNode):
-				if to_port < 2:
-					return
+				if ( is_instance_of(from_graph_nd, DCEnableTextNode)
+				or is_instance_of(from_graph_nd, DCHideTextNode) ):
+					if to_port < 2:
+						return
 		
 		graph.connect_node(from_node, from_port, to_node, to_port)
 	else:

@@ -1,8 +1,8 @@
 extends Node
 
 
-var dc_data: DCGDialogueData
-var live_nodes_js: Dictionary
+var dc_data: DCGDialogueData  # Main dialogue data
+var live_nodes_js: Dictionary = {}  # nodes_js which can be modified during a dialogue
 
 var play_start_id: int
 var play_lang: String
@@ -15,10 +15,10 @@ var current_dialogue: DCGDialogueData.NodeData
 
 func _enter_tree():
 	var scene = get_main_graph()
-	var data_js = DCParse.GetDataJS(get_main_graph())
-	var data_js_str = JSON.stringify(data_js)
+	var data_js = DCParse.GetDataJS(get_main_graph())  # Data from nodes
+	var data_js_str = JSON.stringify(data_js)  # Converted to string
 	
-	self.dc_data = DCGDialogueData.new()
+	self.dc_data = DCGDialogueData.new()  # New main data
 	self.dc_data.parse_js(data_js_str)
 	
 	clear_play_scene()
@@ -45,17 +45,16 @@ func run_next_dialogue(port_id: int):
 	clear_dialogue()
 
 	# Get Next Interactive Node
-	var next_interactive_node = self.dc_data.get_next_interactive_node(self.current_dialogue, port_id)
+	var next_dialogue_node = self.dc_data.get_next_dialogue_node(self.current_dialogue, port_id, self.live_nodes_js)
 
-	if next_interactive_node:
-		self.current_dialogue = next_interactive_node
-		var next_node_js = self.dc_data.get_node_js(next_interactive_node)
+	if next_dialogue_node:
+		self.current_dialogue = next_dialogue_node
 
 		# Set up Dialogue Node
-		if next_interactive_node.node_class_key == DCGUtils.DialogueNode:
-			set_up_dialogue_node(next_interactive_node)
-		elif next_interactive_node.node_class_key == DCGUtils.ActionNode:
-			set_up_action_node(next_interactive_node)
+		if next_dialogue_node.node_class_key == DCGUtils.DialogueNode:
+			set_up_dialogue_node(next_dialogue_node)
+		elif next_dialogue_node.node_class_key == DCGUtils.ActionNode:
+			set_up_action_node(next_dialogue_node)
 			
 	else:
 		queue_free()
@@ -71,11 +70,11 @@ func add_text_button(text: String, port_id: int):
 
 
 func set_up_action_node(d_node: DCGDialogueData.NodeData):
-	var node_js = self.dc_data.get_node_js(d_node)
+	var live_node_js = self.dc_data.get_live_node_js(d_node, self.live_nodes_js)
 
 	var action_text = ""
-	var name_js = node_js["ActionName"]
-	var text_js = node_js["ActionText"]
+	var name_js = live_node_js["ActionName"]
+	var text_js = live_node_js["ActionText"]
 	
 	if name_js:
 		action_text = name_js
@@ -90,26 +89,26 @@ func set_up_action_node(d_node: DCGDialogueData.NodeData):
 
 
 func set_up_dialogue_node(d_node: DCGDialogueData.NodeData):
-	var node_js = self.dc_data.get_node_js(d_node)
+	var live_node_js = self.dc_data.get_live_node_js(d_node, self.live_nodes_js)
 
-	var main_text_str = node_js["MainText"]["Text"]
+	var main_text_str = live_node_js["MainText"]["Text"]
 	var main_text = self.dc_data.get_text_by_lang(main_text_str, self.play_lang)
 
 	if main_text:
 		get_main_text_edit().text = main_text
 
-	if not node_js["TextSlots"]:
+	if not live_node_js["TextSlots"]:
 		add_text_button("> > > > >", 0)
 	else :
-		for i in range(node_js["TextSlots"].size()):
-			var text_slot_text = self.dc_data.get_text_by_lang(node_js["TextSlots"][i]["Text"], self.play_lang)
+		for i in range(live_node_js["TextSlots"].size()):
+			var text_slot_text = self.dc_data.get_text_by_lang(live_node_js["TextSlots"][i]["Text"], self.play_lang)
 			if text_slot_text:
 				add_text_button(text_slot_text, i + 1)
 			else:
 				add_text_button("", i + 1)
 
-	if "Character" in node_js.keys():
-		var char_id = node_js["Character"]["Id"]
+	if "Character" in live_node_js.keys():
+		var char_id = live_node_js["Character"]["Id"]
 		
 		var char_node = self.dc_data.get_character_node_js_by_id(char_id)
 		if char_node:
@@ -150,7 +149,7 @@ func get_char_texture_edit() -> TextureRect:
 
 
 func get_main_text_edit() -> TextEdit:
-	return $PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/Panel/VBoxContainer2/MainTextEdit
+	return $PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/Panel/VBoxContainer2/HBoxContainer2/MainTextEdit
 
 
 func get_start_name_edit() -> TextEdit:
