@@ -91,7 +91,10 @@ func set_up_action_node(d_node: DCGDialogueData.NodeData):
 func set_up_dialogue_node(d_node: DCGDialogueData.NodeData):
 	var live_node_js = self.dc_data.get_live_node_js(d_node, self.live_nodes_js)
 
-	var main_text_str = live_node_js["MainText"]["Text"]
+	# Get Text In Text JS
+	var main_text_js = live_node_js["MainText"]
+	var main_text_str = self.dc_data.get_text_of_text_slot(main_text_js)
+	
 	var main_text = self.dc_data.get_text_by_lang(main_text_str, self.play_lang)
 
 	if main_text:
@@ -101,7 +104,7 @@ func set_up_dialogue_node(d_node: DCGDialogueData.NodeData):
 		add_text_button("> > > > >", 0)
 	else :
 		for i in range(live_node_js["TextSlots"].size()):
-			var text_slot_text = self.dc_data.get_text_by_lang(live_node_js["TextSlots"][i]["Text"], self.play_lang)
+			var text_slot_text = self.dc_data.get_text_by_lang(self.dc_data.get_text_of_text_slot(live_node_js["TextSlots"][i]), self.play_lang)
 			if text_slot_text:
 				add_text_button(text_slot_text, i + 1)
 			else:

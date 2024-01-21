@@ -60,21 +60,6 @@ func parse_js(date_js_str: String):
 			to_node_c[to_port].append(i)
 
 
-func get_live_node_js(the_node: NodeData, live_nodes_js: Dictionary):
-	if the_node.node_class_key in DCGUtils.live_nodes_types:
-		var node_js = get_nodes_js()[the_node.node_class_key][the_node.array_index]
-		var live_node_js
-		
-		if nodes_by_name.find_key(the_node) not in live_nodes_js:
-		
-			live_node_js = node_js.duplicate(true)
-			live_nodes_js[node_js["Name"]] = live_node_js
-		else:
-			live_node_js = live_nodes_js[node_js["Name"]]
-			
-		return live_node_js
-
-
 # live_nodes_js are json nodes which can be modified during a dialogue
 func get_next_dialogue_node(the_node: NodeData, port_id: int, live_nodes_js: Dictionary) -> NodeData:
 	var next_node = the_node
@@ -104,31 +89,87 @@ func get_next_dialogue_node(the_node: NodeData, port_id: int, live_nodes_js: Dic
 					else:
 						if parse_node.node_class_key == DCGUtils.SetTextNode:
 							set_live_texts(parse_node, live_nodes_js)
+						elif parse_node.node_class_key == DCGUtils.EnableTextNode:
+							set_live_texts(parse_node, live_nodes_js)
+						elif parse_node.node_class_key == DCGUtils.HideTextNode:
+							set_live_texts(parse_node, live_nodes_js)
 						
 						next_node = parse_node
 						
 				else:
-					break
+					return null
 			else:
-				break
+				return null
 		else:
-			break
+			return null
+
+	print("Infinite Recursion of " + get_nodes_js()[the_node.node_class_key][the_node.array_index]["Name"])
 
 	return null
 
 
+func get_live_node_js(the_node: NodeData, live_nodes_js: Dictionary):
+	if the_node.node_class_key in DCGUtils.live_nodes_types:
+		var node_js = get_nodes_js()[the_node.node_class_key][the_node.array_index]
+		var live_node_js
+		
+		if nodes_by_name.find_key(the_node) not in live_nodes_js:
+		
+			live_node_js = node_js.duplicate(true)
+			live_nodes_js[node_js["Name"]] = live_node_js
+		else:
+			live_node_js = live_nodes_js[node_js["Name"]]
+			
+		return live_node_js
+
+
+# Only for the TextNode, EnableTextNode, HideTextNode
 func set_live_texts(text_node: NodeData, live_nodes_js: Dictionary):
-	var live_node_js = get_live_node_js(text_node, live_nodes_js)
-	var node_outputs = live_node_js["Outputs"]
+	var live_text_node_js = get_live_node_js(text_node, live_nodes_js)
 	
-	for conns in text_node.from_node_conns:
-		var key_int = text_node.from_node_conns.find_key(conns)
+	for key_int in text_node.from_node_conns.keys():
 		if key_int == 0:
 			continue
-		elif key_int == 1:
-			pass  # CHANGE RANDOM TEXTS
-		else:
-			pass # CHANGE TEXTS
+		
+		var conns_ids = text_node.from_node_conns[key_int]
+
+		for conn_id in conns_ids:
+			var conn = get_connections_js()[conn_id]
+			var to_node = nodes_by_name[conn["to_node"]] as NodeData
+			var to_port = conn["to_port"]
+			var from_port = conn["from_port"]
+			var to_live_node_js = get_live_node_js(to_node, live_nodes_js)
+
+			if to_node.node_class_key == DCGUtils.DialogueNode:
+				if live_text_node_js["TextSlots"]:
+					
+					# Get From_Node Text
+					var from_text
+					if key_int == 1:  # Random
+						var rand_id = randi_range(0, live_text_node_js["TextSlots"].size() - 1)
+						from_text = get_text_of_text_slot(live_text_node_js["TextSlots"][rand_id])
+					else:
+						from_text = get_text_of_text_slot(live_text_node_js["TextSlots"][from_port - 2])
+					
+					# Main Text
+					if to_port == 1:
+						# Set New Live Text
+						to_live_node_js["MainText"]["LiveText"] = from_text
+
+					# Text Slot
+					elif to_port > 1:
+						# Set New Live Text
+						to_live_node_js["TextSlots"][to_port - 2]["LiveText"] = from_text
+
+
+func get_text_of_text_slot(main_text_js):
+	var main_text_str = main_text_js["Text"]
+	if "LiveText" in main_text_js:
+		main_text_str = main_text_js["LiveText"]
+	else:
+		main_text_str = main_text_js["Text"]
+	
+	return main_text_str
 
 
 func get_text_by_lang(text: String, lang: String):
@@ -136,6 +177,8 @@ func get_text_by_lang(text: String, lang: String):
 	
 	if lang_text and typeof(lang_text) == TYPE_DICTIONARY and lang in lang_text.keys():
 		return lang_text[lang]
+	else:
+		return text
 
 
 func get_characters():
