@@ -60,13 +60,15 @@ func run_next_dialogue(port_id: int):
 		queue_free()
 
 
-func add_text_button(text: String, port_id: int):
+func add_text_button(text: String, port_id: int) -> DCTextSlotButton:
 	var text_b = self.text_button.instantiate() as DCTextSlotButton
 	text_b.out_port_id = port_id
 	text_b.next_node_button.connect(run_next_dialogue)
 	
 	text_b.text = text
 	get_texts_container().add_child(text_b)
+
+	return text_b
 
 
 func set_up_action_node(d_node: DCGDialogueData.NodeData):
@@ -104,11 +106,22 @@ func set_up_dialogue_node(d_node: DCGDialogueData.NodeData):
 		add_text_button("> > > > >", 0)
 	else :
 		for i in range(live_node_js["TextSlots"].size()):
-			var text_slot_text = self.dc_data.get_text_by_lang(self.dc_data.get_text_of_text_slot(live_node_js["TextSlots"][i]), self.play_lang)
-			if text_slot_text:
-				add_text_button(text_slot_text, i + 1)
+			var text_slot_js = live_node_js["TextSlots"][i]
+			# If Text Disabled
+			if "HideLiveNode" in text_slot_js and text_slot_js["HideLiveNode"]:
+				continue
+
+			var live_text = self.dc_data.get_text_of_text_slot(text_slot_js)
+			var final_text = self.dc_data.get_text_by_lang(live_text, self.play_lang)
+
+			var text_button: DCTextSlotButton
+			if final_text:
+				text_button = add_text_button(final_text, i + 1)
 			else:
-				add_text_button("", i + 1)
+				text_button = add_text_button("No Text!", i + 1)
+
+			if "EnableLiveText" in text_slot_js and not text_slot_js["EnableLiveText"]:
+				text_button.disabled = true
 
 	if "Character" in live_node_js.keys():
 		var char_id = live_node_js["Character"]["Id"]
