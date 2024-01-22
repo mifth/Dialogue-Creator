@@ -125,41 +125,78 @@ func get_live_node_js(the_node: NodeData, live_nodes_js: Dictionary):
 
 # Only for the TextNode, EnableTextNode, HideTextNode
 func change_live_texts(from_node: NodeData, live_nodes_js: Dictionary):
-	var from_live_node_js = get_live_node_js(from_node, live_nodes_js)
-	
 	for from_port in from_node.from_node_conns.keys():
 		if from_port == 0:
 			continue
 		
-		var conns_ids = from_node.from_node_conns[from_port]
+		var from_node_js = get_live_node_js(from_node, live_nodes_js)
+		if not from_node_js:
+			from_node_js = get_node_js(from_node)
 
+		var conns_ids = from_node.from_node_conns[from_port]
+		
 		for conn_id in conns_ids:
 			var conn = get_connections_js()[conn_id]
 			var to_node = nodes_by_name[conn["to_node"]] as NodeData
 			var to_port = conn["to_port"]
-			# var from_port = conn["from_port"]
-			var to_live_node_js = get_live_node_js(to_node, live_nodes_js)
-
+			
 			if to_node.node_class_key in DCGUtils.live_nodes_types:
-					change_live_text(from_port, to_port, from_live_node_js,
-									to_live_node_js, from_node, to_node)
+				var to_live_node_js = get_live_node_js(to_node, live_nodes_js)
+				
+				change_live_text(from_port, to_port, from_node_js,
+								to_live_node_js, from_node, to_node)
+
+			elif to_node.node_class_key == DCGUtils.RerouteTextNode:
+				var nodes_from_reroute_text = []
+				var ports_from_reroute_text = []
+				get_nodes_from_reroute_text(to_node, nodes_from_reroute_text, ports_from_reroute_text, [])
+				
+				for i in range(nodes_from_reroute_text.size()):
+					var the_to_node = nodes_from_reroute_text[i]
+					var the_to_port = ports_from_reroute_text[i]
+					var the_to_live_node_js = get_live_node_js(the_to_node, live_nodes_js)
 
 
-func change_live_text(from_port: int, to_port: int, from_live_node_js, to_live_node_js, from_node: NodeData, to_node: NodeData):
+					change_live_text(from_port, the_to_port, from_node_js,
+									the_to_live_node_js, from_node, the_to_node)
+
+
+func get_nodes_from_reroute_text(reroute_text_node: NodeData, nodes_to_add: Array, ports_to_add: Array, passed_nodes: Array):
+	if reroute_text_node not in passed_nodes:
+		passed_nodes.append(reroute_text_node)
+
+	if reroute_text_node.from_node_conns:
+		for conn_id in reroute_text_node.from_node_conns[0]:
+			var conn = get_connections_js()[conn_id]
+			
+			var to_node = nodes_by_name[conn["to_node"]] as NodeData
+			
+			if to_node not in passed_nodes:
+				if to_node.node_class_key in DCGUtils.live_nodes_types:
+					nodes_to_add.append(to_node)
+					ports_to_add.append(conn["to_port"] as int)
+				elif to_node.node_class_key == DCGUtils.RerouteTextNode:
+					get_nodes_from_reroute_text(to_node, nodes_to_add, ports_to_add, passed_nodes)
+
+				passed_nodes.append(to_node)
+
+
+# from_node_js can be node_js or live_node_js!!!!
+func change_live_text(from_port: int, to_port: int, from_node_js, to_live_node_js, from_node: NodeData, to_node: NodeData):
 
 	# Get From_Node Text
 	var from_text
 
 	if from_node.node_class_key == DCGUtils.SetTextNode:
-		if from_live_node_js["TextSlots"]:
+		if from_node_js["TextSlots"]:
 			if from_port == 1:  # Random
-				var rand_id = randi_range(0, from_live_node_js["TextSlots"].size() - 1)
-				from_text = get_text_of_text_slot(from_live_node_js["TextSlots"][rand_id])
+				var rand_id = randi_range(0, from_node_js["TextSlots"].size() - 1)
+				from_text = get_text_of_text_slot(from_node_js["TextSlots"][rand_id])
 			else:
-				from_text = get_text_of_text_slot(from_live_node_js["TextSlots"][from_port - 2])
+				from_text = get_text_of_text_slot(from_node_js["TextSlots"][from_port - 2])
 		else:
 			from_text = "NO TEXT"
-	
+
 	if to_node.node_class_key == DCGUtils.DialogueNode: 
 		# Main Text
 		if to_port == 1:
@@ -189,14 +226,30 @@ func change_live_text(from_port: int, to_port: int, from_live_node_js, to_live_n
 
 				to_live_node_js["TextSlots"][to_port - 2]["HideLiveText"] = hide_text
 
+	elif to_node.node_class_key == DCGUtils.ActionNode:
+		# Main Text
+		if to_port == 1:
+			# Set New Live Text
+			if from_node.node_class_key == DCGUtils.SetTextNode:
+				to_live_node_js["ActionText"]["LiveText"] = from_text
 
-func get_text_of_text_slot(main_text_js):
-	var main_text_str = main_text_js["Text"]
-	if "LiveText" in main_text_js:
+	elif to_node.node_class_key == DCGUtils.SetTextNode:
+		# Main Text
+		if to_port > 0:
+			# Set New Live Text
+			if from_node.node_class_key == DCGUtils.SetTextNode:
+				to_live_node_js["TextSlots"][to_port - 1]["LiveText"] = from_text
+
+
+
+func get_text_of_text_slot(main_text_js: Dictionary):
+	var main_text_str: String
+
+	if "LiveText" in main_text_js.keys():
 		main_text_str = main_text_js["LiveText"]
 	else:
 		main_text_str = main_text_js["Text"]
-	
+
 	return main_text_str
 
 

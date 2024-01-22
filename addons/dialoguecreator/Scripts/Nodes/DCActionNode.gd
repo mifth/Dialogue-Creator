@@ -14,7 +14,8 @@ func GetNodeParamsJS():
 	var params = GetNodeBaseParamsJS()
 	
 	params["ActionName"] = get_action_name_node().text
-	params["ActionText"] = get_action_text_node().text
+	params["ActionText"] = {}
+	params["ActionText"]["Text"] = get_action_text_node().text
 	
 	return [params, DCGUtils.ActionNode]
 

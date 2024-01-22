@@ -66,7 +66,7 @@ func add_text_button(text: String, port_id: int) -> DCTextSlotButton:
 	text_b.next_node_button.connect(run_next_dialogue)
 	
 	text_b.text = text
-	get_texts_container().add_child(text_b)
+	get_text_buttons_container().add_child(text_b)
 
 	return text_b
 
@@ -76,7 +76,7 @@ func set_up_action_node(d_node: DCGDialogueData.NodeData):
 
 	var action_text = ""
 	var name_js = live_node_js["ActionName"]
-	var text_js = live_node_js["ActionText"]
+	var text_js = self.dc_data.get_text_of_text_slot(live_node_js["ActionText"])
 	
 	if name_js:
 		action_text = name_js
@@ -108,7 +108,7 @@ func set_up_dialogue_node(d_node: DCGDialogueData.NodeData):
 		for i in range(live_node_js["TextSlots"].size()):
 			var text_slot_js = live_node_js["TextSlots"][i]
 			# If Text Disabled
-			if "HideLiveNode" in text_slot_js and text_slot_js["HideLiveNode"]:
+			if "HideLiveText" in text_slot_js and text_slot_js["HideLiveText"]:
 				continue
 
 			var live_text = self.dc_data.get_text_of_text_slot(text_slot_js)
@@ -152,7 +152,7 @@ func clear_dialogue():
 	var main_text = get_main_text_edit()
 	main_text.text = ""
 	
-	var texts = get_texts_container()
+	var texts = get_text_buttons_container()
 	DCGUtils.remove_children(texts)
 
 
@@ -172,7 +172,7 @@ func get_start_name_edit() -> TextEdit:
 	return $PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/Panel/VBoxContainer2/HBoxContainer/StartNameTextEdit
 
 
-func get_texts_container() -> VBoxContainer:
+func get_text_buttons_container() -> VBoxContainer:
 	return $PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/TextsVBoxContainer
 
 

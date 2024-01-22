@@ -80,7 +80,7 @@ static func LoadFileJS(main_graph: DCGraph, path: String):
 			SetNodeParamsJS(new_node, node_js)
 			
 			new_node.get_action_name_node().text = node_js["ActionName"]
-			new_node.get_action_text_node().text = node_js["ActionText"]
+			new_node.get_action_text_node().text = node_js["ActionText"]["Text"]
 			
 			nodes_by_name[node_js["Name"]] = new_node.name
 		
