@@ -96,7 +96,7 @@ static func LoadFileJS(main_graph: DCGraph, path: String):
 			var main_text = new_node.GetMainText()
 			main_text.text = node_js["MainText"]["Text"]
 			
-			if "Character" in node_js.keys():
+			if "Character" in node_js:
 				var char_id = new_node.GetCharacterIDSpinBox()
 				char_id.value = node_js["Character"]["Id"] as int
 			

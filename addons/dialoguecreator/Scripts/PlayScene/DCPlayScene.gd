@@ -128,7 +128,7 @@ func set_up_dialogue_node(d_node: DCGDialogueData.NodeData):
 					text_button.disabled = false
 
 	# Set Up Character
-	if "Character" in live_node_js.keys():
+	if "Character" in live_node_js:
 		var char_id = live_node_js["Character"]["Id"]
 		
 		var char_node = self.dc_data.get_character_node_js_by_id(char_id)

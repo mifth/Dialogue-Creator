@@ -50,12 +50,12 @@ func parse_js(date_js_str: String):
 			var from_port = conn["from_port"] as int
 			var to_port = conn["to_port"] as int
 			
-			if from_port not in from_node_c.keys():
+			if from_port not in from_node_c:
 				from_node_c[from_port] = []
 			from_node_c[from_port].append(i)
 			
 			var to_node_c = self.nodes_by_name[conn["to_node"]].to_node_conns
-			if to_port not in to_node_c.keys():
+			if to_port not in to_node_c:
 				to_node_c[to_port] = []
 			to_node_c[to_port].append(i)
 
@@ -71,7 +71,7 @@ func _get_dialogue_node_recursively(the_node: NodeData, port_id: int,
 
 	var dialogue_node: NodeData
 	
-	if port_id in the_node.from_node_conns.keys():
+	if port_id in the_node.from_node_conns:
 		var node_data_port_id = the_node.from_node_conns[port_id]
 
 		if node_data_port_id:
@@ -105,17 +105,26 @@ func get_live_node_js(the_node: NodeData, live_nodes_js: Dictionary):
 		var node_js = get_nodes_js()[the_node.node_class_key][the_node.array_index]
 		var live_node_js
 		
-		if nodes_by_name.find_key(the_node) not in live_nodes_js:
+		if node_js["Name"] not in live_nodes_js:
 		
 			live_node_js = node_js.duplicate(true)
 			live_nodes_js[node_js["Name"]] = live_node_js
+
+			_check_default_live_text(the_node, live_node_js)
+
 		else:
 			live_node_js = live_nodes_js[node_js["Name"]]
-			
+
 		return live_node_js
 
 
-# Only for the TextNode, EnableTextNode, HideTextNode
+func _check_default_live_text(the_node: NodeData, live_node_js):
+	if the_node.to_node_conns:
+		for port_id in the_node.to_node_conns.keys():
+			pass
+
+
+# Only for the SetTextNode, EnableTextNode, HideTextNode
 func _change_live_texts(from_node: NodeData, live_nodes_js: Dictionary):
 	for from_port in from_node.from_node_conns.keys():
 		if from_port == 0:
@@ -237,7 +246,7 @@ func _change_live_text(from_port: int, to_port: int, from_node_js, to_live_node_
 func get_text_of_text_slot(main_text_js: Dictionary):
 	var main_text_str: String
 
-	if "LiveText" in main_text_js.keys():
+	if "LiveText" in main_text_js:
 		main_text_str = main_text_js["LiveText"]
 	else:
 		main_text_str = main_text_js["Text"]
@@ -248,7 +257,7 @@ func get_text_of_text_slot(main_text_js: Dictionary):
 func get_text_by_lang(text: String, lang: String):
 	var lang_text = JSON.parse_string(text)
 	
-	if lang_text and typeof(lang_text) == TYPE_DICTIONARY and lang in lang_text.keys():
+	if lang_text and typeof(lang_text) == TYPE_DICTIONARY and lang in lang_text:
 		return lang_text[lang]
 	else:
 		return text
