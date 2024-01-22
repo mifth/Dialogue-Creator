@@ -62,50 +62,42 @@ func parse_js(date_js_str: String):
 
 # live_nodes_js are json nodes which can be modified during a dialogue
 func get_next_dialogue_node(the_node: NodeData, port_id: int, live_nodes_js: Dictionary) -> NodeData:
-	var next_node = the_node
 
-	for i in range(200):  # 200 iterations are just not to get infinite recursion
-		var node_js = get_nodes_js()[next_node.node_class_key][next_node.array_index]
-		var node_outputs = node_js["Outputs"]
-		
-		var output_id
-		
-		if i == 0:
-			output_id = port_id
-		elif node_outputs and node_outputs[0]["Type"] == 0:
-			output_id = 0
+	return _get_dialogue_node_recursively(the_node, port_id, live_nodes_js, [])
 
-		if output_id != null:
-			if output_id in next_node.from_node_conns.keys():
-				var node_data_port_id = next_node.from_node_conns[output_id]
 
-				if node_data_port_id:
-					var conn = get_connections_js()[node_data_port_id[0]]
-					var parse_node = nodes_by_name[conn["to_node"]] as DCGDialogueData.NodeData
+func _get_dialogue_node_recursively(the_node: NodeData, port_id: int, 
+									live_nodes_js: Dictionary, parsed_nodes: Array) -> NodeData:
 
-					# Next Interactive Node Is Found!
-					if parse_node.node_class_key in DCGUtils.dialogue_nodes_types:
-						return parse_node
-					else:
-						if parse_node.node_class_key == DCGUtils.SetTextNode:
-							change_live_texts(parse_node, live_nodes_js)
-						elif parse_node.node_class_key == DCGUtils.EnableTextNode:
-							change_live_texts(parse_node, live_nodes_js)
-						elif parse_node.node_class_key == DCGUtils.HideTextNode:
-							change_live_texts(parse_node, live_nodes_js)
-						
-						next_node = parse_node
-						
-				else:
-					return null
+	var dialogue_node: NodeData
+	
+	if port_id in the_node.from_node_conns.keys():
+		var node_data_port_id = the_node.from_node_conns[port_id]
+
+		if node_data_port_id:
+			var conn = get_connections_js()[node_data_port_id[0]]
+			var parse_node = nodes_by_name[conn["to_node"]] as DCGDialogueData.NodeData
+
+			# Next Interactive Node Is Found!
+			if parse_node.node_class_key in DCGUtils.dialogue_nodes_types:
+				dialogue_node = parse_node
 			else:
-				return null
-		else:
-			return null
+				if parse_node.node_class_key == DCGUtils.SetTextNode:
+					_change_live_texts(parse_node, live_nodes_js)
+				elif parse_node.node_class_key == DCGUtils.EnableTextNode:
+					_change_live_texts(parse_node, live_nodes_js)
+				elif parse_node.node_class_key == DCGUtils.HideTextNode:
+					_change_live_texts(parse_node, live_nodes_js)
+				
+				if parse_node not in parsed_nodes:
+					parsed_nodes.append(parse_node)
 
-	print("Infinite Recursion of " + get_nodes_js()[the_node.node_class_key][the_node.array_index]["Name"])
-
-	return null
+					var parse_node_js = get_nodes_js()[parse_node.node_class_key][parse_node.array_index]
+					var parse_node_outputs = parse_node_js["Outputs"]
+					if parse_node_outputs and parse_node_outputs[0]["Type"] == 0:
+						dialogue_node = _get_dialogue_node_recursively(parse_node, 0, live_nodes_js, parsed_nodes)
+	
+	return dialogue_node
 
 
 func get_live_node_js(the_node: NodeData, live_nodes_js: Dictionary):
@@ -124,7 +116,7 @@ func get_live_node_js(the_node: NodeData, live_nodes_js: Dictionary):
 
 
 # Only for the TextNode, EnableTextNode, HideTextNode
-func change_live_texts(from_node: NodeData, live_nodes_js: Dictionary):
+func _change_live_texts(from_node: NodeData, live_nodes_js: Dictionary):
 	for from_port in from_node.from_node_conns.keys():
 		if from_port == 0:
 			continue
@@ -143,13 +135,13 @@ func change_live_texts(from_node: NodeData, live_nodes_js: Dictionary):
 			if to_node.node_class_key in DCGUtils.live_nodes_types:
 				var to_live_node_js = get_live_node_js(to_node, live_nodes_js)
 				
-				change_live_text(from_port, to_port, from_node_js,
+				_change_live_text(from_port, to_port, from_node_js,
 								to_live_node_js, from_node, to_node)
 
 			elif to_node.node_class_key == DCGUtils.RerouteTextNode:
 				var nodes_from_reroute_text = []
 				var ports_from_reroute_text = []
-				get_nodes_from_reroute_text(to_node, nodes_from_reroute_text, ports_from_reroute_text, [])
+				_get_nodes_from_reroute_text(to_node, nodes_from_reroute_text, ports_from_reroute_text, [])
 				
 				for i in range(nodes_from_reroute_text.size()):
 					var the_to_node = nodes_from_reroute_text[i]
@@ -157,11 +149,11 @@ func change_live_texts(from_node: NodeData, live_nodes_js: Dictionary):
 					var the_to_live_node_js = get_live_node_js(the_to_node, live_nodes_js)
 
 
-					change_live_text(from_port, the_to_port, from_node_js,
+					_change_live_text(from_port, the_to_port, from_node_js,
 									the_to_live_node_js, from_node, the_to_node)
 
 
-func get_nodes_from_reroute_text(reroute_text_node: NodeData, nodes_to_add: Array, ports_to_add: Array, passed_nodes: Array):
+func _get_nodes_from_reroute_text(reroute_text_node: NodeData, nodes_to_add: Array, ports_to_add: Array, passed_nodes: Array):
 	if reroute_text_node not in passed_nodes:
 		passed_nodes.append(reroute_text_node)
 
@@ -176,13 +168,13 @@ func get_nodes_from_reroute_text(reroute_text_node: NodeData, nodes_to_add: Arra
 					nodes_to_add.append(to_node)
 					ports_to_add.append(conn["to_port"] as int)
 				elif to_node.node_class_key == DCGUtils.RerouteTextNode:
-					get_nodes_from_reroute_text(to_node, nodes_to_add, ports_to_add, passed_nodes)
+					_get_nodes_from_reroute_text(to_node, nodes_to_add, ports_to_add, passed_nodes)
 
 				passed_nodes.append(to_node)
 
 
 # from_node_js can be node_js or live_node_js!!!!
-func change_live_text(from_port: int, to_port: int, from_node_js, to_live_node_js, from_node: NodeData, to_node: NodeData):
+func _change_live_text(from_port: int, to_port: int, from_node_js, to_live_node_js, from_node: NodeData, to_node: NodeData):
 
 	# Get From_Node Text
 	var from_text
