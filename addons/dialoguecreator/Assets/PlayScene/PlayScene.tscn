@@ -121,7 +121,7 @@ size_flags_vertical = 3
 [node name="TextSlotButton" parent="PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/TextsVBoxContainer" instance=ExtResource("3_ebybh")]
 layout_mode = 2
 
-[node name="Container2" type="Container" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="Container2" type="Control" parent="PanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1

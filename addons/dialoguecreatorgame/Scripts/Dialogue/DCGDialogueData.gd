@@ -76,7 +76,7 @@ func _get_dialogue_node_recursively(the_node: NodeData, port_id: int,
 
 		if node_data_port_id:
 			var conn = get_connections_js()[node_data_port_id[0]]
-			var parse_node = nodes_by_name[conn["to_node"]] as DCGDialogueData.NodeData
+			var parse_node = self.nodes_by_name[conn["to_node"]] as DCGDialogueData.NodeData
 
 			# Next Interactive Node Is Found!
 			if parse_node.node_class_key in DCGUtils.dialogue_nodes_types:
@@ -118,10 +118,28 @@ func get_live_node_js(the_node: NodeData, live_nodes_js: Dictionary):
 		return live_node_js
 
 
-func _check_default_live_text(the_node: NodeData, live_node_js):
-	if the_node.to_node_conns:
-		for port_id in the_node.to_node_conns.keys():
-			pass
+func _check_default_live_text(node_to_check: NodeData, live_node_js):
+	if node_to_check.node_class_key in DCGUtils.live_nodes_types and node_to_check.to_node_conns:
+		for port_id in node_to_check.to_node_conns.keys():
+			var port_type = get_input_port_type(live_node_js, port_id)
+		
+			if port_type == 1:
+				var port_conns = node_to_check.to_node_conns[port_type]
+
+				for conn_ids in port_conns:
+					var conn = get_connections_js()[conn_ids]
+					var from_node = self.nodes_by_name[conn["from_node"]] as NodeData
+
+					if from_node.node_class_key == DCGUtils.TextNode:
+						var from_node_js = get_node_js(from_node) 
+						var from_text_slot = get_text_slot_by_port(from_node, from_node_js, conn["from_port"], false)
+
+						var to_text_slot = get_text_slot_by_port(node_to_check, live_node_js, port_id, true)
+
+						if from_text_slot and to_text_slot:
+							to_text_slot["LiveText"] = from_text_slot["Text"]
+
+						break
 
 
 # Only for the SetTextNode, EnableTextNode, HideTextNode
@@ -138,7 +156,7 @@ func _change_live_texts(from_node: NodeData, live_nodes_js: Dictionary):
 		
 		for conn_id in conns_ids:
 			var conn = get_connections_js()[conn_id]
-			var to_node = nodes_by_name[conn["to_node"]] as NodeData
+			var to_node = self.nodes_by_name[conn["to_node"]] as NodeData
 			var to_port = conn["to_port"]
 			
 			if to_node.node_class_key in DCGUtils.live_nodes_types:
@@ -150,7 +168,7 @@ func _change_live_texts(from_node: NodeData, live_nodes_js: Dictionary):
 			elif to_node.node_class_key == DCGUtils.RerouteTextNode:
 				var nodes_from_reroute_text = []
 				var ports_from_reroute_text = []
-				_get_nodes_from_reroute_text(to_node, nodes_from_reroute_text, ports_from_reroute_text, [])
+				_get_nodes_from_reroute_text_recursively(to_node, nodes_from_reroute_text, ports_from_reroute_text, [])
 				
 				for i in range(nodes_from_reroute_text.size()):
 					var the_to_node = nodes_from_reroute_text[i]
@@ -162,22 +180,24 @@ func _change_live_texts(from_node: NodeData, live_nodes_js: Dictionary):
 									the_to_live_node_js, from_node, the_to_node)
 
 
-func _get_nodes_from_reroute_text(reroute_text_node: NodeData, nodes_to_add: Array, ports_to_add: Array, passed_nodes: Array):
-	if reroute_text_node not in passed_nodes:
-		passed_nodes.append(reroute_text_node)
+func _get_nodes_from_reroute_text_recursively(reroute_text_node: NodeData, nodes_to_add: Array,
+											ports_to_add: Array, passed_nodes: Array):
+	# if reroute_text_node not in passed_nodes:
+	# 	passed_nodes.append(reroute_text_node)
 
 	if reroute_text_node.from_node_conns:
 		for conn_id in reroute_text_node.from_node_conns[0]:
 			var conn = get_connections_js()[conn_id]
 			
-			var to_node = nodes_by_name[conn["to_node"]] as NodeData
+			var to_node = self.nodes_by_name[conn["to_node"]] as NodeData
 			
 			if to_node not in passed_nodes:
 				if to_node.node_class_key in DCGUtils.live_nodes_types:
 					nodes_to_add.append(to_node)
 					ports_to_add.append(conn["to_port"] as int)
+					
 				elif to_node.node_class_key == DCGUtils.RerouteTextNode:
-					_get_nodes_from_reroute_text(to_node, nodes_to_add, ports_to_add, passed_nodes)
+					_get_nodes_from_reroute_text_recursively(to_node, nodes_to_add, ports_to_add, passed_nodes)
 
 				passed_nodes.append(to_node)
 
@@ -242,6 +262,51 @@ func _change_live_text(from_port: int, to_port: int, from_node_js, to_live_node_
 				to_live_node_js["TextSlots"][to_port - 1]["LiveText"] = from_text
 
 
+func get_text_slot_by_port(the_node: NodeData, node_js, port_id: int, is_input: bool):
+	if the_node.node_class_key == DCGUtils.ActionNode:
+		if is_input and port_id == 1:
+			return node_js["ActionText"]
+		
+	elif the_node.node_class_key == DCGUtils.TextNode:
+		if not is_input:
+
+			if port_id == 0 and node_js["TextSlots"]:
+				var slots_size = node_js["TextSlots"].size()
+
+				return node_js["TextSlots"][randi_range(0, slots_size - 1)]
+
+			elif port_id > 0:
+				return node_js["TextSlots"][port_id - 1]
+	
+	elif the_node.node_class_key == DCGUtils.DialogueNode:
+		if is_input:
+
+			if port_id == 1:
+				return node_js["MainText"]
+			elif port_id > 1:
+				return node_js["TextSlots"][port_id - 2]
+		
+		else:
+			if port_id == 0:
+				return node_js["MainText"]
+			
+			elif port_id > 0:
+				return node_js["TextSlots"][port_id - 1]
+	
+	elif the_node.node_class_key == DCGUtils.SetTextNode:
+		if is_input:
+			if port_id > 0:
+				return node_js["TextSlots"][port_id - 1]
+		
+		else:
+			if port_id == 1 and node_js["TextSlots"]:
+				var slots_size = node_js["TextSlots"].size()
+
+				return node_js["TextSlots"][randi_range(0, slots_size - 1)]
+
+			elif port_id > 1:
+				return node_js["TextSlots"][port_id - 2]
+
 
 func get_text_of_text_slot(main_text_js: Dictionary):
 	var main_text_str: String
@@ -299,7 +364,7 @@ func get_startnode_by_id(start_node_id: int) -> NodeData:
 	if DCGUtils.StartNode in self.data_js["Nodes"]:
 		for node_js in self.data_js["Nodes"][DCGUtils.StartNode]:
 			if node_js["StartID"] == start_node_id:
-				return nodes_by_name[node_js["Name"]]
+				return self.nodes_by_name[node_js["Name"]]
 	
 	return null
 
