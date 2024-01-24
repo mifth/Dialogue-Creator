@@ -5,12 +5,22 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b66nx"]
 bg_color = Color(0.0509804, 0.0509804, 0.0509804, 0.556863)
 
-[node name="TextSlotButton" type="Button"]
+[node name="TextSlotButton" type="RichTextLabel"]
+custom_minimum_size = Vector2(200, 38)
 offset_right = 472.0
 offset_bottom = 31.0
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/normal_font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxFlat_b66nx")
 text = "Next"
 script = ExtResource("1_n3ewr")
 
-[connection signal="pressed" from="." to="." method="_on_pressed"]
+[node name="LinkButton" type="LinkButton" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -44.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="pressed" from="LinkButton" to="." method="_on_control_pressed"]

@@ -77,21 +77,22 @@ func _get_dialogue_node_recursively(the_node: NodeData, port_id: int,
 		if node_data_port_id:
 			var conn = get_connections_js()[node_data_port_id[0]]
 			var parse_node = self.nodes_by_name[conn["to_node"]] as DCGDialogueData.NodeData
+			
+			if parse_node not in parsed_nodes:
+				parsed_nodes.append(parse_node)
 
-			# Next Interactive Node Is Found!
-			if parse_node.node_class_key in DCGUtils.dialogue_nodes_types:
-				dialogue_node = parse_node
-			else:
-				if parse_node.node_class_key == DCGUtils.SetTextNode:
-					_change_live_texts(parse_node, live_nodes_js)
-				elif parse_node.node_class_key == DCGUtils.EnableTextNode:
-					_change_live_texts(parse_node, live_nodes_js)
-				elif parse_node.node_class_key == DCGUtils.HideTextNode:
-					_change_live_texts(parse_node, live_nodes_js)
-				
-				if parse_node not in parsed_nodes:
-					parsed_nodes.append(parse_node)
-
+				if parse_node.node_class_key in DCGUtils.dialogue_nodes_types:
+					# Next Interactive Node Is Found!
+					dialogue_node = parse_node
+				else:
+					if parse_node.node_class_key == DCGUtils.SetTextNode:
+						_change_live_texts(parse_node, live_nodes_js)
+					elif parse_node.node_class_key == DCGUtils.EnableTextNode:
+						_change_live_texts(parse_node, live_nodes_js)
+					elif parse_node.node_class_key == DCGUtils.HideTextNode:
+						_change_live_texts(parse_node, live_nodes_js)
+					
+					# Try Getting Next Node
 					var parse_node_js = get_nodes_js()[parse_node.node_class_key][parse_node.array_index]
 					var parse_node_outputs = parse_node_js["Outputs"]
 					if parse_node_outputs and parse_node_outputs[0]["Type"] == 0:
@@ -129,10 +130,19 @@ func _check_default_live_text(node_to_check: NodeData, live_node_js):
 				for conn_ids in port_conns:
 					var conn = get_connections_js()[conn_ids]
 					var from_node = self.nodes_by_name[conn["from_node"]] as NodeData
+					var from_port = conn["from_port"]
 
+					# In a case if it's RerouteTextNode Node we get a node Reversely 
+					if from_node.node_class_key == DCGUtils.RerouteTextNode:
+						var prev_conn = get_conn_from_reroute_text_reversed_recursively(from_node, [])
+						if prev_conn:
+							from_node = nodes_by_name[prev_conn["from_node"]] as NodeData
+							from_port = prev_conn["from_port"]
+
+					# Change Default Text
 					if from_node.node_class_key == DCGUtils.TextNode:
-						var from_node_js = get_node_js(from_node) 
-						var from_text_slot = get_text_slot_by_port(from_node, from_node_js, conn["from_port"], false)
+						var from_node_js = get_node_js(from_node)
+						var from_text_slot = get_text_slot_by_port(from_node, from_node_js, from_port, false)
 
 						var to_text_slot = get_text_slot_by_port(node_to_check, live_node_js, port_id, true)
 
@@ -140,6 +150,27 @@ func _check_default_live_text(node_to_check: NodeData, live_node_js):
 							to_text_slot["LiveText"] = from_text_slot["Text"]
 
 						break
+
+
+# Get Connection From RerouteText Node Reversed
+func get_conn_from_reroute_text_reversed_recursively(rerote_text_node: NodeData, parsed_nodes: Array):
+	var reversed_conn
+
+	if rerote_text_node.to_node_conns:
+		var prev_con_id = rerote_text_node.to_node_conns[0][0]
+		var prev_con = get_connections_js()[prev_con_id]
+
+		var prev_node = nodes_by_name[prev_con["from_node"]] as NodeData
+
+		if prev_node not in parsed_nodes:
+			parsed_nodes.append(prev_node)
+
+			if prev_node.node_class_key == DCGUtils.RerouteTextNode:
+				reversed_conn = get_conn_from_reroute_text_reversed_recursively(prev_node, parsed_nodes)
+			else:
+				reversed_conn = prev_con
+	
+	return reversed_conn
 
 
 # Only for the SetTextNode, EnableTextNode, HideTextNode
@@ -182,9 +213,6 @@ func _change_live_texts(from_node: NodeData, live_nodes_js: Dictionary):
 
 func _get_nodes_from_reroute_text_recursively(reroute_text_node: NodeData, nodes_to_add: Array,
 											ports_to_add: Array, passed_nodes: Array):
-	# if reroute_text_node not in passed_nodes:
-	# 	passed_nodes.append(reroute_text_node)
-
 	if reroute_text_node.from_node_conns:
 		for conn_id in reroute_text_node.from_node_conns[0]:
 			var conn = get_connections_js()[conn_id]
@@ -192,6 +220,8 @@ func _get_nodes_from_reroute_text_recursively(reroute_text_node: NodeData, nodes
 			var to_node = self.nodes_by_name[conn["to_node"]] as NodeData
 			
 			if to_node not in passed_nodes:
+				passed_nodes.append(to_node)
+				
 				if to_node.node_class_key in DCGUtils.live_nodes_types:
 					nodes_to_add.append(to_node)
 					ports_to_add.append(conn["to_port"] as int)
@@ -199,7 +229,6 @@ func _get_nodes_from_reroute_text_recursively(reroute_text_node: NodeData, nodes
 				elif to_node.node_class_key == DCGUtils.RerouteTextNode:
 					_get_nodes_from_reroute_text_recursively(to_node, nodes_to_add, ports_to_add, passed_nodes)
 
-				passed_nodes.append(to_node)
 
 
 # from_node_js can be node_js or live_node_js!!!!
