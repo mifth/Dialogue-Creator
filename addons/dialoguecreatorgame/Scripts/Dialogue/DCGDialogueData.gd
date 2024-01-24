@@ -124,7 +124,7 @@ func _check_default_live_text(node_to_check: NodeData, live_node_js):
 			var port_type = get_input_port_type(live_node_js, port_id)
 		
 			if port_type == 1:
-				var port_conns = node_to_check.to_node_conns[port_type]
+				var port_conns = node_to_check.to_node_conns[port_id]
 
 				for conn_ids in port_conns:
 					var conn = get_connections_js()[conn_ids]

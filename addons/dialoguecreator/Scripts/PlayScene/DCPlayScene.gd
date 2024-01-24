@@ -123,9 +123,9 @@ func set_up_dialogue_node(d_node: DCGDialogueData.NodeData):
 
 			if "EnableLiveText" in text_slot_js:
 				if text_slot_js["EnableLiveText"]:
-					text_button.disabled = true
-				else:
 					text_button.disabled = false
+				else:
+					text_button.disabled = true
 
 	# Set Up Character
 	if "Character" in live_node_js:
