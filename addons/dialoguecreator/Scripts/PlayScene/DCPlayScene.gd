@@ -108,7 +108,8 @@ func set_up_dialogue_node(d_node: DCGDialogueData.NodeData):
 	else :
 		for i in range(live_node_js["TextSlots"].size()):
 			var text_slot_js = live_node_js["TextSlots"][i]
-			# If Text Disabled
+
+			# If Text Hidden
 			if "HideLiveText" in text_slot_js and text_slot_js["HideLiveText"]:
 				continue
 
@@ -121,11 +122,15 @@ func set_up_dialogue_node(d_node: DCGDialogueData.NodeData):
 			else:
 				text_button = add_text_button("No Text!", i + 1)
 
+			# If Text Disabled
 			if "EnableLiveText" in text_slot_js:
-				if text_slot_js["EnableLiveText"]:
-					text_button.disabled = false
-				else:
-					text_button.disabled = true
+				if not text_slot_js["EnableLiveText"]:
+					text_button.next_node_button.disconnect(run_next_dialogue)
+
+					text_button.text = ""
+					text_button.push_color(Color.DIM_GRAY)
+					text_button.add_text(final_text)
+					text_button.pop()
 
 	# Set Up Character
 	if "Character" in live_node_js:

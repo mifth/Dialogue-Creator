@@ -1,5 +1,5 @@
 class_name  DCTextSlotButton
-extends Node
+extends RichTextLabel
 
 
 signal next_node_button(out_port_id: int)
