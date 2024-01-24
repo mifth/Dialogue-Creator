@@ -189,7 +189,6 @@ func GetInputsJS():
 	for i in range(get_input_port_count()):
 		var input = {}
 		input["Type"] = get_input_port_type(i)
-		input["Slot"] = get_input_port_slot(i)
 		
 		inputs.append(input)
 
@@ -203,7 +202,6 @@ func GetOutputsJS():
 	for i in range(get_output_port_count()):
 		var output = {}
 		output["Type"] = get_output_port_type(i)
-		output["Slot"] = get_output_port_slot(i)
 		
 		outputs.append(output)
 	
