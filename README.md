@@ -1,6 +1,6 @@
 # Dialogue-Creator
 
-Dialogue Creator is an application(made with Godot) which allows to create logical chains of dialogues. All data is exported to JSON so that it's possible to plug them to any game. A [plugin for Godot](https://github.com/mifth/Dialogue-Creator/tree/main/addons/dialoguecreatorgame) is included but unfortunately there are no plugins for Unity and Unreal Engine. But that's not a big deal for Unity/UE developers.
+Dialogue Creator is a free application(made with Godot) which allows to create logical chains of dialogues. All data is exported to JSON so that it's possible to plug them to any game. A [plugin for Godot](https://github.com/mifth/Dialogue-Creator/tree/main/addons/dialoguecreatorgame) is included but unfortunately there are no plugins for Unity and Unreal Engine. But that's not a big deal for Unity/UE developers.
 
 [Documentation](https://github.com/mifth/Dialogue-Creator/wiki/Dialogue-Creator)  
 [Discord Server](https://discord.com/invite/MrK5aw7k7S)
