@@ -15,7 +15,7 @@ var current_dialogue: DCGDialogueData.NodeData
 
 func _enter_tree():
 	var scene = get_main_graph()
-	var data_js = DCParse.GetDataJS(get_main_graph())  # Data from nodes
+	var data_js = DCParse.get_data_js(get_main_graph())  # Data from nodes
 	var data_js_str = JSON.stringify(data_js)  # Converted to string
 	
 	self.dc_data = DCGDialogueData.new()  # New main data

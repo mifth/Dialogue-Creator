@@ -3,11 +3,11 @@ extends DCBaseGraphNode
 
 
 func _on_add_text_button_pressed():
-	AddTextTextNode()
+	add_text_text_node()
 
 
-func AddTextTextNode() -> DCDialogueNodeText:
-	return AddTextNode(true, 1, Color.BURLYWOOD, true, 0, Color.WHITE)
+func add_text_text_node() -> DCDialogueNodeText:
+	return add_text_node(true, 1, Color.BURLYWOOD, true, 0, Color.WHITE)
 
 
 func GetMainText() -> TextEdit:
@@ -18,8 +18,8 @@ func GetCharacterIDSpinBox() -> SpinBox:
 	return $VBoxContainer/HBoxContainer/CharacterID
 
 
-func GetNodeParamsJS():
-	var params = GetNodeBaseParamsJS()
+func get_node_params_js():
+	var params = get_node_base_params_js()
 
 	# Get Main Text
 	var main_text = GetMainText()
@@ -32,6 +32,6 @@ func GetNodeParamsJS():
 		params["Character"] = {"Id": id_box.value as int}
 	
 	# Get Texts
-	params["TextSlots"] = GetTextNodesJS()
+	params["TextSlots"] = get_text_nodes_js()
 	
 	return [params, DCGUtils.DialogueNode]

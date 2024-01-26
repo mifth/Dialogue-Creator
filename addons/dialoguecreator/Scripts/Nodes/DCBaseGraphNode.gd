@@ -6,7 +6,7 @@ func _exit_tree():
 	queue_free()
 
 
-func GetInputPortID(the_node: Node) -> int:
+func get_input_port_id(the_node: Node) -> int:
 	var children = get_children()
 	
 	for i in range(get_input_port_count()):
@@ -19,7 +19,7 @@ func GetInputPortID(the_node: Node) -> int:
 	return -1
 
 
-func GetOutputPortID(the_node: Node) -> int:
+func get_output_port_id(the_node: Node) -> int:
 	var children = get_children()
 	
 	for i in range(get_output_port_count()):
@@ -32,13 +32,13 @@ func GetOutputPortID(the_node: Node) -> int:
 	return -1
 
 
-func ClearPorts(the_node: Node):
+func clear_ports(the_node: Node):
 	var graph = get_parent() as GraphEdit
 	
 	var connections = graph.get_connection_list()
 
-	var input_port := GetInputPortID(the_node)
-	var output_port := GetOutputPortID(the_node)
+	var input_port := get_input_port_id(the_node)
+	var output_port := get_output_port_id(the_node)
 
 	for i in range(connections.size() - 1, -1, -1):
 		var conn = connections[i]
@@ -49,7 +49,7 @@ func ClearPorts(the_node: Node):
 			graph.disconnect_node(conn["from_node"], conn["from_port"], conn["to_node"], conn["to_port"])
 
 
-func GetFirstID(the_node: Node):
+func get_first_id(the_node: Node):
 	var children = get_children()
 	
 	for i in range(children.size()):
@@ -61,8 +61,8 @@ func GetFirstID(the_node: Node):
 	return -1
 
 
-func UpPort(the_node: Node):
-	var first_id = GetFirstID(the_node)
+func up_port(the_node: Node):
+	var first_id = get_first_id(the_node)
 
 	if get_children().find(the_node) == first_id:
 		return
@@ -72,8 +72,8 @@ func UpPort(the_node: Node):
 	var graph = get_parent() as GraphEdit
 	var connections = graph.get_connection_list()
 
-	var input_port := GetInputPortID(the_node)
-	var output_port := GetOutputPortID(the_node)
+	var input_port := get_input_port_id(the_node)
+	var output_port := get_output_port_id(the_node)
 	
 	var up_input_port := -1
 	var up_output_port := -1
@@ -110,7 +110,7 @@ func UpPort(the_node: Node):
 	return [the_node, second_node]
 
 
-func DownPort(the_node: Node):
+func down_port(the_node: Node):
 	var node_id = get_children().find(the_node)
 
 	if node_id == get_children().size() - 1:
@@ -121,8 +121,8 @@ func DownPort(the_node: Node):
 	var graph = get_parent() as GraphEdit
 	var connections = graph.get_connection_list()
 
-	var input_port := GetInputPortID(the_node)
-	var output_port := GetOutputPortID(the_node)
+	var input_port := get_input_port_id(the_node)
+	var output_port := get_output_port_id(the_node)
 	
 	var down_input_port := -1
 	var down_output_port := -1
@@ -163,8 +163,8 @@ func down_text_by_number(numb: int, the_node: Node):
 	var cur_node = the_node
 
 	for i in range(numb):
-		var ret_values = DownPort(cur_node)
-		ReverseTexts(ret_values)
+		var ret_values = down_port(cur_node)
+		reverse_texts(ret_values)
 		cur_node = ret_values[1]
 	
 	return cur_node
@@ -179,13 +179,13 @@ func delete_text_port(the_node: Node):
 	if id < children.size() - 1:
 		node_to_del = down_text_by_number((children.size() - 1) - id, node_to_del)
 
-	ClearPorts(node_to_del)
+	clear_ports(node_to_del)
 	clear_slot(get_children().find(node_to_del))
 
 	node_to_del.queue_free()
 
 
-func ReverseTexts(nodes):
+func reverse_texts(nodes):
 	if nodes and nodes[0] and nodes[1]:
 		var text_1: Control = nodes[0]
 		var text_2: Control = nodes[1]
@@ -197,21 +197,21 @@ func ReverseTexts(nodes):
 		text_2.get_text_node().text = tmp_txt_1
 
 
-func ReverseTextsUp(the_node: Node):
-	var nodes = UpPort(the_node)
+func reverse_texts_up(the_node: Node):
+	var nodes = up_port(the_node)
 	
 	if nodes:
-		ReverseTexts(nodes)
+		reverse_texts(nodes)
 
 
-func ReverseTextsDown(the_node: Node):
-	var nodes = DownPort(the_node)
+func reverse_texts_down(the_node: Node):
+	var nodes = down_port(the_node)
 	
 	if nodes:
-		ReverseTexts(nodes)
+		reverse_texts(nodes)
 
 
-func GetInputsJS():
+func get_inputs_js():
 	var inputs = []
 
 	for i in range(get_input_port_count()):
@@ -223,7 +223,7 @@ func GetInputsJS():
 	return inputs
 
 
-func GetOutputsJS():
+func get_outputs_js():
 	var outputs = []
 	
 	# Outputs
@@ -236,11 +236,11 @@ func GetOutputsJS():
 	return outputs
 
 
-func GetNodeBaseParamsJS() -> Dictionary:
+func get_node_base_params_js() -> Dictionary:
 	var base_params = {}
 
-	base_params["Inputs"] = GetInputsJS()
-	base_params["Outputs"] = GetOutputsJS()
+	base_params["Inputs"] = get_inputs_js()
+	base_params["Outputs"] = get_outputs_js()
 	
 	base_params["Name"] = name
 	
@@ -254,7 +254,7 @@ func GetNodeBaseParamsJS() -> Dictionary:
 	return base_params
 
 
-func GetTextNodesJS():
+func get_text_nodes_js():
 	var text_nodes_js = []
 	var children = get_children()
 	for i in range(children.size()):
@@ -271,13 +271,13 @@ func GetTextNodesJS():
 	return text_nodes_js
 
 
-func AddTextNode(is_port_l:bool, port_l_type: int, port_l_color: Color,
+func add_text_node(is_port_l:bool, port_l_type: int, port_l_color: Color,
 				is_port_r:bool, port_r_type: int, port_r_color: Color) -> DCDialogueNodeText:
 	var text_node = DCGraph.text_node_text_res.instantiate() as DCDialogueNodeText
 	
 	text_node.DeleteDialogueText.connect(self.delete_text_port)
-	text_node.UpDialogueText.connect(self.ReverseTextsUp)
-	text_node.DownDialogueText.connect(self.ReverseTextsDown)
+	text_node.UpDialogueText.connect(self.reverse_texts_up)
+	text_node.DownDialogueText.connect(self.reverse_texts_down)
 
 	add_child(text_node)
 	set_slot( get_children().size() - 1, is_port_l, port_l_type, port_l_color, is_port_r, port_r_type, port_r_color)

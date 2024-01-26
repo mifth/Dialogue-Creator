@@ -39,8 +39,8 @@ func GetCharacterNameLineEdit() -> LineEdit:
 	return $VBoxContainer/HBoxContainer/CharacterNameLineEdit
 
 
-func GetNodeParamsJS():
-	var params = GetNodeBaseParamsJS()
+func get_node_params_js():
+	var params = get_node_base_params_js()
 	
 	params["CharacterName"] = GetCharacterNameLineEdit().text
 	
@@ -69,7 +69,7 @@ func GetIDs(nodes):
 
 func SetUniqueID(start_value: int):
 	var nodes = get_parent().get_children()
-	GetCharacterIDSpinBox().value = DCGUtils.GenerateID(GetIDs(nodes), start_value)
+	GetCharacterIDSpinBox().value = DCGUtils.generate_id(GetIDs(nodes), start_value)
 
 
 func _on_character_id_value_changed(value):

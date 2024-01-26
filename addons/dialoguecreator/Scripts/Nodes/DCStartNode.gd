@@ -6,8 +6,8 @@ func _enter_tree():
 	SetUniqueID(0)
 
 
-func GetNodeParamsJS():
-	var params = GetNodeBaseParamsJS()
+func get_node_params_js():
+	var params = get_node_base_params_js()
 	
 	params["StartID"] = GetStartIDSpinBox().value as int
 	params["StartName"] = GetStartName().text
@@ -39,7 +39,7 @@ func GetIDs(nodes):
 
 func SetUniqueID(start_value: int):
 	var nodes = get_parent().get_children()
-	GetStartIDSpinBox().value = DCGUtils.GenerateID(GetIDs(nodes), start_value)
+	GetStartIDSpinBox().value = DCGUtils.generate_id(GetIDs(nodes), start_value)
 
 
 func _on_start_spin_box_value_changed(value):

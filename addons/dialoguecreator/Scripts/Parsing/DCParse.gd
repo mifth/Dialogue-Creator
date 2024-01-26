@@ -2,7 +2,7 @@ class_name DCParse
 extends Object
 
 
-static func GetDataJS(main_graph: DCGraph):
+static func get_data_js(main_graph: DCGraph):
 	var graph = main_graph.graph
 	
 	var data_js = {}
@@ -12,7 +12,7 @@ static func GetDataJS(main_graph: DCGraph):
 	# Get Nodes Data
 	for node in graph.get_children():
 		if is_instance_of(node, DCBaseGraphNode):
-			var node_params = node.GetNodeParamsJS()
+			var node_params = node.get_node_params_js()
 			
 			# Create Array
 			if node_params[1] not in nodes_js:
@@ -44,10 +44,10 @@ static func GetDataJS(main_graph: DCGraph):
 	return data_js
 
 
-static func SaveFileJS(main_graph: DCGraph, path: String):
+static func save_file_js(main_graph: DCGraph, path: String):
 	var graph = main_graph.graph
 	
-	var data_js = GetDataJS(main_graph)
+	var data_js = get_data_js(main_graph)
 	var data_js_str = JSON.stringify(data_js, "   ")
 	
 	var final_path = path
@@ -63,7 +63,7 @@ static func SaveFileJS(main_graph: DCGraph, path: String):
 	file.store_string(data_js_str)
 	
 	
-static func LoadFileJS(main_graph: DCGraph, path: String):
+static func load_file_js(main_graph: DCGraph, path: String):
 	var graph = main_graph.graph
 	
 	var text_js = FileAccess.get_file_as_string(path)
@@ -77,7 +77,7 @@ static func LoadFileJS(main_graph: DCGraph, path: String):
 		for node_js in nodes_js[DCGUtils.ActionNode]:
 			var new_node = DCGraph.action_node_res.instantiate() as DCActionNode
 			graph.add_child(new_node)
-			SetNodeParamsJS(new_node, node_js)
+			set_node_params_js(new_node, node_js)
 			
 			new_node.get_action_name_node().text = node_js["ActionName"]
 			new_node.get_action_text_node().text = node_js["ActionText"]["Text"]
@@ -94,7 +94,7 @@ static func LoadFileJS(main_graph: DCGraph, path: String):
 		for node_js in nodes_js[DCGUtils.DialogueNode]:
 			var new_node = DCGraph.dialogue_node_res.instantiate() as DCDialogueNode
 			graph.add_child(new_node)
-			SetNodeParamsJS(new_node, node_js)
+			set_node_params_js(new_node, node_js)
 			nodes_by_name[node_js["Name"]] = new_node.name
 			
 			# Set Main Text
@@ -106,52 +106,52 @@ static func LoadFileJS(main_graph: DCGraph, path: String):
 				char_id.value = node_js["Character"]["Id"] as int
 			
 			if node_js["TextSlots"]:
-				AddTextTextSlotsJS(new_node, node_js["TextSlots"])
+				add_text_text_slots_js(new_node, node_js["TextSlots"])
 		
 
 	if DCGUtils.EnableTextNode in nodes_js:
 		for node_js in nodes_js[DCGUtils.EnableTextNode]:
 			var new_node = DCGraph.enable_node_res.instantiate() as GraphNode
 			graph.add_child(new_node)
-			SetNodeParamsJS(new_node, node_js)
+			set_node_params_js(new_node, node_js)
 			nodes_by_name[node_js["Name"]] = new_node.name
 
 	if DCGUtils.HideTextNode in nodes_js:
 		for node_js in nodes_js[DCGUtils.HideTextNode]:
 			var new_node = DCGraph.hide_node_res.instantiate() as GraphNode
 			graph.add_child(new_node)
-			SetNodeParamsJS(new_node, node_js)
+			set_node_params_js(new_node, node_js)
 			nodes_by_name[node_js["Name"]] = new_node.name
 
 	if DCGUtils.NoteNode in nodes_js:
 		for node_js in nodes_js[DCGUtils.NoteNode]:
 			var new_node = DCGraph.note_node_res.instantiate() as GraphNode
 			graph.add_child(new_node)
-			SetNodeParamsJS(new_node, node_js)
+			set_node_params_js(new_node, node_js)
 			nodes_by_name[node_js["Name"]] = new_node.name
 
 	if DCGUtils.RerouteNode in nodes_js:
 		for node_js in nodes_js[DCGUtils.RerouteNode]:
 			var new_node = DCGraph.reroute_node_res.instantiate() as GraphNode
 			graph.add_child(new_node)
-			SetNodeParamsJS(new_node, node_js)
+			set_node_params_js(new_node, node_js)
 			nodes_by_name[node_js["Name"]] = new_node.name
 
 	if DCGUtils.RerouteTextNode in nodes_js:
 		for node_js in nodes_js[DCGUtils.RerouteTextNode]:
 			var new_node = DCGraph.reroute_text_node_res.instantiate() as GraphNode
 			graph.add_child(new_node)
-			SetNodeParamsJS(new_node, node_js)
+			set_node_params_js(new_node, node_js)
 			nodes_by_name[node_js["Name"]] = new_node.name
 
 	if DCGUtils.SetTextNode in nodes_js:
 		for node_js in nodes_js[DCGUtils.SetTextNode]:
 			var new_node = DCGraph.settext_node_res.instantiate() as GraphNode
 			graph.add_child(new_node)
-			SetNodeParamsJS(new_node, node_js)
+			set_node_params_js(new_node, node_js)
 			
 			if node_js["TextSlots"]:
-				AddTextTextSlotsJS(new_node, node_js["TextSlots"])
+				add_text_text_slots_js(new_node, node_js["TextSlots"])
 			
 			nodes_by_name[node_js["Name"]] = new_node.name
 
@@ -159,7 +159,7 @@ static func LoadFileJS(main_graph: DCGraph, path: String):
 		for node_js in nodes_js[DCGUtils.StartNode]:
 			var new_node = DCGraph.start_node_res.instantiate() as DCStartNode
 			graph.add_child(new_node)
-			SetNodeParamsJS(new_node, node_js)
+			set_node_params_js(new_node, node_js)
 			
 			new_node.GetStartName().text = node_js["StartName"]
 			new_node.GetStartIDSpinBox().value = node_js["StartID"] as int
@@ -170,10 +170,10 @@ static func LoadFileJS(main_graph: DCGraph, path: String):
 		for node_js in nodes_js[DCGUtils.TextNode]:
 			var new_node = DCGraph.text_node_res.instantiate() as GraphNode
 			graph.add_child(new_node)
-			SetNodeParamsJS(new_node, node_js)
+			set_node_params_js(new_node, node_js)
 			
 			if node_js["TextSlots"]:
-				AddTextTextSlotsJS(new_node, node_js["TextSlots"])
+				add_text_text_slots_js(new_node, node_js["TextSlots"])
 			
 			nodes_by_name[node_js["Name"]] = new_node.name
 
@@ -181,7 +181,7 @@ static func LoadFileJS(main_graph: DCGraph, path: String):
 		for node_js in nodes_js[DCGUtils.CharacterNode]:
 			var new_node = DCGraph.character_node_res.instantiate() as DCCharacterNode
 			graph.add_child(new_node)
-			SetNodeParamsJS(new_node, node_js)
+			set_node_params_js(new_node, node_js)
 			
 			var char_id = new_node.GetCharacterIDSpinBox()
 			char_id.value = node_js["CharacterID"] as int
@@ -208,13 +208,13 @@ static func LoadFileJS(main_graph: DCGraph, path: String):
 		main_graph.play_lang_edit.text = data_js["PlaySettings"]["LangName"]
 
 
-static func AddTextTextSlotsJS(base_graph_node: DCBaseGraphNode, texts: Array):
+static func add_text_text_slots_js(base_graph_node: DCBaseGraphNode, texts: Array):
 	for text in texts:
-		var text_node = base_graph_node.AddTextTextNode() as DCDialogueNodeText
+		var text_node = base_graph_node.add_text_text_node() as DCDialogueNodeText
 		text_node.get_text_node().text = text["Text"]
 		
 
-static func SetNodeParamsJS(node: GraphNode, node_js):
+static func set_node_params_js(node: GraphNode, node_js):
 	node.position_offset = Vector2(node_js["Position"][0], node_js["Position"][1])
 	
 	if node_js["Size"]:

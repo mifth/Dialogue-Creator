@@ -2,8 +2,8 @@ class_name DCNoteNode
 extends DCBaseGraphNode
 
 
-func GetNodeParamsJS():
-	var params = GetNodeBaseParamsJS()
+func get_node_params_js():
+	var params = get_node_base_params_js()
 	
 	params["NoteName"] = $VBoxContainer/HBoxContainer/NoteNameLineEdit.text
 	params["NoteText"] = $VBoxContainer/NoteTextEdit.text

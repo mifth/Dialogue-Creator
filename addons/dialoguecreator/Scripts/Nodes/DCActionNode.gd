@@ -11,8 +11,8 @@ func get_action_text_node() -> TextEdit:
 	return $VBoxContainer/ActionTextLineEdit
 
 
-func GetNodeParamsJS():
-	var params = GetNodeBaseParamsJS()
+func get_node_params_js():
+	var params = get_node_base_params_js()
 	
 	params["ActionName"] = get_action_name_node().text
 
@@ -58,7 +58,7 @@ func up_action_port(the_node: Node):
 	var id = children.find(the_node)
 
 	if id > 2:
-		self.ReverseTextsUp(the_node)
+		self.reverse_texts_up(the_node)
 
 
 func down_action_port(the_node: Node):
@@ -66,7 +66,7 @@ func down_action_port(the_node: Node):
 	var id = children.find(the_node)
 
 	if id < children.size() - 2:
-		self.ReverseTextsDown(the_node)
+		self.reverse_texts_down(the_node)
 
 
 func delete_action_port(the_node: Node):
@@ -78,7 +78,7 @@ func delete_action_port(the_node: Node):
 	if id < children.size() - 2:
 		node_to_del = down_text_by_number((children.size() - 2) - id, node_to_del)
 
-	ClearPorts(node_to_del)
+	clear_ports(node_to_del)
 	clear_slot(get_children().find(node_to_del))
 
 	node_to_del.queue_free()
