@@ -82,6 +82,10 @@ static func LoadFileJS(main_graph: DCGraph, path: String):
 			new_node.get_action_name_node().text = node_js["ActionName"]
 			new_node.get_action_text_node().text = node_js["ActionText"]["Text"]
 			
+			for the_text in node_js["ActionPorts"]["Texts"]:
+				var new_port = new_node.add_action_port()
+				new_port.get_text_node().text = the_text
+
 			nodes_by_name[node_js["Name"]] = new_node.name
 		
 
@@ -206,7 +210,7 @@ static func LoadFileJS(main_graph: DCGraph, path: String):
 static func AddTextTextSlotsJS(base_graph_node: DCBaseGraphNode, texts: Array):
 	for text in texts:
 		var text_node = base_graph_node.AddTextTextNode() as DCDialogueNodeText
-		text_node.GetTextNode().text = text["Text"]
+		text_node.get_text_node().text = text["Text"]
 		
 
 static func SetNodeParamsJS(node: GraphNode, node_js):

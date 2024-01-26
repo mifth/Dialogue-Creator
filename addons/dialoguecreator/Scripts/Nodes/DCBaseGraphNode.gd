@@ -111,7 +111,9 @@ func UpPort(the_node: Node):
 
 
 func DownPort(the_node: Node):
-	if get_children().find(the_node) == get_children().size() - 1:
+	var node_id = get_children().find(the_node)
+
+	if node_id == get_children().size() - 1:
 		return
 
 	var second_node: Node
@@ -157,16 +159,42 @@ func DownPort(the_node: Node):
 	return [the_node, second_node]
 
 
+func down_text_by_number(numb: int, the_node: Node):
+	var cur_node = the_node
+
+	for i in range(numb):
+		var ret_values = DownPort(cur_node)
+		ReverseTexts(ret_values)
+		cur_node = ret_values[1]
+	
+	return cur_node
+
+
+func delete_text_port(the_node: Node):
+	var children = get_children()
+	var id = children.find(the_node)
+
+	var node_to_del: Node = the_node
+
+	if id < children.size() - 1:
+		node_to_del = down_text_by_number((children.size() - 1) - id, node_to_del)
+
+	ClearPorts(node_to_del)
+	clear_slot(get_children().find(node_to_del))
+
+	node_to_del.queue_free()
+
+
 func ReverseTexts(nodes):
 	if nodes and nodes[0] and nodes[1]:
-		var text_1: DCDialogueNodeText = nodes[0] as DCDialogueNodeText
-		var text_2: DCDialogueNodeText = nodes[1] as DCDialogueNodeText
+		var text_1: Control = nodes[0]
+		var text_2: Control = nodes[1]
 
-		var tmp_txt_1 = text_1.GetTextNode().text
-		var tmp_txt_2 = text_2.GetTextNode().text
+		var tmp_txt_1 = text_1.get_text_node().text
+		var tmp_txt_2 = text_2.get_text_node().text
 		
-		text_1.GetTextNode().text = tmp_txt_2
-		text_2.GetTextNode().text = tmp_txt_1
+		text_1.get_text_node().text = tmp_txt_2
+		text_2.get_text_node().text = tmp_txt_1
 
 
 func ReverseTextsUp(the_node: Node):
@@ -236,7 +264,7 @@ func GetTextNodesJS():
 			var text_node = child_node as DCDialogueNodeText
 			
 			var text_slot_dict = {}
-			text_slot_dict["Text"] = text_node.GetTextNode().text
+			text_slot_dict["Text"] = text_node.get_text_node().text
 
 			text_nodes_js.append(text_slot_dict)
 	
@@ -247,7 +275,7 @@ func AddTextNode(is_port_l:bool, port_l_type: int, port_l_color: Color,
 				is_port_r:bool, port_r_type: int, port_r_color: Color) -> DCDialogueNodeText:
 	var text_node = DCGraph.text_node_text_res.instantiate() as DCDialogueNodeText
 	
-	text_node.DeleteDialogueText.connect(self.ClearPorts)
+	text_node.DeleteDialogueText.connect(self.delete_text_port)
 	text_node.UpDialogueText.connect(self.ReverseTextsUp)
 	text_node.DownDialogueText.connect(self.ReverseTextsDown)
 
@@ -255,3 +283,4 @@ func AddTextNode(is_port_l:bool, port_l_type: int, port_l_color: Color,
 	set_slot( get_children().size() - 1, is_port_l, port_l_type, port_l_color, is_port_r, port_r_type, port_r_color)
 	
 	return text_node
+

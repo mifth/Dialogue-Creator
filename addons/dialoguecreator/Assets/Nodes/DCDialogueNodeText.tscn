@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://addons/dialoguecreator/Scripts/Nodes/DCDialogueNodeText.gd" id="1_0887f"]
 
-[node name="TextControl" type="Control"]
+[node name="DialogueNodeText" type="Control"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 179.0

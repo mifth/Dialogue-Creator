@@ -28,6 +28,8 @@ const text_node_text_res := preload("res://addons/dialoguecreator/Assets/Nodes/D
 
 const play_scene_res := preload("res://addons/dialoguecreator/Assets/PlayScene/PlayScene.tscn")
 
+const action_port_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCActionNodePort.tscn")
+
 
 func _ready():
 	file_button.NewFile.connect(self.NewScene)
