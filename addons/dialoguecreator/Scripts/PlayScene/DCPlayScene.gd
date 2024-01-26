@@ -86,8 +86,13 @@ func set_up_action_node(d_node: DCGDialogueData.NodeData):
 	get_main_text_edit().text = action_text
 	get_char_texture_edit().texture = self.action_texture
 	
-	add_text_button("True", 0)
-	add_text_button("False", 1)
+	if "ActionPorts" in live_node_js:
+		var ports_texts = live_node_js["ActionPorts"]["Texts"]
+		for i in range(ports_texts.size()):
+			add_text_button(ports_texts[i], i)
+
+	# add_text_button("True", 0)
+	# add_text_button("False", 1)
 
 
 func set_up_dialogue_node(d_node: DCGDialogueData.NodeData):

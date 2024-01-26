@@ -19,16 +19,19 @@ func GetNodeParamsJS():
 	params["ActionText"] = {}
 	params["ActionText"]["Text"] = get_action_text_node().text
 
-	params["ActionPorts"] = {}
-	params["ActionPorts"]["Texts"] = []
-
 	var children = get_children()
-	if children.size() > 3:
-		for i in range(children.size()):
-			if i > 1 and i != children.size() - 1:
-				var port = children[i] as DCActionNodePort
 
-				params["ActionPorts"]["Texts"].append(port.get_text_node().text)
+	# Add Output Texts
+	if children.size() > 3:
+		params["ActionPorts"] = {}
+		params["ActionPorts"]["Texts"] = []
+
+		if children.size() > 3:
+			for i in range(children.size()):
+				if i > 1 and i != children.size() - 1:
+					var port = children[i] as DCActionNodePort
+
+					params["ActionPorts"]["Texts"].append(port.get_text_node().text)
 
 
 	return [params, DCGUtils.ActionNode]
