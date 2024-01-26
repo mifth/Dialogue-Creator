@@ -98,11 +98,11 @@ static func load_file_js(main_graph: DCGraph, path: String):
 			nodes_by_name[node_js["Name"]] = new_node.name
 			
 			# Set Main Text
-			var main_text = new_node.GetMainText()
+			var main_text = new_node.get_main_text()
 			main_text.text = node_js["MainText"]["Text"]
 			
 			if "Character" in node_js:
-				var char_id = new_node.GetCharacterIDSpinBox()
+				var char_id = new_node.get_characterID_spinBox()
 				char_id.value = node_js["Character"]["Id"] as int
 			
 			if node_js["TextSlots"]:
