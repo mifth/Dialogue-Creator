@@ -14,5 +14,5 @@ func _ready():
 func _on_item_pressed(ID):
 	var button_name = popup.get_item_text(ID)
 	
-	emit_signal("AddNode", button_name)
+	AddNode.emit(button_name)
 	

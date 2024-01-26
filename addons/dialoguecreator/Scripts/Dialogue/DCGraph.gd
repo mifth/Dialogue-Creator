@@ -32,27 +32,27 @@ const action_port_res := preload("res://addons/dialoguecreator/Assets/Nodes/DCAc
 
 
 func _ready():
-	file_button.NewFile.connect(self.NewScene)
-	file_button.SaveFile.connect(self.SaveFileDialogue)
-	file_button.LoadFile.connect(self.LoadFileDialogue)
-	nodes_button.AddNode.connect(self.AddNode)
+	file_button.NewFile.connect(self.new_scene)
+	file_button.SaveFile.connect(self.save_file_dialogue)
+	file_button.LoadFile.connect(self.load_file_dialogue)
+	nodes_button.AddNode.connect(self.add_node)
 
-func ClearGraph():
+func clear_graph():
 	graph.clear_connections()
 	DCGUtils.remove_children(graph)
 
 
-func NewScene():
-	ClearGraph()
+func new_scene():
+	clear_graph()
 
 
-func SaveFileDialogue():
+func save_file_dialogue():
 	file_dialogue.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	file_dialogue.title = "Save To JSON"
 	file_dialogue.show()
 
 
-func LoadFileDialogue():
+func load_file_dialogue():
 	file_dialogue.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	file_dialogue.title = "Load JSON"
 	file_dialogue.show()
@@ -62,11 +62,11 @@ func _on_save_file_dialog_file_selected(path):
 	if file_dialogue.file_mode == FileDialog.FILE_MODE_SAVE_FILE:
 		DCParse.save_file_js(self, path)
 	else:
-		ClearGraph()
+		clear_graph()
 		DCParse.load_file_js(self, path)
 
 
-func AddNode(node_name: String):
+func add_node(node_name: String):
 	var node_res: Resource
 	
 	if node_name == "Start":
@@ -93,17 +93,17 @@ func AddNode(node_name: String):
 		node_res = character_node_res
 
 	var new_node: GraphNode = node_res.instantiate()
-	new_node.position_offset = graph.scroll_offset + (Vector2(get_viewport().size) / 2.5)
+	new_node.position_offset = (graph.scroll_offset + (Vector2(get_viewport().size) / 2.5) ) / graph.zoom
 
 	graph.add_child(new_node)
 
 
 func _input(event):
 	if Input.is_key_pressed(KEY_DELETE):
-		DeleteSelectedGraphNodes()
+		delete_selected_graphNodes()
 
 
-func DeleteSelectedGraphNodes():
+func delete_selected_graphNodes():
 	var nodes = graph.get_children()
 	var nodes_rng = range(nodes.size())
 	nodes_rng.reverse()
