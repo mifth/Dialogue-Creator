@@ -34,6 +34,7 @@ func _ready():
 			if next_dialogue_node:
 				self.current_dialogue = next_dialogue_node
 
+				print(" ")
 				print("NEXT NODE: ", next_dialogue_node.node_class_key)
 				
 				# Live nodes are DCActionNode and DCDialogueNode. See DCGUtils.live_nodes
