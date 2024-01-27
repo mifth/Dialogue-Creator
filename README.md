@@ -5,6 +5,15 @@ Dialogue Creator is a free application(made with Godot 4.2) which allows to crea
 [Documentation](https://github.com/mifth/Dialogue-Creator/wiki/Dialogue-Creator)  
 [Discord Server](https://discord.com/invite/MrK5aw7k7S)
 
+The main idea of the Dialogue Creator is JSON is everything!
+
+Features:
+- Lots of nodes which allow to create complex dialogues.
+- Easy to add translations.
+- Godot plugin [dialoguecreatorgame](https://github.com/mifth/Dialogue-Creator/tree/main/addons/dialoguecreatorgame) can be added to any Godot game.
+- Save/Load to JSON.
+- Free as in beer.
+
 ![Image](https://github.com/mifth/Dialogue-Creator/blob/5d593e442df2b58369fdbcca4bb9a961a7729a3e/addons/dialoguecreator/Resources/Main/Splash.png)
 
 ![image](https://github.com/mifth/Dialogue-Creator/assets/2251298/cfb109a3-3cc8-4885-a6b4-37b99eb7e461)
