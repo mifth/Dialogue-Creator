@@ -1,0 +1,142 @@
+{
+   "Connections": [
+	  {
+		 "from_node": "StartNode",
+		 "from_port": 0,
+		 "to_node": "DialogueNode",
+		 "to_port": 0
+	  },
+	  {
+		 "from_node": "DialogueNode",
+		 "from_port": 1,
+		 "to_node": "ActionNode",
+		 "to_port": 0
+	  }
+   ],
+   "Nodes": {
+	  "DCActionNode": [
+		 {
+			"ActionName": "MyAction",
+			"ActionPorts": {
+			   "Texts": [
+				  "Choice 1",
+				  "Choice 2",
+				  "Choice 3"
+			   ]
+			},
+			"ActionText": {
+			   "Text": "{\n\"HasLevel\": 8\n}"
+			},
+			"Inputs": [
+			   {
+				  "Type": 0
+			   },
+			   {
+				  "Type": 1
+			   }
+			],
+			"Name": "ActionNode",
+			"Outputs": [
+			   {
+				  "Type": 0
+			   },
+			   {
+				  "Type": 0
+			   },
+			   {
+				  "Type": 0
+			   }
+			],
+			"Position": [
+			   1830,
+			   420
+			],
+			"Size": [
+			   353,
+			   434.000061035156
+			]
+		 }
+	  ],
+	  "DCDialogueNode": [
+		 {
+			"Character": {
+			   "Id": 0
+			},
+			"Inputs": [
+			   {
+				  "Type": 0
+			   },
+			   {
+				  "Type": 1
+			   },
+			   {
+				  "Type": 1
+			   },
+			   {
+				  "Type": 1
+			   }
+			],
+			"MainText": {
+			   "Text": "{\"Eng\": \"Hi there! Are you looking for a job?\",}"
+			},
+			"Name": "DialogueNode",
+			"Outputs": [
+			   {
+				  "Type": 0
+			   },
+			   {
+				  "Type": 0
+			   },
+			   {
+				  "Type": 0
+			   }
+			],
+			"Position": [
+			   1200,
+			   420
+			],
+			"Size": [
+			   469.999633789063,
+			   366.999816894531
+			],
+			"TextSlots": [
+			   {
+				  "Text": "{\"Eng\": \"Yes, what can you propose?\",}"
+			   },
+			   {
+				  "Text": "{\"Eng\": \"Nevermind\",}"
+			   }
+			]
+		 }
+	  ],
+	  "DCStartNode": [
+		 {
+			"Inputs": [],
+			"Name": "StartNode",
+			"Outputs": [
+			   {
+				  "Type": 0
+			   }
+			],
+			"Position": [
+			   768,
+			   420.399993896484
+			],
+			"Size": [
+			   280.000122070313,
+			   121.000030517578
+			],
+			"StartID": 0,
+			"StartName": "Start Quest"
+		 }
+	  ]
+   },
+   "PlaySettings": {
+	  "LangName": "Eng",
+	  "StartID": 0
+   },
+   "Version": [
+	  0,
+	  1
+   ]
+}
