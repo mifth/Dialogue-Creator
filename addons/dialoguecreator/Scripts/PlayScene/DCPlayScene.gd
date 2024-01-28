@@ -7,8 +7,8 @@ var live_nodes_js: Dictionary = {}  # nodes_js which can be modified during a di
 var play_start_id: int
 var play_lang: String
 
-const text_button := preload("res://addons/dialoguecreator/Assets/PlayScene/TextSlotButton.tscn")
-const action_texture = preload("res://addons/dialoguecreator/Resources/Action/Action.png")
+const text_button: Resource = preload("res://addons/dialoguecreator/Assets/PlayScene/TextSlotButton.tscn")
+const action_texture: Resource = preload("res://addons/dialoguecreator/Resources/Action/Action.png")
 
 var current_dialogue: DCGDialogueData.NodeData
 
