@@ -16,7 +16,7 @@ Features:
 - Possibility to use JSON files created with the Dialogue Creator in any game engine. See how it's done for [the Godot plugin](https://github.com/mifth/Dialogue-Creator/wiki/Plugin-for-Godot).
 - Free as in beer.
 
-Videos:
+Videos:  
 [Dialogue Creator V0.1](https://youtu.be/fL8584Ec-eM)
 
 ![Image](https://github.com/mifth/Dialogue-Creator/blob/5d593e442df2b58369fdbcca4bb9a961a7729a3e/addons/dialoguecreator/Resources/Main/Splash.png)
