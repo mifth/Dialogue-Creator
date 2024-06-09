@@ -101,7 +101,18 @@ func add_node(node_name: String):
 func _input(event):
 	if Input.is_key_pressed(KEY_DELETE):
 		delete_selected_graphNodes()
+	
+	elif Input.is_key_pressed(KEY_S):
+		if Input.is_key_pressed(KEY_CTRL):
+			save_file_dialogue()
 
+	elif Input.is_key_pressed(KEY_O):
+		if Input.is_key_pressed(KEY_CTRL):
+			load_file_dialogue()
+
+	elif Input.is_key_pressed(KEY_N):
+		if Input.is_key_pressed(KEY_CTRL):
+			new_scene()
 
 func delete_selected_graphNodes():
 	var nodes = graph.get_children()

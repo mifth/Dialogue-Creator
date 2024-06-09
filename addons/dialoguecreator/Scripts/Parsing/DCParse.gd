@@ -51,8 +51,8 @@ static func save_file_js(main_graph: DCGraph, path: String):
 	var data_js_str = JSON.stringify(data_js, "   ")
 	
 	var final_path = path
-	if not final_path.ends_with(".json"):
-		final_path += ".json"
+	if not final_path.ends_with(".dcj"):
+		final_path += ".dcj"
 
 	if FileAccess.file_exists(final_path):
 		# Set Writable

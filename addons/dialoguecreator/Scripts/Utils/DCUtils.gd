@@ -1,7 +1,7 @@
 class_name DCUtils
 extends Object
 
-const version = [0, 1]
+const version = [0, 2]
 
 
 

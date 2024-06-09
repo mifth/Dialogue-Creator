@@ -14,11 +14,9 @@ func _ready():
 
 
 func _on_item_pressed(ID):
-	var button_name = popup.get_item_text(ID)
-	
-	if button_name == "New":
+	if ID == 0:
 		emit_signal("NewFile")
-	elif button_name == "Save":
-		emit_signal("SaveFile")
-	elif  button_name == "Open":
+	elif  ID == 1:
 		emit_signal("LoadFile")
+	elif ID == 2:
+		emit_signal("SaveFile")

@@ -33,7 +33,6 @@ func get_node_params_js():
 
 					params["ActionPorts"]["Texts"].append(port.get_text_node().text)
 
-
 	return [params, DCGUtils.ActionNode]
 
 

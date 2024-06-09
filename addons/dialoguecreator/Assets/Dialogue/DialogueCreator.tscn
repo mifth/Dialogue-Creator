@@ -55,11 +55,11 @@ grow_vertical = 2
 layout_mode = 2
 text = "File"
 item_count = 3
-popup/item_0/text = "New"
+popup/item_0/text = "New (Ctrl+N)"
 popup/item_0/id = 0
-popup/item_1/text = "Open"
+popup/item_1/text = "Open (Ctrl+O)"
 popup/item_1/id = 1
-popup/item_2/text = "Save"
+popup/item_2/text = "Save (Ctrl+S)"
 popup/item_2/id = 2
 script = ExtResource("2_4wsl1")
 
@@ -136,7 +136,7 @@ size = Vector2i(589, 344)
 dialog_hide_on_ok = true
 dialog_autowrap = true
 access = 2
-filters = PackedStringArray("*.json")
+filters = PackedStringArray("*.dcj")
 use_native_dialog = true
 
 [connection signal="pressed" from="VBoxContainer/MenuBar/HBoxContainer/HBoxContainer/PlaySceneButton" to="." method="_on_play_scene_button_pressed"]

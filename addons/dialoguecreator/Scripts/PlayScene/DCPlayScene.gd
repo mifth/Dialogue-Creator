@@ -144,10 +144,11 @@ func set_up_dialogue_node(d_node: DCGDialogueData.NodeData):
 		var char_node = self.dc_data.get_character_node_js_by_id(char_id)
 		if char_node:
 			get_char_name_edit().text = char_node["CharacterName"]
-			#get_char_texture_edit().texture = null
-			#print(char_node["CharacterTexture"])
+
 			var icons = get_main_graph().graph.get_node(char_node["Name"]) as DCCharacterNode
 			get_char_texture_edit().texture = icons.GetItemsIcons().get_item_icon(char_node["CharacterTexture"])
+		else:
+			get_char_name_edit().text = "Character: " + str(char_id)
 
 
 func clear_play_scene():
