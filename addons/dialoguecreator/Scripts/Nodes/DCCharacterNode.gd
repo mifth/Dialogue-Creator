@@ -40,7 +40,7 @@ func GetCharacterNameLineEdit() -> LineEdit:
 
 
 func get_node_params_js():
-	var params = get_node_base_params_js()
+	var params = get_node_base_params_js(false)
 	
 	params["CharacterName"] = GetCharacterNameLineEdit().text
 	

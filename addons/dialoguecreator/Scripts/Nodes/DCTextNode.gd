@@ -11,7 +11,7 @@ func add_text_text_node() -> DCDialogueNodeText:
 
 
 func get_node_params_js():
-	var params = get_node_base_params_js()
+	var params = get_node_base_params_js(false)
 	
 	params["TextSlots"] = get_text_nodes_js()
 	

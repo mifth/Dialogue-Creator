@@ -17,7 +17,7 @@ const CharacterNode = "DCCharacterNode"
 const dialogue_nodes_types = [ActionNode, DialogueNode]
 const live_nodes_types = [ActionNode, DialogueNode, SetTextNode]
 
-const version = [0, 2]
+const version = [0, 3]
 
 
 static func generate_id(ids, start_value: int) -> int:

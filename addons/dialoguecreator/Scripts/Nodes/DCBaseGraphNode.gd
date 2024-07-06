@@ -236,11 +236,14 @@ func get_outputs_js():
 	return outputs
 
 
-func get_node_base_params_js() -> Dictionary:
+func get_node_base_params_js(add_inputs: bool = true, add_outputs:bool = true) -> Dictionary:
 	var base_params = {}
 
-	base_params["Inputs"] = get_inputs_js()
-	base_params["Outputs"] = get_outputs_js()
+	if add_inputs:
+		base_params["Inputs"] = get_inputs_js()
+	
+	if add_outputs:
+		base_params["Outputs"] = get_outputs_js()
 	
 	base_params["Name"] = name
 	

@@ -7,7 +7,7 @@ func _enter_tree():
 
 
 func get_node_params_js():
-	var params = get_node_base_params_js()
+	var params = get_node_base_params_js(false)
 	
 	params["StartID"] = GetStartIDSpinBox().value as int
 	params["StartName"] = GetStartName().text
