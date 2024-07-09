@@ -46,14 +46,16 @@ func parse_js(date_js_str: String):
 		for i in range(conns_js.size()):
 			var conn = conns_js[i]
 			
-			var from_node_c = self.nodes_by_name[conn["from_node"]].from_node_conns
 			var from_port = conn["from_port"] as int
 			var to_port = conn["to_port"] as int
 			
+			# Add connections from_node
+			var from_node_c = self.nodes_by_name[conn["from_node"]].from_node_conns
 			if from_port not in from_node_c:
 				from_node_c[from_port] = []
 			from_node_c[from_port].append(i)
 			
+			# Add connections to_node
 			var to_node_c = self.nodes_by_name[conn["to_node"]].to_node_conns
 			if to_port not in to_node_c:
 				to_node_c[to_port] = []
