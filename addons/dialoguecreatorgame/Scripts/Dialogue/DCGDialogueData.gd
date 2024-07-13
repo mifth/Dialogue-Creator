@@ -22,8 +22,8 @@ func get_node_js(node_data: NodeData):
 	return get_nodes_js()[node_data.node_class_key][node_data.array_index]
 
 
-func parse_js(date_js_str: String):
-	self.data_js = JSON.parse_string(date_js_str)
+func parse_js(data_js_str: String):
+	self.data_js = JSON.parse_string(data_js_str)
 	
 	if self.data_js:
 		var nodes_js: Dictionary = get_nodes_js()
