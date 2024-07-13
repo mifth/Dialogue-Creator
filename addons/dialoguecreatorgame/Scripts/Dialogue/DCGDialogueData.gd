@@ -10,8 +10,8 @@ class NodeData:
 	var node_class_key: String  # Node Class Nmae
 	var array_index: int  # Index in data_js["Nodes"][node_class_key] Array
 
-	var from_node_conns := {}
-	var to_node_conns := {}
+	var from_node_conns := {}  # Key - int. Value - Array of int.
+	var to_node_conns := {}  # Key - int. Value - Array of int.
 	
 	func fill_data(node_key: String, array_index: int):
 		self.node_class_key = node_key
@@ -74,10 +74,10 @@ func _get_dialogue_node_recursively(the_node: NodeData, port_id: int,
 	var dialogue_node: NodeData
 	
 	if port_id in the_node.from_node_conns:
-		var node_data_port_id = the_node.from_node_conns[port_id]
+		var node_data_port_id: Array = the_node.from_node_conns[port_id]
 
 		if node_data_port_id:
-			var conn = get_connections_js()[node_data_port_id[0]]
+			var conn = get_connections_js()[node_data_port_id[0]]  # Main Connection has only 1 output.
 			var parse_node = self.nodes_by_name[conn["to_node"]] as DCGDialogueData.NodeData
 			
 			if parse_node not in parsed_nodes:
