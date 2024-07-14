@@ -114,11 +114,7 @@ func _get_dialogue_node_recursively(the_node: NodeData, port_id: int, parsed_nod
 
 				else:
 					# Change Texts it it's a Node which can do it.
-					if (parse_node.node_class_key == DCGUtils.SetTextNode
-						or parse_node.node_class_key == DCGUtils.EnableTextNode
-						or parse_node.node_class_key == DCGUtils.HideTextNode):
-
-						_change_live_texts(parse_node, [])
+					_change_live_texts(parse_node, [])
 
 					
 					# Try Getting Next Node
@@ -159,7 +155,7 @@ func _check_default_live_text(node_to_check: NodeData, live_node_js):
 						var to_text_slot = get_text_slot_by_port(node_to_check, live_node_js, port_id, true)
 
 						if from_text_slot and to_text_slot:
-							to_text_slot["LiveText"] = from_text_slot["Text"]
+							to_text_slot["Text"] = from_text_slot["Text"]
 
 						break
 
@@ -244,7 +240,7 @@ func _change_live_text(from_node: NodeData, from_port: int, to_node: NodeData, t
 	if from_node.node_class_key == DCGUtils.SetTextNode:
 		if from_xnode_js["TextSlots"]:
 			var from_text_slot = get_text_slot_by_port(from_node, from_xnode_js, from_port, false)
-			from_text = get_text_of_text_slot(from_text_slot)
+			from_text = from_text_slot["Text"]
 		else:
 			from_text = "NO TEXT"
 
@@ -255,13 +251,13 @@ func _change_live_text(from_node: NodeData, from_port: int, to_node: NodeData, t
 		if to_port == 1:
 			# Set New Live Text
 			if from_node.node_class_key == DCGUtils.SetTextNode:
-				to_text_slot["LiveText"] = from_text
+				to_text_slot["Text"] = from_text
 
 		# Text Slot
 		elif to_port > 1:
 			# Set New Live Text
 			if from_node.node_class_key == DCGUtils.SetTextNode:
-				to_text_slot["LiveText"] = from_text
+				to_text_slot["Text"] = from_text
 
 			elif from_node.node_class_key == DCGUtils.EnableTextNode:
 				var enable_text = true
@@ -284,14 +280,34 @@ func _change_live_text(from_node: NodeData, from_port: int, to_node: NodeData, t
 		if to_port == 1:
 			# Set New Live Text
 			if from_node.node_class_key == DCGUtils.SetTextNode:
-				to_text_slot["LiveText"] = from_text
+				to_text_slot["Text"] = from_text
 
 	elif to_node.node_class_key == DCGUtils.SetTextNode:
 		# Main Text
 		if to_port > 0:
 			# Set New Live Text
 			if from_node.node_class_key == DCGUtils.SetTextNode:
-				to_text_slot["LiveText"] = from_text
+				to_text_slot["Text"] = from_text
+
+
+static func is_live_text_slot_enabled(live_text_slot: Dictionary) -> bool:
+	var is_enabled := true
+
+	if "EnableLiveText" in live_text_slot:
+		if not live_text_slot["EnableLiveText"]:
+			is_enabled = false
+
+	return is_enabled
+
+
+static func is_live_text_slot_hidden(live_text_slot: Dictionary) -> bool:
+	var is_hidden := false
+
+	if "HideLiveText" in live_text_slot:
+		if live_text_slot["HideLiveText"]:
+			is_hidden = true
+
+	return is_hidden
 
 
 func get_text_slot_by_port(the_node: NodeData, node_js, port_id: int, is_input: bool):
@@ -338,17 +354,6 @@ func get_text_slot_by_port(the_node: NodeData, node_js, port_id: int, is_input: 
 
 			elif port_id > 1:
 				return node_js["TextSlots"][port_id - 2]
-
-
-func get_text_of_text_slot(main_text_js: Dictionary):
-	var main_text_str: String
-
-	if "LiveText" in main_text_js:
-		main_text_str = main_text_js["LiveText"]
-	else:
-		main_text_str = main_text_js["Text"]
-
-	return main_text_str
 
 
 func get_text_by_lang(text: String, lang: String):

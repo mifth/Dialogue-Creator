@@ -75,7 +75,7 @@ func set_up_action_node(d_node: DCGDialogueData.NodeData):
 
 	var action_text = ""
 	var name_js = live_node_js["ActionName"]
-	var text_js = self.dc_data.get_text_of_text_slot(live_node_js["ActionText"])
+	var text_js = live_node_js["ActionText"]["Text"]
 	
 	if name_js:
 		action_text = name_js
@@ -99,7 +99,7 @@ func set_up_dialogue_node(d_node: DCGDialogueData.NodeData):
 
 	# Get Text In Text JS
 	var main_text_js = live_node_js["MainText"]
-	var main_text_str = self.dc_data.get_text_of_text_slot(main_text_js)
+	var main_text_str = main_text_js["Text"]
 	
 	# Set Up Main Text
 	var main_text = self.dc_data.get_text_by_lang(main_text_str, self.play_lang)
@@ -114,10 +114,10 @@ func set_up_dialogue_node(d_node: DCGDialogueData.NodeData):
 			var text_slot_js = live_node_js["TextSlots"][i]
 
 			# If Text Hidden
-			if "HideLiveText" in text_slot_js and text_slot_js["HideLiveText"]:
+			if DCGDialogueData.is_live_text_slot_hidden(text_slot_js):
 				continue
 
-			var live_text = self.dc_data.get_text_of_text_slot(text_slot_js)
+			var live_text = text_slot_js["Text"]
 			var final_text = self.dc_data.get_text_by_lang(live_text, self.play_lang)
 
 			var text_button: DCTextSlotButton
@@ -127,14 +127,13 @@ func set_up_dialogue_node(d_node: DCGDialogueData.NodeData):
 				text_button = add_text_button("No Text!", i + 1)
 
 			# If Text Disabled
-			if "EnableLiveText" in text_slot_js:
-				if not text_slot_js["EnableLiveText"]:
-					text_button.next_node_button.disconnect(run_next_dialogue)
+			if not DCGDialogueData.is_live_text_slot_enabled(text_slot_js):
+				text_button.next_node_button.disconnect(run_next_dialogue)
 
-					text_button.text = ""
-					text_button.push_color(Color.DIM_GRAY)
-					text_button.add_text(final_text)
-					text_button.pop()
+				text_button.text = ""
+				text_button.push_color(Color.DIM_GRAY)
+				text_button.add_text(final_text)
+				text_button.pop()
 
 	# Set Up Character
 	if "Character" in live_node_js:
