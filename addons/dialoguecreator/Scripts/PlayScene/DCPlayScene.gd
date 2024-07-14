@@ -2,7 +2,8 @@ extends Node
 
 
 var dc_data: DCGDialogueData  # Main dialogue data
-var live_nodes_js: Dictionary = {}  # nodes_js which can be modified during a dialogue
+
+var current_dialogue: DCGDialogueData.NodeData  # Current node data
 
 var play_start_id: int
 var play_lang: String
@@ -10,7 +11,6 @@ var play_lang: String
 const text_button: Resource = preload("res://addons/dialoguecreator/Assets/PlayScene/TextSlotButton.tscn")
 const action_texture: Resource = preload("res://addons/dialoguecreator/Resources/Action/Action.png")
 
-var current_dialogue: DCGDialogueData.NodeData
 
 
 func _enter_tree():
@@ -45,7 +45,7 @@ func run_next_dialogue(port_id: int):
 	clear_dialogue()
 
 	# Get Next Interactive Node
-	var next_dialogue_node = self.dc_data.get_next_dialogue_node(self.current_dialogue, port_id, self.live_nodes_js)
+	var next_dialogue_node = self.dc_data.get_next_dialogue_node(self.current_dialogue, port_id)
 
 	if next_dialogue_node:
 		self.current_dialogue = next_dialogue_node
@@ -72,7 +72,7 @@ func add_text_button(text: String, port_id: int) -> DCTextSlotButton:
 
 
 func set_up_action_node(d_node: DCGDialogueData.NodeData):
-	var live_node_js = self.dc_data.get_live_node_js(d_node, self.live_nodes_js)
+	var live_node_js = self.dc_data.get_live_node_js(d_node)
 
 	var action_text = ""
 	var name_js = live_node_js["ActionName"]
@@ -96,7 +96,7 @@ func set_up_action_node(d_node: DCGDialogueData.NodeData):
 
 
 func set_up_dialogue_node(d_node: DCGDialogueData.NodeData):
-	var live_node_js = self.dc_data.get_live_node_js(d_node, self.live_nodes_js)
+	var live_node_js = self.dc_data.get_live_node_js(d_node)
 
 	# Get Text In Text JS
 	var main_text_js = live_node_js["MainText"]
