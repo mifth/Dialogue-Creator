@@ -69,13 +69,32 @@ func get_node_js(node_data: NodeData):
 	return get_nodes_js()[node_data.node_class_key][node_data.array_index]
 
 
+func get_live_node_js(the_node: NodeData):
+	if the_node.node_class_key in DCGUtils.live_nodes_types:
+		var live_node_js : Dictionary
+		var node_js = get_nodes_js()[the_node.node_class_key][the_node.array_index]
+		
+		if node_js["Name"] not in self.live_nodes_js.keys():
+		
+			live_node_js = node_js.duplicate(true)
+			self.live_nodes_js[node_js["Name"]] = live_node_js
+
+			_check_default_live_text(the_node, live_node_js)
+
+		else:
+			live_node_js = self.live_nodes_js[node_js["Name"]]
+
+		return live_node_js
+
+	return null
+
+
 func get_next_dialogue_node(the_node: NodeData, port_id: int) -> NodeData:
 
 	return _get_dialogue_node_recursively(the_node, port_id, [])
 
 
-func _get_dialogue_node_recursively(the_node: NodeData, port_id: int, 
-									parsed_nodes: Array) -> NodeData:
+func _get_dialogue_node_recursively(the_node: NodeData, port_id: int, parsed_nodes: Array) -> NodeData:
 
 	var dialogue_node: NodeData
 	
@@ -110,27 +129,6 @@ func _get_dialogue_node_recursively(the_node: NodeData, port_id: int,
 						dialogue_node = _get_dialogue_node_recursively(parse_node, 0, parsed_nodes)
 	
 	return dialogue_node
-
-
-func get_live_node_js(the_node: NodeData):
-
-	if the_node.node_class_key in DCGUtils.live_nodes_types:
-		var live_node_js : Dictionary
-		var node_js = get_nodes_js()[the_node.node_class_key][the_node.array_index]
-		
-		if node_js["Name"] not in self.live_nodes_js.keys():
-		
-			live_node_js = node_js.duplicate(true)
-			self.live_nodes_js[node_js["Name"]] = live_node_js
-
-			_check_default_live_text(the_node, live_node_js)
-
-		else:
-			live_node_js = self.live_nodes_js[node_js["Name"]]
-
-		return live_node_js
-
-	return null
 
 
 func _check_default_live_text(node_to_check: NodeData, live_node_js):
@@ -190,10 +188,8 @@ func get_conn_from_reroute_text_reversed_recursively(rerote_text_node: NodeData,
 # Only for the SetTextNode, EnableTextNode, HideTextNode.
 # parent_from_node and parent_from_port are parent node. It's used in case if we have got a RerouteTextNode node.
 func _change_live_texts(from_node: NodeData, parsed_nodes: Array, parent_from_node: NodeData = null, parent_from_port: int = 1000):
+	
 	for from_port in from_node.from_node_conns.keys():
-		# if from_port == 0:
-		# 	continue
-		
 		var from_node_js = get_live_node_js(from_node)
 		if not from_node_js:
 			from_node_js = get_node_js(from_node)
