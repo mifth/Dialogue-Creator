@@ -103,7 +103,7 @@ func set_dialogue(d_node: DCGDialogueData.NodeData):
 	var main_text_str = main_text_js["Text"]
 	
 	# Set Up Main Text
-	var main_text = self.dc_data.get_text_by_lang(main_text_str, self.play_lang)
+	var main_text = DCGDialogueData.get_text_by_lang(main_text_str, self.play_lang)
 	if main_text:
 		get_main_text_edit().text = main_text
 
@@ -119,7 +119,7 @@ func set_dialogue(d_node: DCGDialogueData.NodeData):
 				continue
 
 			var live_text = text_slot_js["Text"]
-			var final_text = self.dc_data.get_text_by_lang(live_text, self.play_lang)
+			var final_text = DCGDialogueData.get_text_by_lang(live_text, self.play_lang)
 
 			var text_button: DCTextSlotButton
 			if final_text:

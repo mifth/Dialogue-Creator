@@ -29,7 +29,7 @@ func parse_js(data_js_str: String):
 	self.nodes_by_name = {}
 	
 	if self.data_js:
-		var nodes_js: Dictionary = get_nodes_js()
+		var nodes_js: Dictionary = _get_nodes_js()
 		
 		# Get Nodes By Name
 		for nodes_key in nodes_js.keys():
@@ -45,7 +45,7 @@ func parse_js(data_js_str: String):
 				self.nodes_by_name[node_js["Name"]] = dc_node_data
 
 		# Get Connections per Node
-		var conns_js = get_connections_js()
+		var conns_js = _get_connections_js()
 		for i in range(conns_js.size()):
 			var conn = conns_js[i]
 			
@@ -66,23 +66,25 @@ func parse_js(data_js_str: String):
 
 
 func get_node_js(node_data: NodeData):
-	return get_nodes_js()[node_data.node_class_key][node_data.array_index]
+	return _get_nodes_js()[node_data.node_class_key][node_data.array_index]
 
 
 func get_live_node_js(the_node: NodeData):
 	if the_node.node_class_key in DCGUtils.live_nodes_types:
 		var live_node_js : Dictionary
-		var node_js = get_nodes_js()[the_node.node_class_key][the_node.array_index]
+		var node_js = _get_nodes_js()[the_node.node_class_key][the_node.array_index]
+
+		var node_name = node_js["Name"]
 		
-		if node_js["Name"] not in self.live_nodes_js.keys():
+		if node_name not in self.live_nodes_js.keys():
 		
 			live_node_js = node_js.duplicate(true)
-			self.live_nodes_js[node_js["Name"]] = live_node_js
+			self.live_nodes_js[node_name] = live_node_js
 
 			_check_default_live_text(the_node, live_node_js)
 
 		else:
-			live_node_js = self.live_nodes_js[node_js["Name"]]
+			live_node_js = self.live_nodes_js[node_name]
 
 		return live_node_js
 
@@ -90,8 +92,69 @@ func get_live_node_js(the_node: NodeData):
 
 
 func get_next_dialogue_node(the_node: NodeData, port_id: int) -> NodeData:
-
 	return _get_dialogue_node_recursively(the_node, port_id, [])
+
+
+static func is_live_text_slot_enabled(live_text_slot: Dictionary) -> bool:
+	var is_enabled := true
+
+	if "EnableLiveText" in live_text_slot:
+		if not live_text_slot["EnableLiveText"]:
+			is_enabled = false
+
+	return is_enabled
+
+
+static func is_live_text_slot_hidden(live_text_slot: Dictionary) -> bool:
+	var is_hidden := false
+
+	if "HideLiveText" in live_text_slot:
+		if live_text_slot["HideLiveText"]:
+			is_hidden = true
+
+	return is_hidden
+
+
+static func get_text_by_lang(text: String, lang: String):
+	var lang_text = JSON.parse_string(text)
+	
+	if lang_text and typeof(lang_text) == TYPE_DICTIONARY and lang in lang_text:
+		return lang_text[lang]
+	else:
+		return text
+
+
+func get_characters():
+	var nodes_js = _get_nodes_js()
+	if nodes_js and DCGUtils.CharacterNode in nodes_js:
+		return _get_nodes_js()[DCGUtils.CharacterNode]
+
+
+func get_character_node_js_by_id(id: int):
+	var chars = get_characters()
+	if chars:
+		for char_node in chars:
+			if char_node["CharacterID"] == id:
+				return char_node
+
+	return null
+
+
+func get_input_port_type(node_js, to_port_id: int) -> int:
+	return node_js["Inputs"][to_port_id]["Type"]
+
+
+func get_output_port_type(node_js, from_port_id: int):
+	return node_js["Outputs"][from_port_id]["Type"]
+
+
+func get_startnode_by_id(start_node_id: int) -> NodeData:
+	if DCGUtils.StartNode in self.data_js["Nodes"]:
+		for node_js in self.data_js["Nodes"][DCGUtils.StartNode]:
+			if node_js["StartID"] == start_node_id:
+				return self.nodes_by_name[node_js["Name"]]
+	
+	return null
 
 
 func _get_dialogue_node_recursively(the_node: NodeData, port_id: int, parsed_nodes: Array) -> NodeData:
@@ -102,7 +165,7 @@ func _get_dialogue_node_recursively(the_node: NodeData, port_id: int, parsed_nod
 		var node_data_port_id: Array = the_node.from_node_conns[port_id]
 
 		if node_data_port_id:
-			var conn = get_connections_js()[node_data_port_id[0]]  # Main Connection has only 1 output.
+			var conn = _get_connections_js()[node_data_port_id[0]]  # Main Connection has only 1 output.
 			var parse_node = self.nodes_by_name[conn["to_node"]] as DCGDialogueData.NodeData
 			
 			if parse_node not in parsed_nodes:
@@ -118,7 +181,7 @@ func _get_dialogue_node_recursively(the_node: NodeData, port_id: int, parsed_nod
 
 					
 					# Try Getting Next Node
-					var parse_node_js = get_nodes_js()[parse_node.node_class_key][parse_node.array_index]
+					var parse_node_js = _get_nodes_js()[parse_node.node_class_key][parse_node.array_index]
 					var parse_node_outputs = parse_node_js["Outputs"]
 
 					if parse_node_outputs and parse_node_outputs[0]["Type"] == 0:
@@ -136,13 +199,13 @@ func _check_default_live_text(node_to_check: NodeData, live_node_js):
 				var port_conns = node_to_check.to_node_conns[port_id]
 
 				for conn_ids in port_conns:
-					var conn = get_connections_js()[conn_ids]
+					var conn = _get_connections_js()[conn_ids]
 					var from_node = self.nodes_by_name[conn["from_node"]] as NodeData
 					var from_port = conn["from_port"]
 
 					# In a case if it's RerouteTextNode Node we get a node Reversely 
 					if from_node.node_class_key == DCGUtils.RerouteTextNode:
-						var prev_conn = get_conn_from_reroute_text_reversed_recursively(from_node, [])
+						var prev_conn = _get_conn_from_reroute_text_reversed_recursively(from_node, [])
 						if prev_conn:
 							from_node = nodes_by_name[prev_conn["from_node"]] as NodeData
 							from_port = prev_conn["from_port"]
@@ -150,9 +213,9 @@ func _check_default_live_text(node_to_check: NodeData, live_node_js):
 					# Change Default Text
 					if from_node.node_class_key == DCGUtils.TextNode:
 						var from_node_js = get_node_js(from_node)
-						var from_text_slot = get_text_slot_by_port(from_node, from_node_js, from_port, false)
+						var from_text_slot = _get_text_slot_by_port(from_node, from_node_js, from_port, false)
 
-						var to_text_slot = get_text_slot_by_port(node_to_check, live_node_js, port_id, true)
+						var to_text_slot = _get_text_slot_by_port(node_to_check, live_node_js, port_id, true)
 
 						if from_text_slot and to_text_slot:
 							to_text_slot["Text"] = from_text_slot["Text"]
@@ -161,12 +224,12 @@ func _check_default_live_text(node_to_check: NodeData, live_node_js):
 
 
 # Get Connection From RerouteText Node Reversed
-func get_conn_from_reroute_text_reversed_recursively(rerote_text_node: NodeData, parsed_nodes: Array):
+func _get_conn_from_reroute_text_reversed_recursively(rerote_text_node: NodeData, parsed_nodes: Array):
 	var reversed_conn
 
 	if rerote_text_node.to_node_conns:
 		var prev_con_id = rerote_text_node.to_node_conns[0][0]
-		var prev_con = get_connections_js()[prev_con_id]
+		var prev_con = _get_connections_js()[prev_con_id]
 
 		var prev_node = nodes_by_name[prev_con["from_node"]] as NodeData
 
@@ -174,7 +237,7 @@ func get_conn_from_reroute_text_reversed_recursively(rerote_text_node: NodeData,
 			parsed_nodes.append(prev_node)
 
 			if prev_node.node_class_key == DCGUtils.RerouteTextNode:
-				reversed_conn = get_conn_from_reroute_text_reversed_recursively(prev_node, parsed_nodes)
+				reversed_conn = _get_conn_from_reroute_text_reversed_recursively(prev_node, parsed_nodes)
 			else:
 				reversed_conn = prev_con
 	
@@ -197,7 +260,7 @@ func _change_live_texts(from_node: NodeData, parsed_nodes: Array, parent_from_no
 		var conns_ids = from_node.from_node_conns[from_port]
 		
 		for conn_id in conns_ids:
-			var conn = get_connections_js()[conn_id]
+			var conn = _get_connections_js()[conn_id]
 			var to_node = self.nodes_by_name[conn["to_node"]] as NodeData
 			var to_port = conn["to_port"]
 
@@ -239,12 +302,12 @@ func _change_live_text(from_node: NodeData, from_port: int, to_node: NodeData, t
 
 	if from_node.node_class_key == DCGUtils.SetTextNode:
 		if from_xnode_js["TextSlots"]:
-			var from_text_slot = get_text_slot_by_port(from_node, from_xnode_js, from_port, false)
+			var from_text_slot = _get_text_slot_by_port(from_node, from_xnode_js, from_port, false)
 			from_text = from_text_slot["Text"]
 		else:
 			from_text = "NO TEXT"
 
-	var to_text_slot = get_text_slot_by_port(to_node, to_live_node_js, to_port, true)
+	var to_text_slot = _get_text_slot_by_port(to_node, to_live_node_js, to_port, true)
 
 	if to_node.node_class_key == DCGUtils.DialogueNode: 
 		# Main Text
@@ -290,27 +353,15 @@ func _change_live_text(from_node: NodeData, from_port: int, to_node: NodeData, t
 				to_text_slot["Text"] = from_text
 
 
-static func is_live_text_slot_enabled(live_text_slot: Dictionary) -> bool:
-	var is_enabled := true
-
-	if "EnableLiveText" in live_text_slot:
-		if not live_text_slot["EnableLiveText"]:
-			is_enabled = false
-
-	return is_enabled
+func _get_nodes_js():
+	return self.data_js["Nodes"]
 
 
-static func is_live_text_slot_hidden(live_text_slot: Dictionary) -> bool:
-	var is_hidden := false
-
-	if "HideLiveText" in live_text_slot:
-		if live_text_slot["HideLiveText"]:
-			is_hidden = true
-
-	return is_hidden
+func _get_connections_js() -> Array:
+	return self.data_js["Connections"]
 
 
-func get_text_slot_by_port(the_node: NodeData, node_js, port_id: int, is_input: bool):
+func _get_text_slot_by_port(the_node: NodeData, node_js, port_id: int, is_input: bool):
 	if the_node.node_class_key == DCGUtils.ActionNode:
 		if is_input and port_id == 1:
 			return node_js["ActionText"]
@@ -354,54 +405,3 @@ func get_text_slot_by_port(the_node: NodeData, node_js, port_id: int, is_input: 
 
 			elif port_id > 1:
 				return node_js["TextSlots"][port_id - 2]
-
-
-func get_text_by_lang(text: String, lang: String):
-	var lang_text = JSON.parse_string(text)
-	
-	if lang_text and typeof(lang_text) == TYPE_DICTIONARY and lang in lang_text:
-		return lang_text[lang]
-	else:
-		return text
-
-
-func get_characters():
-	var nodes_js = get_nodes_js()
-	if nodes_js and DCGUtils.CharacterNode in nodes_js:
-		return get_nodes_js()[DCGUtils.CharacterNode]
-
-
-func get_character_node_js_by_id(id: int):
-	var chars = get_characters()
-	if chars:
-		for char_node in chars:
-			if char_node["CharacterID"] == id:
-				return char_node
-
-	return null
-
-
-func get_nodes_js():
-	return self.data_js["Nodes"]
-
-
-func get_connections_js() -> Array:
-	return self.data_js["Connections"]
-
-
-func get_input_port_type(node_js, to_port_id: int) -> int:
-	return node_js["Inputs"][to_port_id]["Type"]
-
-
-func get_output_port_type(node_js, from_port_id: int):
-	return node_js["Outputs"][from_port_id]["Type"]
-
-
-func get_startnode_by_id(start_node_id: int) -> NodeData:
-	if DCGUtils.StartNode in self.data_js["Nodes"]:
-		for node_js in self.data_js["Nodes"][DCGUtils.StartNode]:
-			if node_js["StartID"] == start_node_id:
-				return self.nodes_by_name[node_js["Name"]]
-	
-	return null
-
