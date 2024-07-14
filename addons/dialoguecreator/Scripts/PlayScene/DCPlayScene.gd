@@ -17,7 +17,8 @@ func _enter_tree():
 	var data_js = DCParse.get_data_js(get_main_graph())  # Data from nodes
 	var data_js_str = JSON.stringify(data_js)  # Converted to string
 	
-	self.dc_data = DCGDialogueData.new()  # New main data
+	# Create new DCGDialogueData and Parse JSON.
+	self.dc_data = DCGDialogueData.new() 
 	self.dc_data.parse_js(data_js_str)
 	
 	clear_play_scene()
@@ -51,9 +52,9 @@ func run_next_dialogue(port_id: int):
 
 		# Set up Dialogue Node
 		if next_dialogue_node.node_class_key == DCGUtils.DialogueNode:
-			set_up_dialogue_node(next_dialogue_node)
+			set_dialogue(next_dialogue_node)
 		elif next_dialogue_node.node_class_key == DCGUtils.ActionNode:
-			set_up_action_node(next_dialogue_node)
+			set_action(next_dialogue_node)
 			
 	else:
 		queue_free()
@@ -70,7 +71,7 @@ func add_text_button(text: String, port_id: int) -> DCTextSlotButton:
 	return text_b
 
 
-func set_up_action_node(d_node: DCGDialogueData.NodeData):
+func set_action(d_node: DCGDialogueData.NodeData):
 	var live_node_js = self.dc_data.get_live_node_js(d_node)
 
 	var action_text = ""
@@ -94,7 +95,7 @@ func set_up_action_node(d_node: DCGDialogueData.NodeData):
 	# add_text_button("False", 1)
 
 
-func set_up_dialogue_node(d_node: DCGDialogueData.NodeData):
+func set_dialogue(d_node: DCGDialogueData.NodeData):
 	var live_node_js = self.dc_data.get_live_node_js(d_node)
 
 	# Get Text In Text JS
