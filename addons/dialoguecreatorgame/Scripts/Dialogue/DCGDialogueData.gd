@@ -92,18 +92,20 @@ func _get_dialogue_node_recursively(the_node: NodeData, port_id: int,
 				if parse_node.node_class_key in DCGUtils.dialogue_nodes_types:
 					# Next Interactive Node Is Found!
 					dialogue_node = parse_node
+
 				else:
 					# Change Texts it it's a Node which can do it.
-					if parse_node.node_class_key == DCGUtils.SetTextNode:
+					if (parse_node.node_class_key == DCGUtils.SetTextNode
+						or parse_node.node_class_key == DCGUtils.EnableTextNode
+						or parse_node.node_class_key == DCGUtils.HideTextNode):
+
 						_change_live_texts(parse_node, [])
-					elif parse_node.node_class_key == DCGUtils.EnableTextNode:
-						_change_live_texts(parse_node, [])
-					elif parse_node.node_class_key == DCGUtils.HideTextNode:
-						_change_live_texts(parse_node, [])
+
 					
 					# Try Getting Next Node
 					var parse_node_js = get_nodes_js()[parse_node.node_class_key][parse_node.array_index]
 					var parse_node_outputs = parse_node_js["Outputs"]
+
 					if parse_node_outputs and parse_node_outputs[0]["Type"] == 0:
 						dialogue_node = _get_dialogue_node_recursively(parse_node, 0, parsed_nodes)
 	

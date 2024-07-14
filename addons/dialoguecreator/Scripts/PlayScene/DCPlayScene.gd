@@ -12,7 +12,6 @@ const text_button: Resource = preload("res://addons/dialoguecreator/Assets/PlayS
 const action_texture: Resource = preload("res://addons/dialoguecreator/Resources/Action/Action.png")
 
 
-
 func _enter_tree():
 	var scene = get_main_graph()
 	var data_js = DCParse.get_data_js(get_main_graph())  # Data from nodes
