@@ -76,6 +76,7 @@ func get_live_node_js(the_node: NodeData):
 
 		var node_name = node_js["Name"]
 		
+		# Copy Live Text
 		if node_name not in self.live_nodes_js.keys():
 		
 			live_node_js = node_js.duplicate(true)
@@ -83,6 +84,7 @@ func get_live_node_js(the_node: NodeData):
 
 			_check_default_live_text(the_node, live_node_js)
 
+		# Get Live Text
 		else:
 			live_node_js = self.live_nodes_js[node_name]
 
