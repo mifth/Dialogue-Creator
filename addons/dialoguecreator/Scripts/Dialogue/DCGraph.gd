@@ -39,7 +39,7 @@ func _ready():
 
 func clear_graph():
 	graph.clear_connections()
-	DCGUtils.remove_children(graph)
+	DCUtils.remove_children(graph)
 
 
 func new_scene():

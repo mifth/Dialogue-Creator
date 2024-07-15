@@ -179,8 +179,8 @@ func _get_dialogue_node_recursively(the_node: NodeData, port_id: int, parsed_nod
 
 				else:
 					# Change Texts it it's a Node which can do it.
-					_change_live_texts(parse_node, [])
-
+					if parse_node.node_class_key in DCGUtils.change_text_nodes_types:
+						_change_live_texts(parse_node, [])
 					
 					# Try Getting Next Node
 					var parse_node_js = _get_nodes_js()[parse_node.node_class_key][parse_node.array_index]

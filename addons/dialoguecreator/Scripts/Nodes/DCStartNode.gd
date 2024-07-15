@@ -39,7 +39,7 @@ func GetIDs(nodes):
 
 func SetUniqueID(start_value: int):
 	var nodes = get_parent().get_children()
-	GetStartIDSpinBox().value = DCGUtils.generate_id(GetIDs(nodes), start_value)
+	GetStartIDSpinBox().value = DCUtils.generate_id(GetIDs(nodes), start_value)
 
 
 func _on_start_spin_box_value_changed(value):

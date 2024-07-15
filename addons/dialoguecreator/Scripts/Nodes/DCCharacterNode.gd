@@ -69,7 +69,7 @@ func GetIDs(nodes):
 
 func SetUniqueID(start_value: int):
 	var nodes = get_parent().get_children()
-	GetCharacterIDSpinBox().value = DCGUtils.generate_id(GetIDs(nodes), start_value)
+	GetCharacterIDSpinBox().value = DCUtils.generate_id(GetIDs(nodes), start_value)
 
 
 func _on_character_id_value_changed(value):

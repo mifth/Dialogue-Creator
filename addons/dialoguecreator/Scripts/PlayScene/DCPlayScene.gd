@@ -168,7 +168,7 @@ func clear_dialogue():
 	main_text.text = ""
 	
 	var texts = get_text_buttons_container()
-	DCGUtils.remove_children(texts)
+	DCUtils.remove_children(texts)
 
 
 func get_char_name_edit() -> TextEdit:
