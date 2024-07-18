@@ -13,8 +13,8 @@ class NodeData:
 	var node_class_key: String  # Node Class Nmae
 	var array_index: int  # Index in data_js["Nodes"][node_class_key] Array
 
-	var from_node_conns := {}  # Key - int. Value - Array of int.
-	var to_node_conns := {}  # Key - int. Value - Array of int.
+	var from_node_conns := {}  # Key - int(from_port). Value - Array of indexes to node_conns.
+	var to_node_conns := {}  # Key - int(to_port). Value - Array of indexes to node_conns.
 	
 	func fill_data(node_key: String, array_index: int):
 		self.node_class_key = node_key
@@ -250,10 +250,11 @@ func _get_conn_from_reroute_text_reversed_recursively(rerote_text_node: NodeData
 # parent_from_node and parent_from_port are parent node. It's used in case if we have got a RerouteTextNode node.
 func _change_live_texts(from_node: NodeData, parsed_nodes: Array, parent_from_node: NodeData = null, parent_from_port: int = 1000):
 	
+	var from_node_js = get_live_node_js(from_node)
+	if not from_node_js:
+		from_node_js = get_node_js(from_node)
+	
 	for from_port in from_node.from_node_conns.keys():
-		var from_node_js = get_live_node_js(from_node)
-		if not from_node_js:
-			from_node_js = get_node_js(from_node)
 		
 		# pass if Port Type = 0. It's a main port
 		if from_node_js["Outputs"][from_port]["Type"] == 0:
@@ -272,11 +273,14 @@ func _change_live_texts(from_node: NodeData, parsed_nodes: Array, parent_from_no
 				if to_node.node_class_key in DCGUtils.live_nodes_types:
 					var to_live_node_js = get_live_node_js(to_node)
 					
+					# Change Text
 					if parent_from_node:
+						# From Reroute Node mostly
 						_change_live_text(parent_from_node, parent_from_port, to_node, to_port)
 					else:
 						_change_live_text(from_node, from_port, to_node, to_port)
 
+				# Only for Reroute Node
 				elif to_node.node_class_key == DCGUtils.RerouteTextNode:
 					if parent_from_node:
 						_change_live_texts(to_node, parsed_nodes, parent_from_node, parent_from_port)
@@ -284,7 +288,6 @@ func _change_live_texts(from_node: NodeData, parsed_nodes: Array, parent_from_no
 						_change_live_texts(to_node, parsed_nodes, from_node, from_port)
 
 
-# from_node_js can be node_js or live_node_js!!!!
 func _change_live_text(from_node: NodeData, from_port: int, to_node: NodeData, to_port: int):
 
 	# Get From_Node Text
@@ -311,6 +314,7 @@ func _change_live_text(from_node: NodeData, from_port: int, to_node: NodeData, t
 
 	var to_text_slot = _get_text_slot_by_port(to_node, to_live_node_js, to_port, true)
 
+	# Set Text
 	if to_node.node_class_key == DCGUtils.DialogueNode: 
 		# Main Text
 		if to_port == 1:
