@@ -83,9 +83,9 @@ static func load_file_js(main_graph: DCGraph, path: String):
 			new_node.get_action_text_node().text = node_js["ActionText"]["Text"]
 			
 			if "ActionPorts" in node_js:
-				for the_text in node_js["ActionPorts"]["Texts"]:
+				for the_text in node_js["ActionPorts"]:
 					var new_port = new_node.add_action_port()
-					new_port.get_text_node().text = the_text
+					new_port.get_text_node().text = the_text["Text"]
 
 			nodes_by_name[node_js["Name"]] = new_node.name
 		

@@ -87,9 +87,9 @@ func set_action(d_node: DCGDialogueData.NodeData):
 	get_char_texture_edit().texture = self.action_texture
 	
 	if "ActionPorts" in live_node_js:
-		var ports_texts = live_node_js["ActionPorts"]["Texts"]
+		var ports_texts = live_node_js["ActionPorts"]
 		for i in range(ports_texts.size()):
-			add_text_button(ports_texts[i], i)
+			add_text_button(ports_texts[i]["Text"], i)
 
 	# add_text_button("True", 0)
 	# add_text_button("False", 1)
