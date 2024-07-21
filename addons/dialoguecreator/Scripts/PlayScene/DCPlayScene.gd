@@ -106,10 +106,12 @@ func set_dialogue(d_node: DCGDialogueData.NodeData):
 	var main_text = DCGDialogueData.get_text_by_lang(main_text_str, self.play_lang)
 	if main_text:
 		get_main_text_edit().text = main_text
+	else:
+		get_main_text_edit().text = main_text_str
 
 	# Set Up Text Slots
 	if not live_node_js["TextSlots"]:
-		add_text_button("> > > > >", 0)
+		add_text_button(">>>", 0)
 	else :
 		for i in range(live_node_js["TextSlots"].size()):
 			var text_slot_js = live_node_js["TextSlots"][i]
@@ -125,7 +127,7 @@ func set_dialogue(d_node: DCGDialogueData.NodeData):
 			if final_text:
 				text_button = add_text_button(final_text, i + 1)
 			else:
-				text_button = add_text_button("No Text!", i + 1)
+				text_button = add_text_button("No Text Found!", i + 1)
 
 			# If Text Disabled
 			if not DCGDialogueData.is_live_text_slot_enabled(text_slot_js):

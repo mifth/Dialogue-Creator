@@ -117,13 +117,13 @@ static func is_live_text_slot_hidden(live_text_slot: Dictionary) -> bool:
 	return is_hidden
 
 
-static func get_text_by_lang(text: String, lang: String):
+static func get_text_by_lang(text: String, lang: String) -> String:
 	var lang_text = JSON.parse_string(text)
 	
 	if lang_text and typeof(lang_text) == TYPE_DICTIONARY and lang in lang_text:
 		return lang_text[lang]
 	else:
-		return text
+		return ""
 
 
 func get_characters():
