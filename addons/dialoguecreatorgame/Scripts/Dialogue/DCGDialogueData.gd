@@ -369,8 +369,14 @@ func _get_connections_js() -> Array:
 
 func _get_text_slot_by_port(the_node: NodeData, node_js, port_id: int, is_input: bool):
 	if the_node.node_class_key == DCGUtils.ActionNode:
-		if is_input and port_id == 1:
-			return node_js["ActionText"]
+		if is_input:
+			if port_id == 1:
+				return node_js["ActionText"]
+		else:
+			var action_ports = node_js["ActionPorts"]
+
+			if action_ports and port_id < len(action_ports):
+				return action_ports[port_id]["Text"]
 		
 	elif the_node.node_class_key == DCGUtils.TextNode:
 		if not is_input:
