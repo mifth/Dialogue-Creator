@@ -80,10 +80,11 @@ func get_live_node_js(the_node: NodeData):
 		if node_name not in self.live_nodes_js.keys():
 		
 			live_node_js = node_js.duplicate(true)
-			self.live_nodes_js[node_name] = live_node_js
 
 			_check_default_live_text(the_node, live_node_js)
 
+			self.live_nodes_js[node_name] = live_node_js
+			
 		# Get Live Text
 		else:
 			live_node_js = self.live_nodes_js[node_name]
