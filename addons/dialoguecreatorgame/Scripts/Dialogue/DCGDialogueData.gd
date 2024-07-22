@@ -76,15 +76,15 @@ func get_live_node_js(the_node: NodeData):
 
 		var node_name = node_js["Name"]
 		
-		# Copy Live Text
+		# Copy Node and Check Texts
 		if node_name not in self.live_nodes_js.keys():
 		
 			live_node_js = node_js.duplicate(true)
 
-			_check_default_live_text(the_node, live_node_js)
+			_check_default_live_texts(the_node, live_node_js)
 
 			self.live_nodes_js[node_name] = live_node_js
-			
+
 		# Get Live Text
 		else:
 			live_node_js = self.live_nodes_js[node_name]
@@ -193,7 +193,7 @@ func _get_dialogue_node_recursively(the_node: NodeData, port_id: int, parsed_nod
 	return dialogue_node
 
 
-func _check_default_live_text(node_to_check: NodeData, live_node_js):
+func _check_default_live_texts(node_to_check: NodeData, live_node_js):
 	if node_to_check.node_class_key in DCGUtils.live_nodes_types and node_to_check.to_node_conns:
 		for port_id in node_to_check.to_node_conns.keys():
 			var port_type = get_input_port_type(live_node_js, port_id)
@@ -214,7 +214,7 @@ func _check_default_live_text(node_to_check: NodeData, live_node_js):
 							from_port = prev_conn["from_port"]
 
 					# Change Default Text
-					if from_node.node_class_key == DCGUtils.TextNode:
+					elif from_node.node_class_key == DCGUtils.TextNode:
 						var from_node_js = get_node_js(from_node)
 						var from_text_slot = _get_text_slot_by_port(from_node, from_node_js, from_port, false)
 
