@@ -376,7 +376,7 @@ func _get_text_slot_by_port(the_node: NodeData, node_js, port_id: int, is_input:
 			var action_ports = node_js["ActionPorts"]
 
 			if action_ports and port_id < len(action_ports):
-				return action_ports[port_id]["Text"]
+				return action_ports[port_id]
 		
 	elif the_node.node_class_key == DCGUtils.TextNode:
 		if not is_input:
