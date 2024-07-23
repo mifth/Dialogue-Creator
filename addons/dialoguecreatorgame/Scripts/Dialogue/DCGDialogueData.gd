@@ -81,7 +81,7 @@ func get_live_node_js(the_node: NodeData):
 		
 			live_node_js = node_js.duplicate(true)
 
-			_check_default_live_texts(the_node, live_node_js)
+			_set_default_live_texts(the_node, live_node_js)
 
 			self.live_nodes_js[node_name] = live_node_js
 
@@ -193,7 +193,7 @@ func _get_dialogue_node_recursively(the_node: NodeData, port_id: int, parsed_nod
 	return dialogue_node
 
 
-func _check_default_live_texts(node_to_check: NodeData, live_node_js):
+func _set_default_live_texts(node_to_check: NodeData, live_node_js):
 	if node_to_check.node_class_key in DCGUtils.live_nodes_types and node_to_check.to_node_conns:
 		for port_id in node_to_check.to_node_conns.keys():
 			var port_type = get_input_port_type(live_node_js, port_id)
